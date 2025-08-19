@@ -1,0 +1,459 @@
+import React, { useState } from 'react';
+import DemoModeToggle from '../components/DemoModeToggle';
+import VirtualProjectList from '../components/VirtualProjectList';
+import ProjectAnalytics from '../components/ProjectAnalytics';
+import ProjectModal from '../components/ProjectModal';
+import { IProject } from '@/models/Project';
+
+// Sample project data for demonstration
+const sampleProjects = [
+  {
+    _id: '1',
+    name: 'Downtown Office Complex',
+    description: 'Modern 20-story office building with sustainable design features and smart building technology.',
+    type: 'commercial',
+    status: 'active',
+    location: {
+      address: '123 Main Street',
+      city: 'New York',
+      state: 'NY',
+      zipCode: '10001',
+      country: 'USA',
+      coordinates: { lat: 40.7589, lng: -73.9851 }
+    },
+    client: {
+      name: 'Metro Development Corp',
+      email: 'contact@metrodev.com',
+      phone: '+1-555-0123',
+      company: 'Metro Development Corp'
+    },
+    timeline: {
+      startDate: new Date('2024-01-15T00:00:00.000Z'),
+      endDate: new Date('2025-06-30T00:00:00.000Z'),
+      estimatedDuration: 525
+    },
+    budget: {
+      estimated: 25000000,
+      actual: 8500000,
+      currency: 'USD'
+    },
+    team: [
+      { userId: 'user1', role: 'project_manager', permissions: ['read', 'write', 'admin'] },
+      { userId: 'user2', role: 'architect', permissions: ['read', 'write'] },
+      { userId: 'user3', role: 'engineer', permissions: ['read', 'write'] }
+    ],
+    tags: ['commercial', 'sustainable', 'smart-building', 'high-rise'],
+    metadata: {},
+    createdBy: 'user1' as any,
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-03-15')
+  },
+  {
+    _id: '2',
+    name: 'Riverside Residential Community',
+    description: 'Luxury residential development with 150 units, amenities, and waterfront views.',
+    type: 'residential',
+    status: 'planning',
+    location: {
+      address: '456 River Road',
+      city: 'Miami',
+      state: 'FL',
+      zipCode: '33101',
+      country: 'USA',
+      coordinates: { lat: 25.7617, lng: -80.1918 }
+    },
+    client: {
+      name: 'Luxury Homes Inc',
+      email: 'info@luxuryhomes.com',
+      phone: '+1-555-0456',
+      company: 'Luxury Homes Inc'
+    },
+    timeline: {
+      startDate: new Date('2024-07-01T00:00:00.000Z'),
+      endDate: new Date('2026-12-31T00:00:00.000Z'),
+      estimatedDuration: 730
+    },
+    budget: {
+      estimated: 45000000,
+      actual: 0,
+      currency: 'USD'
+    },
+    team: [
+      { userId: 'user4', role: 'project_manager', permissions: ['read', 'write', 'admin'] },
+      { userId: 'user5', role: 'architect', permissions: ['read', 'write'] }
+    ],
+    tags: ['residential', 'luxury', 'waterfront', 'amenities'],
+    metadata: {},
+    createdBy: 'user4' as any,
+    createdAt: new Date('2024-02-01'),
+    updatedAt: new Date('2024-02-01')
+  },
+  {
+    _id: '3',
+    name: 'Industrial Manufacturing Plant',
+    description: 'State-of-the-art manufacturing facility for automotive parts with advanced robotics.',
+    type: 'industrial',
+    status: 'completed',
+    location: {
+      address: '789 Industrial Blvd',
+      city: 'Detroit',
+      state: 'MI',
+      zipCode: '48201',
+      country: 'USA',
+      coordinates: { lat: 42.3314, lng: -83.0458 }
+    },
+    client: {
+      name: 'AutoTech Industries',
+      email: 'projects@autotech.com',
+      phone: '+1-555-0789',
+      company: 'AutoTech Industries'
+    },
+    timeline: {
+      startDate: new Date('2023-03-01T00:00:00.000Z'),
+      endDate: new Date('2024-02-28T00:00:00.000Z'),
+      estimatedDuration: 365
+    },
+    budget: {
+      estimated: 35000000,
+      actual: 34500000,
+      currency: 'USD'
+    },
+    team: [
+      { userId: 'user6', role: 'project_manager', permissions: ['read', 'write', 'admin'] },
+      { userId: 'user7', role: 'engineer', permissions: ['read', 'write'] },
+      { userId: 'user8', role: 'contractor', permissions: ['read', 'write'] }
+    ],
+    tags: ['industrial', 'manufacturing', 'automotive', 'robotics'],
+    metadata: {},
+    createdBy: 'user6' as any,
+    createdAt: new Date('2023-02-01'),
+    updatedAt: new Date('2024-02-28')
+  },
+  {
+    _id: '4',
+    name: 'Highway Bridge Renovation',
+    description: 'Major renovation of critical infrastructure bridge with minimal traffic disruption.',
+    type: 'infrastructure',
+    status: 'on-hold',
+    location: {
+      address: 'Highway 95 Bridge',
+      city: 'Philadelphia',
+      state: 'PA',
+      zipCode: '19101',
+      country: 'USA',
+      coordinates: { lat: 39.9526, lng: -75.1652 }
+    },
+    client: {
+      name: 'PennDOT',
+      email: 'projects@pa.gov',
+      phone: '+1-555-0321',
+      company: 'Pennsylvania Department of Transportation'
+    },
+    timeline: {
+      startDate: new Date('2024-04-01T00:00:00.000Z'),
+      endDate: new Date('2025-10-31T00:00:00.000Z'),
+      estimatedDuration: 580
+    },
+    budget: {
+      estimated: 15000000,
+      actual: 2000000,
+      currency: 'USD'
+    },
+    team: [
+      { userId: 'user9', role: 'project_manager', permissions: ['read', 'write', 'admin'] },
+      { userId: 'user10', role: 'engineer', permissions: ['read', 'write'] }
+    ],
+    tags: ['infrastructure', 'bridge', 'renovation', 'highway'],
+    metadata: {},
+    createdBy: 'user9' as any,
+    createdAt: new Date('2024-03-01'),
+    updatedAt: new Date('2024-04-15')
+  },
+  {
+    _id: '5',
+    name: 'Historic Building Restoration',
+    description: 'Restoration of 19th-century landmark building for modern office use.',
+    type: 'renovation',
+    status: 'active',
+    location: {
+      address: '321 Heritage Lane',
+      city: 'Boston',
+      state: 'MA',
+      zipCode: '02101',
+      country: 'USA',
+      coordinates: { lat: 42.3601, lng: -71.0589 }
+    },
+    client: {
+      name: 'Heritage Preservation Trust',
+      email: 'contact@heritage.org',
+      phone: '+1-555-0654',
+      company: 'Heritage Preservation Trust'
+    },
+    timeline: {
+      startDate: new Date('2024-01-01T00:00:00.000Z'),
+      endDate: new Date('2025-08-31T00:00:00.000Z'),
+      estimatedDuration: 600
+    },
+    budget: {
+      estimated: 12000000,
+      actual: 4500000,
+      currency: 'USD'
+    },
+    team: [
+      { userId: 'user11', role: 'project_manager', permissions: ['read', 'write', 'admin'] },
+      { userId: 'user12', role: 'architect', permissions: ['read', 'write'] },
+      { userId: 'user13', role: 'contractor', permissions: ['read', 'write'] }
+    ],
+    tags: ['renovation', 'historic', 'preservation', 'landmark'],
+    metadata: {},
+    createdBy: 'user11' as any,
+    createdAt: new Date('2023-12-01'),
+    updatedAt: new Date('2024-03-20')
+  }
+] as any[];
+
+export function EnhancedFeaturesExamples() {
+  const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
+  const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>('view');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({
+    status: '',
+    type: '',
+    client: ''
+  });
+
+  const handleProjectClick = (project: IProject) => {
+    setSelectedProject(project);
+    setModalMode('view');
+    setIsModalOpen(true);
+  };
+
+  const handleEditProject = (project: IProject) => {
+    setSelectedProject(project);
+    setModalMode('edit');
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteProject = (project: IProject) => {
+    if (confirm(`Are you sure you want to delete "${project.name}"?`)) {
+      console.log('Deleting project:', project._id);
+      // In a real app, this would call the delete API
+    }
+  };
+
+  const handleViewProject = (project: IProject) => {
+    setSelectedProject(project);
+    setModalMode('view');
+    setIsModalOpen(true);
+  };
+
+  const handleSaveProject = async (projectData: Partial<IProject>) => {
+    console.log('Saving project:', projectData);
+    // In a real app, this would call the save API
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+  };
+
+  const handleCreateProject = () => {
+    setSelectedProject(null);
+    setModalMode('create');
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteProjectById = async (projectId: string) => {
+    console.log('Deleting project by id:', projectId);
+    // Simulate async delete
+    await new Promise(resolve => setTimeout(resolve, 300));
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Enhanced Features Showcase
+          </h1>
+          <p className="text-xl text-gray-600">
+            Demonstrating the latest improvements and new components
+          </p>
+        </div>
+
+        {/* Demo Mode Toggle */}
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Demo Mode Toggle</h2>
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Default Variant</h3>
+              <DemoModeToggle />
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Minimal Variant</h3>
+              <DemoModeToggle />
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Detailed Variant</h3>
+              <DemoModeToggle />
+            </div>
+          </div>
+        </div>
+
+        {/* Project Analytics */}
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Project Analytics Dashboard</h2>
+          <ProjectAnalytics
+            projects={sampleProjects}
+            showCharts={true}
+            showMetrics={true}
+            showTrends={true}
+            timeRange="all"
+          />
+        </div>
+
+        {/* Project Management */}
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Project Management</h2>
+            <button
+              onClick={handleCreateProject}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+            >
+              <span>+</span>
+              <span>Create Project</span>
+            </button>
+          </div>
+
+          {/* Search and Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search projects..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <select
+                value={filters.status}
+                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">All Statuses</option>
+                <option value="planning">Planning</option>
+                <option value="active">Active</option>
+                <option value="on-hold">On Hold</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+              <select
+                value={filters.type}
+                onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">All Types</option>
+                <option value="residential">Residential</option>
+                <option value="commercial">Commercial</option>
+                <option value="industrial">Industrial</option>
+                <option value="infrastructure">Infrastructure</option>
+                <option value="renovation">Renovation</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Client</label>
+              <input
+                type="text"
+                value={filters.client}
+                onChange={(e) => setFilters(prev => ({ ...prev, client: e.target.value }))}
+                placeholder="Filter by client..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          {/* Virtual Project List */}
+          <VirtualProjectList
+            projects={sampleProjects}
+            onProjectClick={handleProjectClick}
+            onEditProject={handleEditProject}
+            onDeleteProject={handleDeleteProject}
+            onViewProject={handleViewProject}
+            searchTerm={searchTerm}
+            filters={filters}
+            itemHeight={120}
+            containerHeight={600}
+            showActions={true}
+            className="border border-gray-200 rounded-lg"
+          />
+        </div>
+
+        {/* Feature Highlights */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Performance Optimizations</h3>
+            <ul className="space-y-2 text-gray-600">
+              <li>• Virtual scrolling for large project lists</li>
+              <li>• Lazy loading and efficient rendering</li>
+              <li>• Optimized search and filtering</li>
+              <li>• Smooth animations with framer-motion</li>
+            </ul>
+          </div>
+          
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Enhanced Offline Support</h3>
+            <ul className="space-y-2 text-gray-600">
+              <li>• Advanced conflict resolution</li>
+              <li>• Batch processing and retry logic</li>
+              <li>• Comprehensive sync strategies</li>
+              <li>• Offline-first architecture</li>
+            </ul>
+          </div>
+          
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Advanced Analytics</h3>
+            <ul className="space-y-2 text-gray-600">
+              <li>• Real-time project metrics</li>
+              <li>• Performance tracking</li>
+              <li>• Budget and timeline analysis</li>
+              <li>• Team utilization insights</li>
+            </ul>
+          </div>
+          
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Specialized Modals</h3>
+            <ul className="space-y-2 text-gray-600">
+              <li>• Project-specific forms</li>
+              <li>• Advanced validation</li>
+              <li>• Team management</li>
+              <li>• Comprehensive project data</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Project Modal */}
+      <ProjectModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        project={selectedProject}
+        mode={modalMode}
+        onSave={handleSaveProject}
+        onDelete={handleDeleteProjectById}
+        loading={false}
+      />
+    </div>
+  );
+}
+
+export default EnhancedFeaturesExamples;

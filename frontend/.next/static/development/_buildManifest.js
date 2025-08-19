@@ -1,0 +1,1 @@
+self.__BUILD_MANIFEST = {__rewrites:{afterFiles:[{has:void 0,source:"\u002Fapi\u002Fhealth",destination:"\u002Fapi\u002Fhealth\u002Fcheck"}],beforeFiles:[],fallback:[]},sortedPages:["\u002F_app"]};self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()
