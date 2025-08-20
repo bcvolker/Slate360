@@ -1,5 +1,37 @@
-import React, { useState } from 'react';
-import { useOfflineProjects, useOfflineProject, useFilteredOfflineProjects } from '../hooks/useOfflineProjects';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Plus, 
+  Edit, 
+  Trash2, 
+  Search, 
+  Filter, 
+  Download, 
+  Upload, 
+  Wifi, 
+  WifiOff,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  Clock,
+  Calendar,
+  DollarSign,
+  MapPin,
+  Users,
+  Tag,
+  FileText,
+  BarChart3,
+  Settings,
+  RefreshCw,
+  Database,
+  Cloud,
+  HardDrive
+} from 'lucide-react';
+import { ProjectModal } from '../components/ProjectModal';
+import { ConfirmModal } from '../components/Modal';
+import { useOfflineProjects } from '../hooks/useOfflineProjects';
+import { IProject } from '../types/project';
+import { useOfflineProject, useFilteredOfflineProjects } from '../hooks/useOfflineProjects';
 import { SyncStatus, CompactSyncStatus } from '../components/SyncStatus';
 import { toast } from 'react-hot-toast';
 
@@ -17,22 +49,38 @@ export function OfflineProjectsList() {
   } = useOfflineProjects();
 
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [newProject, setNewProject] = useState({
+  const [newProject, setNewProject] = useState<Partial<IProject>>({
     name: '',
     description: '',
-    type: 'residential' as const,
-    status: 'planning' as const,
+    type: 'residential',
+    status: 'planning',
     location: {
       address: '',
       city: '',
       state: '',
       zipCode: '',
-      country: 'USA'
+      country: 'USA',
+      coordinates: { lat: 0, lng: 0 }
     },
     client: {
       name: '',
-      email: ''
-    }
+      email: '',
+      phone: '',
+      company: ''
+    },
+    budget: {
+      estimated: 0,
+      currency: 'USD',
+      breakdown: {
+        materials: 0,
+        labor: 0,
+        equipment: 0,
+        permits: 0,
+        contingency: 0
+      }
+    },
+    team: [],
+    tags: []
   });
 
   const handleCreateProject = async () => {
@@ -49,11 +97,14 @@ export function OfflineProjectsList() {
           city: '',
           state: '',
           zipCode: '',
-          country: 'USA'
+          country: 'USA',
+          coordinates: { lat: 0, lng: 0 }
         },
         client: {
           name: '',
-          email: ''
+          email: '',
+          phone: '',
+          company: ''
         }
       });
     } catch (error) {
@@ -117,7 +168,7 @@ export function OfflineProjectsList() {
             />
             <select
               value={newProject.type}
-              onChange={(e) => setNewProject(prev => ({ ...prev, type: e.target.value as any }))}
+              onChange={(e) => setNewProject(prev => ({ ...prev, type: e.target.value as IProject['type'] }))}
               className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="residential">Residential</option>
@@ -130,7 +181,7 @@ export function OfflineProjectsList() {
             <input
               type="text"
               placeholder="Client Name"
-              value={newProject.client.name}
+              value={newProject.client?.name || ''}
               onChange={(e) => setNewProject(prev => ({ 
                 ...prev, 
                 client: { ...prev.client, name: e.target.value } 

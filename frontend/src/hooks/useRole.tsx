@@ -90,12 +90,15 @@ export function withRole<T extends object>(
 
 // Hook for access control in components
 export function useAccessControl() {
-  const { isAuthenticated, userRole, userTier } = useRole();
+  const { isAuthenticated, userRole, userTier, isAdmin, isCEO } = useRole();
   
   return {
     isAuthenticated,
     userRole,
     userTier,
+    canAccessAdmin: isAdmin || isCEO,
+    canManageUsers: isAdmin || isCEO,
+    canViewAnalytics: isAdmin || isCEO || userTier === 'premium' || userTier === 'enterprise',
     hasRole: (role: string) => userRole === role,
     hasTier: (tier: string) => userTier === tier,
     hasMinimumRole: (minRole: string) => {

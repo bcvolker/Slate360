@@ -142,25 +142,32 @@ export default function PricingPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.h1 
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="max-w-7xl mx-auto text-center">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-4xl md:text-5xl font-bold text-gray-900 mb-6"
           >
-            Simple, Transparent Pricing
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl text-gray-600 mb-8"
-          >
-            Choose the plan that fits your team size and project requirements. 
-            All plans include our core features with no hidden fees.
-          </motion.p>
+            {/* Logo */}
+            <div className="flex justify-center mb-8">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl flex items-center justify-center shadow-xl">
+                <span className="text-white font-bold text-3xl">S</span>
+              </div>
+            </div>
+            
+            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+              Simple,{' '}
+              <span className="bg-gradient-to-r from-slate-700 to-blue-600 bg-clip-text text-transparent">
+                Transparent
+              </span>{' '}
+              Pricing
+            </h1>
+            
+            <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
+              Choose the plan that fits your team size and project requirements. All plans include core features with no hidden fees.
+            </p>
+          </motion.div>
         </div>
       </section>
 

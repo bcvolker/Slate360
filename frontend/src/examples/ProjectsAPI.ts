@@ -1,8 +1,18 @@
+import React, { useState } from 'react';
+import { 
+  IProject, 
+  IProjectResponse, 
+  IProjectsResponse, 
+  IProjectFilters, 
+  IProjectStats,
+  IProjectError 
+} from '../types/project';
+
 // Examples of how to use the Projects API endpoints
 
 // Example 1: Create a new project
-export const createProjectExample = async () => {
-  const projectData = {
+export const createProjectExample = async (): Promise<IProject> => {
+  const projectData: Omit<IProject, '_id' | 'createdAt' | 'updatedAt'> = {
     name: "Downtown Office Complex",
     description: "Modern 15-story office building with sustainable design features and LEED certification",
     type: "commercial",
@@ -65,11 +75,11 @@ export const createProjectExample = async () => {
     });
 
     if (response.ok) {
-      const result = await response.json();
+      const result: IProjectResponse = await response.json();
       console.log('Project created:', result.project);
       return result.project;
     } else {
-      const error = await response.json();
+      const error: IProjectError = await response.json();
       console.error('Failed to create project:', error);
       throw new Error(error.error);
     }
@@ -98,7 +108,6 @@ export const listProjectsExample = async () => {
       const result = await response.json();
       console.log('Projects:', result.projects);
       console.log('Pagination:', result.pagination);
-      console.log('Filters:', result.filters);
       return result;
     } else {
       const error = await response.json();
@@ -290,37 +299,38 @@ export const searchProjectsExample = async () => {
   };
 };
 
-// Example 8: React hook for projects
+// Example 8: React hook for projects - Simplified version
 export const useProjects = () => {
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const fetchProjects = async (filters = {}) => {
+  const fetchProjects = async (filters: IProjectFilters = {}): Promise<IProjectsResponse> => {
     setLoading(true);
     setError(null);
     
     try {
-      const queryParams = new URLSearchParams(filters);
+      const queryParams = new URLSearchParams(filters as Record<string, string>);
       const response = await fetch(`/api/projects?${queryParams}`);
       
       if (response.ok) {
-        const result = await response.json();
-        setProjects(result.projects);
+        const result: IProjectsResponse = await response.json();
+        setProjects(result.projects || []);
         return result;
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error);
+        const errorData: IProjectError = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch projects');
       }
     } catch (err) {
-      setError(err.message);
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
       throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  const createProject = async (projectData) => {
+  const createProject = async (projectData: Omit<IProject, '_id' | 'createdAt' | 'updatedAt'>): Promise<IProject> => {
     setLoading(true);
     setError(null);
     
@@ -334,22 +344,23 @@ export const useProjects = () => {
       });
 
       if (response.ok) {
-        const result = await response.json();
+        const result: IProjectResponse = await response.json();
         setProjects(prev => [result.project, ...prev]);
         return result.project;
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error);
+        const errorData: IProjectError = await response.json();
+        throw new Error(errorData.error || 'Failed to create project');
       }
     } catch (err) {
-      setError(err.message);
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
       throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  const updateProject = async (projectId, updateData) => {
+  const updateProject = async (projectId: string, updateData: Partial<IProject>): Promise<IProject> => {
     setLoading(true);
     setError(null);
     
@@ -363,24 +374,25 @@ export const useProjects = () => {
       });
 
       if (response.ok) {
-        const result = await response.json();
+        const result: IProjectResponse = await response.json();
         setProjects(prev => 
-          prev.map(p => p._id === projectId ? result.project : p)
+          prev.map((p: IProject) => p._id === projectId ? result.project : p)
         );
         return result.project;
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error);
+        const errorData: IProjectError = await response.json();
+        throw new Error(errorData.error || 'Failed to update project');
       }
     } catch (err) {
-      setError(err.message);
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
       throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  const deleteProject = async (projectId) => {
+  const deleteProject = async (projectId: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
     
@@ -390,14 +402,15 @@ export const useProjects = () => {
       });
 
       if (response.ok) {
-        setProjects(prev => prev.filter(p => p._id !== projectId));
+        setProjects(prev => prev.filter((p: IProject) => p._id !== projectId));
         return true;
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error);
+        const errorData: IProjectError = await response.json();
+        throw new Error(errorData.error || 'Failed to delete project');
       }
     } catch (err) {
-      setError(err.message);
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
       throw err;
     } finally {
       setLoading(false);
@@ -416,20 +429,20 @@ export const useProjects = () => {
 };
 
 // Example 9: Project statistics and analytics
-export const getProjectStats = async () => {
+export const getProjectStats = async (): Promise<IProjectStats> => {
   try {
     // Get all projects for analysis
     const response = await fetch('/api/projects?limit=1000');
     
     if (response.ok) {
-      const result = await response.json();
+      const result: IProjectsResponse = await response.json();
       const projects = result.projects;
       
       // Calculate statistics
-      const stats = {
+      const stats: IProjectStats = {
         total: projects.length,
-        byStatus: {},
-        byType: {},
+        byStatus: {} as Record<string, number>,
+        byType: {} as Record<string, number>,
         byBudget: {
           totalEstimated: 0,
           totalActual: 0,
@@ -443,7 +456,7 @@ export const getProjectStats = async () => {
         }
       };
 
-      projects.forEach(project => {
+      projects.forEach((project: IProject) => {
         // Status distribution
         stats.byStatus[project.status] = (stats.byStatus[project.status] || 0) + 1;
         
@@ -451,17 +464,17 @@ export const getProjectStats = async () => {
         stats.byType[project.type] = (stats.byType[project.type] || 0) + 1;
         
         // Budget calculations
-        if (project.budget.estimated) {
+        if (project.budget?.estimated) {
           stats.byBudget.totalEstimated += project.budget.estimated;
         }
-        if (project.budget.actual) {
+        if (project.budget?.actual) {
           stats.byBudget.totalActual += project.budget.actual;
         }
         
         // Timeline analysis
         if (project.status === 'active') {
           stats.byTimeline.active++;
-          if (project.timeline.endDate && new Date() > new Date(project.timeline.endDate)) {
+          if (project.timeline?.endDate && new Date() > new Date(project.timeline.endDate)) {
             stats.byTimeline.overdue++;
           }
         } else if (project.status === 'completed') {
@@ -470,31 +483,23 @@ export const getProjectStats = async () => {
       });
 
       // Calculate averages
-      const projectsWithBudget = projects.filter(p => p.budget.estimated);
+      const projectsWithBudget = projects.filter((p: IProject) => p.budget?.estimated);
       if (projectsWithBudget.length > 0) {
         stats.byBudget.averageEstimated = stats.byBudget.totalEstimated / projectsWithBudget.length;
-        stats.byBudget.averageActual = stats.byBudget.totalActual / projectsWithBudget.length;
+      }
+      
+      const projectsWithActualBudget = projects.filter((p: IProject) => p.budget?.actual);
+      if (projectsWithActualBudget.length > 0) {
+        stats.byBudget.averageActual = stats.byBudget.totalActual / projectsWithActualBudget.length;
       }
 
       return stats;
     } else {
-      throw new Error('Failed to fetch projects for statistics');
+      const errorData: IProjectError = await response.json();
+      throw new Error(errorData.error || 'Failed to fetch projects for statistics');
     }
   } catch (error) {
-    console.error('Error calculating project statistics:', error);
+    console.error('Error getting project stats:', error);
     throw error;
   }
-};
-
-// Export all examples
-export {
-  createProjectExample,
-  listProjectsExample,
-  getProjectExample,
-  updateProjectExample,
-  deleteProjectExample,
-  createComplexProjectExample,
-  searchProjectsExample,
-  useProjects,
-  getProjectStats
 };

@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
-import { useSession } from 'next-auth/react';
+import React, { useState } from 'react';
+import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Loader2, Shield, Users, BarChart3, Wifi, Zap } from 'lucide-react';
+import { Loader2, Shield, Users, BarChart3, Wifi, Zap, Plus, Search, Filter } from 'lucide-react';
 import { useDemoMode } from '../../hooks/useDemoMode';
 import { useOfflineProjects } from '../../hooks/useOfflineProjects';
 import { useRole } from '../../hooks/useRole';
@@ -36,12 +36,26 @@ export default function DashboardPage() {
     error
   } = useOfflineProjects();
 
+  // State for user menu and search
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
   // Redirect if not authenticated
   React.useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
     }
   }, [status, router]);
+
+  // Filter projects based on search and status
+  const filteredProjects = projects?.filter(project => {
+    const matchesSearch = project.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         project.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  }) || [];
 
   if (status === 'loading') {
     return (
@@ -60,245 +74,357 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">S</span>
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-slate-700 to-blue-600 bg-clip-text text-transparent">
+                SLATE360
+              </span>
+            </div>
+
+            {/* Search and Filters */}
+            <div className="flex-1 max-w-2xl mx-8">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <input
+                  type="text"
+                  placeholder="Search projects..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* User Menu */}
+            <div className="flex items-center space-x-4">
+              <DemoModeToggle />
+              <div className="relative">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center space-x-2 text-gray-700 hover:text-gray-900"
+                >
+                  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                    <span className="text-sm font-medium text-gray-700">
+                      {session?.user?.name?.charAt(0) || 'U'}
+                    </span>
+                  </div>
+                  <span className="hidden md:block">{session?.user?.name || 'User'}</span>
+                </button>
+
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                    <button
+                      onClick={() => setShowUserMenu(false)}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Profile
+                    </button>
+                    <button
+                      onClick={() => setShowUserMenu(false)}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Settings
+                    </button>
+                    <button
+                      onClick={() => setShowUserMenu(false)}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Sign out
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
       {/* Demo Banner */}
       {isDemoMode && (
         <DemoBanner className="mb-6" />
       )}
 
-      {/* Header Section */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-              <div>
-                <motion.h1 
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-2xl font-bold text-gray-900"
-                >
-                  Welcome back, {session.user?.name || 'User'}!
-                </motion.h1>
-                <motion.p 
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
-                  className="text-sm text-gray-600"
-                >
-                  {isDemoMode 
-                    ? `Demo Mode - ${demoData.projectCount} sample projects loaded`
-                    : `${projects.length} projects • Last sync: ${syncStatus?.lastSync ? new Date(syncStatus.lastSync).toLocaleString() : 'Never'}`
-                  }
-                </motion.p>
-              </div>
-              
-              <div className="flex items-center space-x-3">
-                {/* Demo Mode Toggle */}
-                <DemoModeToggle 
-                  className="hidden sm:block"
-                />
-
-                {/* Sync Status */}
-                <SyncStatus className="hidden sm:block" />
-
-                {/* Create Project Button */}
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-                >
-                  <Zap className="w-4 h-4 mr-2" />
-                  New Project
-                </motion.button>
-              </div>
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Dashboard Header */}
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+              <p className="text-gray-600">Welcome back, {session.user?.name || 'User'}</p>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Stats */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
-          >
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <BarChart3 className="w-6 h-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Projects</p>
-                <p className="text-2xl font-bold text-gray-900">{projects.length}</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
-          >
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Users className="w-6 h-6 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Active Projects</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {projects.filter((p: any) => p.status === 'active').length}
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
-          >
-            <div className="flex items-center">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <Wifi className="w-6 h-6 text-yellow-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Sync Status</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {isOnline ? 'Online' : 'Offline'}
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
-          >
-            <div className="flex items-center">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <Shield className="w-6 h-6 text-purple-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">User Role</p>
-                <p className="text-2xl font-bold text-gray-900 capitalize">
-                  {userRole || 'User'}
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-          {/* Analytics Sidebar */}
-          <div className="xl:col-span-1">
-            <div className="sticky top-6">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                <ProjectAnalytics
-                  projects={projects}
-                  showCharts={true}
-                  showMetrics={true}
-                  showTrends={true}
-                  timeRange="all"
-                  className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
-                />
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Projects List */}
-          <div className="xl:col-span-3">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
             >
-              <VirtualProjectList
-                projects={projects}
-                onProjectClick={(project: any) => console.log('Project clicked:', project)}
-                onEditProject={(project: any) => console.log('Edit project:', project)}
-                onDeleteProject={(project: any) => console.log('Delete project:', project)}
-                onViewProject={(project: any) => console.log('View project:', project)}
-                loading={isLoading}
-                emptyMessage="No projects found. Create your first project to get started!"
-                className="bg-white rounded-lg shadow-sm border border-gray-200"
-                showActions={true}
-              />
+              <Plus className="w-4 h-4" />
+              <span>New Project</span>
+            </button>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white p-6 rounded-lg shadow-sm border border-gray-200"
+            >
+              <div className="flex items-center">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <BarChart3 className="w-6 h-6 text-blue-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Total Projects</p>
+                  <p className="text-2xl font-semibold text-gray-900">{projects?.length || 0}</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-white p-6 rounded-lg shadow-sm border border-gray-200"
+            >
+              <div className="flex items-center">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <Shield className="w-6 h-6 text-green-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Active Projects</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {projects?.filter(p => p.status === 'active').length || 0}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-white p-6 rounded-lg shadow-sm border border-gray-200"
+            >
+              <div className="flex items-center">
+                <div className="p-2 bg-purple-100 rounded-lg">
+                  <Users className="w-6 h-6 text-purple-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Team Members</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {projects?.reduce((total, p) => total + (p.team?.length || 0), 0) || 0}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="bg-white p-6 rounded-lg shadow-sm border border-gray-200"
+            >
+              <div className="flex items-center">
+                <div className="p-2 bg-orange-100 rounded-lg">
+                  <Wifi className="w-6 h-6 text-orange-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Sync Status</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {isOnline ? 'Online' : 'Offline'}
+                  </p>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
-      </div>
+
+        {/* Filters */}
+        <div className="mb-6 flex flex-wrap gap-4 items-center">
+          <div className="flex items-center space-x-2">
+            <Filter className="w-4 h-4 text-gray-500" />
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="all">All Statuses</option>
+              <option value="planning">Planning</option>
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+              <option value="on-hold">On Hold</option>
+            </select>
+          </div>
+          
+          {!isOnline && (
+            <div className="flex items-center space-x-2 text-orange-600">
+              <Wifi className="w-4 h-4" />
+              <span className="text-sm">Working offline</span>
+            </div>
+          )}
+        </div>
+
+        {/* Projects Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Project List */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="p-6 border-b border-gray-200">
+                <h2 className="text-xl font-semibold text-gray-900">Projects</h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  {filteredProjects.length} of {projects?.length || 0} projects
+                </p>
+              </div>
+              
+              {isLoading ? (
+                <div className="p-6 text-center">
+                  <Loader2 className="w-6 h-6 animate-spin mx-auto text-gray-400" />
+                  <p className="text-gray-500 mt-2">Loading projects...</p>
+                </div>
+              ) : filteredProjects.length > 0 ? (
+                <VirtualProjectList
+                  projects={filteredProjects}
+                  onEditProject={(project) => {
+                    // Handle edit
+                  }}
+                  onDeleteProject={(projectId) => {
+                    // Handle delete
+                  }}
+                />
+              ) : (
+                <div className="p-6 text-center">
+                  <p className="text-gray-500">
+                    {searchTerm || statusFilter !== 'all' 
+                      ? 'No projects match your filters.' 
+                      : 'No projects yet. Create your first project to get started!'}
+                  </p>
+                  {!searchTerm && statusFilter === 'all' && (
+                    <button
+                      onClick={() => setShowCreateModal(true)}
+                      className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      Create Project
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Analytics Sidebar */}
+          <div className="space-y-6">
+            {/* Project Analytics */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Analytics</h3>
+              <ProjectAnalytics projects={projects || []} />
+            </div>
+
+            {/* Sync Status */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Sync Status</h3>
+              <SyncStatus 
+                showDetails={true}
+                showActions={true}
+                className=""
+              />
+            </div>
+
+            {/* Quick Actions */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+              <div className="space-y-3">
+                <button
+                  onClick={() => setShowCreateModal(true)}
+                  className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                >
+                  New Project
+                </button>
+                <button
+                  onClick={() => router.push('/dashboard/project-hub')}
+                  className="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors text-sm"
+                >
+                  View All Projects
+                </button>
+                {isCEO && (
+                  <button
+                    onClick={() => router.push('/dashboard/ceo')}
+                    className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm"
+                  >
+                    CEO Dashboard
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Demo Workflow Walkthrough */}
+        {isDemoMode && (
+          <div className="mt-8">
+            <DemoWorkflowWalkthrough
+              isOpen={false}
+              onClose={() => {}}
+              onStepComplete={(stepId) => {}}
+            />
+          </div>
+        )}
+      </main>
+
+      {/* Create Project Modal */}
+      {showCreateModal && (
+        <ProjectModal
+          isOpen={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          onSave={async (projectData) => {
+            try {
+              await createProject(projectData);
+              setShowCreateModal(false);
+            } catch (error) {
+              console.error('Failed to create project:', error);
+            }
+          }}
+          mode="create"
+        />
+      )}
 
       {/* Help and Process Guide */}
-      <div className="fixed bottom-6 right-6 flex flex-col space-y-3 z-40">
-        <HelpIcon
-          content={`
-# Dashboard Help
-
-## Features
-- **Demo Mode**: Toggle to explore with sample data
-- **Offline Sync**: Work without internet connection
-- **Advanced Analytics**: Comprehensive project insights
-- **Virtual Scrolling**: Efficient large project lists
-- **Mobile Optimized**: Responsive design for all devices
-
-## Quick Actions
-- Use the search bar to find projects quickly
-- Apply filters to narrow down results
-- Switch between grid and list views
-- Export projects for backup or sharing
-          `}
+      <div className="fixed bottom-6 right-6 flex flex-col space-y-3">
+        <HelpIcon 
           title="Dashboard Help"
-          size="lg"
-          position="left"
-          maxWidth={350}
-          trigger="click"
+          content="This dashboard shows an overview of all your projects, analytics, and quick actions. Use the search and filters to find specific projects."
         />
-        
-        <ProcessGuide
-          title="Quick Start"
+        <ProcessGuide 
+          title="Getting Started"
           steps={[
             {
               id: 'step1',
-              title: 'Explore Demo Mode',
-              description: 'Toggle demo mode to see sample projects and workflows',
-              status: 'completed',
-              tips: ['Click the demo mode toggle in the header']
+              title: 'Create your first project',
+              description: 'Start by creating a new project using the New Project button'
             },
             {
               id: 'step2',
-              title: 'Create a Project',
-              description: 'Add your first project using the "New Project" button',
-              status: 'active',
-              tips: ['Fill in all required fields', 'Add relevant tags']
+              title: 'Add team members',
+              description: 'Invite team members to collaborate on your project'
             },
             {
               id: 'step3',
-              title: 'Use Analytics',
-              description: 'Review project insights in the analytics sidebar',
-              status: 'pending',
-              tips: ['Check budget utilization', 'Monitor team performance']
+              title: 'Set up project timeline',
+              description: 'Define milestones and deadlines for your project'
             },
             {
               id: 'step4',
-              title: 'Sync Offline Changes',
-              description: 'Ensure your offline work is synchronized when online',
-              status: 'pending',
-              tips: ['Check sync status indicator', 'Resolve any conflicts']
+              title: 'Upload project files',
+              description: 'Add relevant documents and 3D models to your project'
             }
           ]}
-          variant="compact"
-          theme="blue"
-          maxHeight={400}
         />
       </div>
     </div>
