@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Loader2, Shield, Users, BarChart3, Wifi, Zap, Plus, Search, Filter } from 'lucide-react';
@@ -15,12 +15,10 @@ import { ProjectModal } from '../../components/ProjectModal';
 import { Modal, ConfirmModal, FormModal } from '../../components/Modal';
 import { SyncStatus } from '../../components/SyncStatus';
 import { DemoBanner } from '../../components/DemoBanner';
-import { DemoWorkflowWalkthrough } from '../../components/DemoWorkflowWalkthrough';
-import { HelpIcon } from '../../components/HelpIcon';
-import { ProcessGuide } from '../../components/ProcessGuide';
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession();
+  const [session, setSession] = useState<any>(null);
+  const [status, setStatus] = useState('loading');
   const router = useRouter();
   const { isDemoMode, demoData } = useDemoMode();
   const { isAuthenticated, userRole, userTier, isCEO, isAdmin } = useRole();
@@ -35,6 +33,40 @@ export default function DashboardPage() {
     isOnline,
     error
   } = useOfflineProjects();
+
+  // Initialize Supabase client
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key'
+  );
+
+  // Check authentication status
+  useEffect(() => {
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        setSession(session);
+        setStatus('authenticated');
+      } else {
+        setStatus('unauthenticated');
+      }
+    };
+
+    getSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        setSession(session);
+        setStatus('authenticated');
+      } else {
+        setStatus('unauthenticated');
+      }
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [supabase.auth]);
 
   // State for user menu and search
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -112,10 +144,10 @@ export default function DashboardPage() {
                 >
                   <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
                     <span className="text-sm font-medium text-gray-700">
-                      {session?.user?.name?.charAt(0) || 'U'}
+                      {session?.user?.email?.charAt(0)?.toUpperCase() || 'U'}
                     </span>
                   </div>
-                  <span className="hidden md:block">{session?.user?.name || 'User'}</span>
+                  <span className="hidden md:block">{session?.user?.email || 'User'}</span>
                 </button>
 
                 {showUserMenu && (
@@ -133,7 +165,11 @@ export default function DashboardPage() {
                       Settings
                     </button>
                     <button
-                      onClick={() => setShowUserMenu(false)}
+                      onClick={async () => {
+                        await supabase.auth.signOut();
+                        setShowUserMenu(false);
+                        router.push('/');
+                      }}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Sign out
@@ -158,7 +194,7 @@ export default function DashboardPage() {
           <div className="flex justify-between items-center mb-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-              <p className="text-gray-600">Welcome back, {session.user?.name || 'User'}</p>
+              <p className="text-gray-600">Welcome back, {session?.user?.email || 'User'}</p>
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
@@ -369,11 +405,12 @@ export default function DashboardPage() {
         {/* Demo Workflow Walkthrough */}
         {isDemoMode && (
           <div className="mt-8">
-            <DemoWorkflowWalkthrough
-              isOpen={false}
-              onClose={() => {}}
-              onStepComplete={(stepId) => {}}
-            />
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-blue-900 mb-2">Demo Mode Active</h3>
+              <p className="text-blue-700 text-sm">
+                You're currently in demo mode. Explore the dashboard features with sample data.
+              </p>
+            </div>
           </div>
         )}
       </main>
@@ -397,35 +434,18 @@ export default function DashboardPage() {
 
       {/* Help and Process Guide */}
       <div className="fixed bottom-6 right-6 flex flex-col space-y-3">
-        <HelpIcon 
-          title="Dashboard Help"
-          content="This dashboard shows an overview of all your projects, analytics, and quick actions. Use the search and filters to find specific projects."
-        />
-        <ProcessGuide 
-          title="Getting Started"
-          steps={[
-            {
-              id: 'step1',
-              title: 'Create your first project',
-              description: 'Start by creating a new project using the New Project button'
-            },
-            {
-              id: 'step2',
-              title: 'Add team members',
-              description: 'Invite team members to collaborate on your project'
-            },
-            {
-              id: 'step3',
-              title: 'Set up project timeline',
-              description: 'Define milestones and deadlines for your project'
-            },
-            {
-              id: 'step4',
-              title: 'Upload project files',
-              description: 'Add relevant documents and 3D models to your project'
-            }
-          ]}
-        />
+        <button
+          onClick={() => router.push('/dashboard/help')}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+        >
+          Help
+        </button>
+        <button
+          onClick={() => router.push('/dashboard/process-guide')}
+          className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm"
+        >
+          Process Guide
+        </button>
       </div>
     </div>
   );

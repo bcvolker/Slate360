@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 
 export interface BillingPortalAccess {

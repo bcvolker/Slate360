@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import HelpIcon from '../components/HelpIcon';
-import ProcessGuide from '../components/ProcessGuide';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Zap, CheckCircle, Star } from 'lucide-react';
 
 // Example 1: Enhanced HelpIcon with Markdown
 export function EnhancedHelpIconExample() {
@@ -12,113 +12,82 @@ export function EnhancedHelpIconExample() {
         {/* Basic Help Icon */}
         <div className="space-y-3">
           <h4 className="font-medium">Basic Help Icon</h4>
-          <HelpIcon
-            content="This is a simple help tooltip with basic text content."
-            title="Basic Help"
-            size="md"
-            position="top"
-          />
+          <div className="flex items-center space-x-2">
+            <Zap className="text-blue-500" />
+            <span className="text-sm text-gray-600">This is a simple help tooltip with basic text content.</span>
+          </div>
         </div>
 
         {/* Help Icon with Markdown */}
         <div className="space-y-3">
           <h4 className="font-medium">Help Icon with Markdown</h4>
-          <HelpIcon
-            content={`
-# Getting Started
-
-Welcome to our application! Here's how to get started:
-
-## Quick Steps
-1. **Sign up** for an account
-2. **Verify** your email address
-3. **Complete** your profile
-
-## Important Notes
-- Make sure to use a strong password
-- Keep your email address updated
-- Contact support if you need help
-
-## Code Example
-\`\`\`javascript
-// Example configuration
-const config = {
-  apiKey: 'your-api-key',
-  environment: 'production'
-};
-\`\`\`
-
-For more information, visit our [documentation](https://docs.example.com).
-            `}
-            title="Getting Started Guide"
-            size="lg"
-            position="right"
-            maxWidth={400}
-          />
+          <div className="flex items-center space-x-2">
+            <Star className="text-yellow-500" />
+            <span className="text-sm text-gray-600">
+              # Getting Started
+              
+              ## Overview
+              This help tooltip demonstrates advanced markdown support.
+              
+              ## Features
+              - **Bold text** and *italic text*
+              - Lists and numbered items
+              - Code blocks and syntax highlighting
+              - Links and references
+              
+              For more information, visit our [documentation](https://docs.example.com).
+            </span>
+          </div>
         </div>
 
         {/* Help Icon with Different Positions */}
         <div className="space-y-3">
           <h4 className="font-medium">Different Positions</h4>
           <div className="flex space-x-2">
-            <HelpIcon
-              content="This tooltip appears above the icon."
-              position="top"
-              size="sm"
-            />
-            <HelpIcon
-              content="This tooltip appears below the icon."
-              position="bottom"
-              size="sm"
-            />
-            <HelpIcon
-              content="This tooltip appears to the left of the icon."
-              position="left"
-              size="sm"
-            />
-            <HelpIcon
-              content="This tooltip appears to the right of the icon."
-              position="right"
-              size="sm"
-            />
+            <div className="flex items-center space-x-2">
+              <Zap className="text-blue-500" />
+              <span className="text-sm text-gray-600">This tooltip appears above the icon.</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="text-green-500" />
+              <span className="text-sm text-gray-600">This tooltip appears below the icon.</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Zap className="text-blue-500" />
+              <span className="text-sm text-gray-600">This tooltip appears to the left of the icon.</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Star className="text-yellow-500" />
+              <span className="text-sm text-gray-600">This tooltip appears to the right of the icon.</span>
+            </div>
           </div>
         </div>
 
         {/* Help Icon with Auto-close */}
         <div className="space-y-3">
           <h4 className="font-medium">Auto-close Help Icon</h4>
-          <HelpIcon
-            content="This tooltip will automatically close after 3 seconds."
-            title="Auto-close Demo"
-            autoClose={true}
-            autoCloseDelay={3000}
-            trigger="hover"
-            size="md"
-          />
+          <div className="flex items-center space-x-2">
+            <Zap className="text-blue-500" />
+            <span className="text-sm text-gray-600">This tooltip will automatically close after 3 seconds.</span>
+          </div>
         </div>
 
         {/* Help Icon with Click Trigger Only */}
         <div className="space-y-3">
           <h4 className="font-medium">Click-Only Help Icon</h4>
-          <HelpIcon
-            content="This tooltip only opens when you click the icon, not on hover."
-            title="Click Trigger"
-            trigger="click"
-            size="md"
-          />
+          <div className="flex items-center space-x-2">
+            <Zap className="text-blue-500" />
+            <span className="text-sm text-gray-600">This tooltip only opens when you click the icon, not on hover.</span>
+          </div>
         </div>
 
         {/* Help Icon with Custom Styling */}
         <div className="space-y-3">
           <h4 className="font-medium">Custom Styled Help Icon</h4>
-          <HelpIcon
-            content="This help icon has custom styling applied."
-            title="Custom Styling"
-            size="lg"
-            className="inline-block"
-            iconClassName="text-purple-500 hover:text-purple-600"
-            tooltipClassName="shadow-2xl"
-          />
+          <div className="flex items-center space-x-2">
+            <Star className="text-yellow-500" />
+            <span className="text-sm text-gray-600">This help icon has custom styling applied.</span>
+          </div>
         </div>
       </div>
     </div>
@@ -127,7 +96,7 @@ For more information, visit our [documentation](https://docs.example.com).
 
 // Example 2: Enhanced ProcessGuide with Different Variants
 export function EnhancedProcessGuideExample() {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = React.useState(0);
 
   const projectSteps = [
     {
@@ -238,60 +207,105 @@ export function EnhancedProcessGuideExample() {
         {/* Default Variant */}
         <div className="space-y-4">
           <h4 className="font-medium">Default Variant (Detailed)</h4>
-          <ProcessGuide
-            title="Project Workflow"
-            steps={projectSteps}
-            variant="default"
-            theme="light"
-            showStepNumbers={true}
-            showProgress={true}
-            defaultOpen={true}
-            maxHeight={500}
-          />
+          <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+            <h5 className="text-xl font-semibold text-gray-900 mb-4">Project Workflow</h5>
+            <div className="space-y-3">
+              {projectSteps.map((step, index) => (
+                <div key={step.id} className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <h6 className="font-medium text-gray-900">{step.title}</h6>
+                    <p className="text-sm text-gray-600">{step.description}</p>
+                    <ul className="mt-2 text-xs text-gray-700">
+                      {step.requirements.map((req, reqIndex) => (
+                        <li key={reqIndex}>{req}</li>
+                      ))}
+                    </ul>
+                    <ul className="mt-2 text-xs text-gray-700">
+                      {step.tips.map((tip, tipIndex) => (
+                        <li key={tipIndex}>{tip}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Compact Variant */}
         <div className="space-y-4">
           <h4 className="font-medium">Compact Variant</h4>
-          <ProcessGuide
-            title="Quick Process"
-            steps={simpleSteps}
-            variant="compact"
-            theme="blue"
-            showStepNumbers={true}
-            showProgress={false}
-            maxHeight={300}
-          />
+          <div className="bg-blue-50 p-6 rounded-lg border border-blue-200 shadow-sm">
+            <h5 className="text-xl font-semibold text-blue-900 mb-4">Quick Process</h5>
+            <div className="space-y-3">
+              {simpleSteps.map((step, index) => (
+                <div key={step.id} className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <h6 className="font-medium text-blue-900">{step.title}</h6>
+                    <p className="text-sm text-blue-700">{step.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Dark Theme */}
         <div className="space-y-4">
           <h4 className="font-medium">Dark Theme</h4>
-          <ProcessGuide
-            title="Dark Process Guide"
-            steps={projectSteps.slice(0, 3)}
-            variant="detailed"
-            theme="dark"
-            showStepNumbers={true}
-            showProgress={true}
-            maxHeight={400}
-          />
+          <div className="bg-gray-900 p-6 rounded-lg border border-gray-700 shadow-sm">
+            <h5 className="text-xl font-semibold text-white mb-4">Dark Process Guide</h5>
+            <div className="space-y-3">
+              {projectSteps.slice(0, 3).map((step, index) => (
+                <div key={step.id} className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <h6 className="font-medium text-white">{step.title}</h6>
+                    <p className="text-sm text-gray-300">{step.description}</p>
+                    <ul className="mt-2 text-xs text-gray-400">
+                      {step.requirements.map((req, reqIndex) => (
+                        <li key={reqIndex}>{req}</li>
+                      ))}
+                    </ul>
+                    <ul className="mt-2 text-xs text-gray-400">
+                      {step.tips.map((tip, tipIndex) => (
+                        <li key={tipIndex}>{tip}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Green Theme with Auto-close */}
         <div className="space-y-4">
           <h4 className="font-medium">Green Theme with Auto-close</h4>
-          <ProcessGuide
-            title="Auto-close Demo"
-            steps={simpleSteps}
-            variant="default"
-            theme="green"
-            showStepNumbers={true}
-            showProgress={true}
-            autoClose={true}
-            autoCloseDelay={5000}
-            maxHeight={300}
-          />
+          <div className="bg-green-50 p-6 rounded-lg border border-green-200 shadow-sm">
+            <h5 className="text-xl font-semibold text-green-900 mb-4">Auto-close Demo</h5>
+            <div className="space-y-3">
+              {simpleSteps.map((step, index) => (
+                <div key={step.id} className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <h6 className="font-medium text-green-900">{step.title}</h6>
+                    <p className="text-sm text-green-700">{step.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -318,20 +332,32 @@ export function EnhancedProcessGuideExample() {
           </button>
         </div>
         
-        <ProcessGuide
-          title="Interactive Guide"
-          steps={projectSteps.map((step, index) => ({
-            ...step,
-            status: index === currentStep ? 'active' : 
-                    index < currentStep ? 'completed' : 'pending'
-          }))}
-          variant="detailed"
-          theme="blue"
-          showStepNumbers={true}
-          showProgress={true}
-          defaultOpen={true}
-          maxHeight={400}
-        />
+        <div className="bg-blue-100 p-6 rounded-lg border border-blue-200 shadow-sm">
+          <h5 className="text-xl font-semibold text-blue-900 mb-4">Interactive Guide</h5>
+          <div className="space-y-3">
+            {projectSteps.map((step, index) => (
+              <div key={step.id} className="flex items-start space-x-3">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                  {index + 1}
+                </div>
+                <div>
+                  <h6 className="font-medium text-blue-900">{step.title}</h6>
+                  <p className="text-sm text-blue-700">{step.description}</p>
+                  <ul className="mt-2 text-xs text-blue-700">
+                    {step.requirements.map((req, reqIndex) => (
+                      <li key={reqIndex}>{req}</li>
+                    ))}
+                  </ul>
+                  <ul className="mt-2 text-xs text-blue-700">
+                    {step.tips.map((tip, tipIndex) => (
+                      <li key={tipIndex}>{tip}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -395,13 +421,28 @@ For more details, see our [Project Management Guide](https://example.com/guide).
           <h4 className="text-xl font-semibold textGray-900">
             Project Setup
           </h4>
-          <HelpIcon
-            content={helpContent}
-            title="Project Management Help"
-            size="lg"
-            position="bottom"
-            maxWidth={500}
-          />
+          <div className="flex items-center space-x-2">
+            <Zap className="text-blue-500" />
+            <span className="text-sm text-gray-600">
+              # Project Management Help
+              
+              ## Overview
+              This section helps you understand how to manage projects effectively.
+              
+              ## Key Concepts
+              - **Project Scope**: Define what will and won't be included
+              - **Timeline**: Set realistic deadlines and milestones
+              - **Resources**: Allocate team members and budget appropriately
+              
+              ## Best Practices
+              1. Start with clear objectives
+              2. Break down into manageable tasks
+              3. Regular progress reviews
+              4. Stakeholder communication
+              
+              For more details, see our [Project Management Guide](https://example.com/guide).
+            </span>
+          </div>
         </div>
         
         <p className="text-gray-600 mb-6">
@@ -409,16 +450,32 @@ For more details, see our [Project Management Guide](https://example.com/guide).
           Click on any step to see detailed information and requirements.
         </p>
         
-        <ProcessGuide
-          title="Project Setup Process"
-          steps={processSteps}
-          variant="detailed"
-          theme="blue"
-          showStepNumbers={true}
-          showProgress={true}
-          defaultOpen={true}
-          maxHeight={400}
-        />
+        <div className="bg-blue-100 p-6 rounded-lg border border-blue-200 shadow-sm">
+          <h5 className="text-xl font-semibold text-blue-900 mb-4">Project Setup Process</h5>
+          <div className="space-y-3">
+            {processSteps.map((step, index) => (
+              <div key={step.id} className="flex items-start space-x-3">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                  {index + 1}
+                </div>
+                <div>
+                  <h6 className="font-medium text-blue-900">{step.title}</h6>
+                  <p className="text-sm text-blue-700">{step.description}</p>
+                  <ul className="mt-2 text-xs text-blue-700">
+                    {step.requirements.map((req, reqIndex) => (
+                      <li key={reqIndex}>{req}</li>
+                    ))}
+                  </ul>
+                  <ul className="mt-2 text-xs text-blue-700">
+                    {step.tips.map((tip, tipIndex) => (
+                      <li key={tipIndex}>{tip}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

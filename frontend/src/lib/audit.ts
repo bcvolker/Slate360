@@ -1,393 +1,280 @@
-import { AuditLog, IAuditLog } from '../models/AuditLog';
-import { connectToDatabase } from './mongodb';
+import mongoose from 'mongoose';
+import { IAuditLog } from '../models/AuditLog';
 
-export interface AuditLogOptions {
-  // User information
-  userId: string;
-  userEmail?: string;
-  userRole?: string;
-  
-  // Action details
+// Audit log interface
+export interface IAuditLog {
+  _id: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
   action: string;
+  resource: string;
+  resourceId: string;
   details: Record<string, any>;
-  
-  // Resource information
-  resourceType?: string;
-  resourceId?: string;
-  
-  // Severity and category
-  severity?: 'low' | 'medium' | 'high' | 'critical';
-  category?: 'user' | 'system' | 'security' | 'data' | 'billing' | 'project';
-  
-  // Request context
-  ipAddress?: string;
-  userAgent?: string;
-  
-  // Additional metadata
-  metadata?: Record<string, any>;
-  
-  // Performance options
-  skipDatabase?: boolean; // For testing or when DB is unavailable
-  logToConsole?: boolean; // For development debugging
-}
-
-export interface AuditLogResult {
-  success: boolean;
-  auditLogId?: string;
-  error?: string;
+  ipAddress: string;
+  userAgent: string;
   timestamp: Date;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  category: 'authentication' | 'authorization' | 'data_access' | 'data_modification' | 'system' | 'other';
+  outcome: 'success' | 'failure' | 'partial';
+  metadata: Record<string, any>;
 }
 
-/**
- * Log an audit event to MongoDB
- * @param options - Audit log options
- * @returns Promise<AuditLogResult>
- */
-export async function logAudit(options: AuditLogOptions): Promise<AuditLogResult> {
-  const {
-    userId,
-    userEmail,
-    userRole,
-    action,
-    details,
-    resourceType,
-    resourceId,
-    severity,
-    category,
-    ipAddress,
-    userAgent,
-    metadata,
-    skipDatabase = false,
-    logToConsole = false
-  } = options;
+// Audit log schema
+const auditLogSchema = new mongoose.Schema<IAuditLog>({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    index: true,
+  },
+  action: {
+    type: String,
+    required: true,
+    trim: true,
+    index: true,
+  },
+  resource: {
+    type: String,
+    required: true,
+    trim: true,
+    index: true,
+  },
+  resourceId: {
+    type: String,
+    required: true,
+    trim: true,
+    index: true,
+  },
+  details: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {},
+  },
+  ipAddress: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  userAgent: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now,
+    index: true,
+  },
+  severity: {
+    type: String,
+    enum: ['low', 'medium', 'high', 'critical'],
+    default: 'low',
+    index: true,
+  },
+  category: {
+    type: String,
+    enum: ['authentication', 'authorization', 'data_access', 'data_modification', 'system', 'other'],
+    default: 'other',
+    index: true,
+  },
+  outcome: {
+    type: String,
+    enum: ['success', 'failure', 'partial'],
+    default: 'success',
+    index: true,
+  },
+  metadata: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {},
+  },
+});
 
-  const timestamp = new Date();
-  const auditLogId = `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+// Indexes for better query performance
+auditLogSchema.index({ timestamp: -1 });
+auditLogSchema.index({ userId: 1, timestamp: -1 });
+auditLogSchema.index({ action: 1, timestamp: -1 });
+auditLogSchema.index({ resource: 1, timestamp: -1 });
+auditLogSchema.index({ severity: 1, timestamp: -1 });
+auditLogSchema.index({ category: 1, timestamp: -1 });
+auditLogSchema.index({ outcome: 1, timestamp: -1 });
 
-  // Console logging for development
-  if (logToConsole) {
-    console.log('🔍 AUDIT LOG:', {
-      id: auditLogId,
-      timestamp: timestamp.toISOString(),
-      userId,
-      action,
-      details,
-      severity: severity || 'low',
-      category: category || 'user'
-    });
-  }
+// Create and export the model
+const AuditLog = mongoose.models.AuditLog || mongoose.model<IAuditLog>('AuditLog', auditLogSchema);
 
-  // Skip database if requested (useful for testing)
-  if (skipDatabase) {
-    return {
-      success: true,
-      auditLogId,
-      timestamp
-    };
-  }
-
+// Audit logging functions
+export const logAudit = async (
+  userId: mongoose.Types.ObjectId,
+  action: string,
+  resource: string,
+  resourceId: string,
+  details: Record<string, any> = {},
+  ipAddress: string = 'unknown',
+  userAgent: string = 'unknown',
+  severity: IAuditLog['severity'] = 'low',
+  category: IAuditLog['category'] = 'other',
+  outcome: IAuditLog['outcome'] = 'success',
+  metadata: Record<string, any> = {}
+): Promise<void> => {
   try {
-    // Connect to database
-    await connectToDatabase();
-
-    // Create audit log entry
     const auditLog = new AuditLog({
       userId,
-      userEmail,
-      userRole,
       action,
-      details,
-      resourceType,
+      resource,
       resourceId,
-      severity: severity || 'low',
-      category: category || 'user',
+      details,
       ipAddress,
       userAgent,
+      timestamp: new Date(),
+      severity,
+      category,
+      outcome,
       metadata,
-      timestamp
     });
 
-    // Save to database
     await auditLog.save();
-
-    return {
-      success: true,
-      auditLogId: auditLog._id.toString(),
-      timestamp
-    };
-
   } catch (error) {
     console.error('Failed to log audit event:', error);
-    
-    // Return error but don't throw to avoid breaking application flow
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-      timestamp
-    };
+    // Don't throw - audit logging should not break the main application flow
   }
-}
+};
 
-/**
- * Convenience function for logging user actions
- */
-export async function logUserAction(
-  userId: string,
-  action: string,
-  details: Record<string, any>,
-  options?: Partial<AuditLogOptions>
-): Promise<AuditLogResult> {
-  return logAudit({
-    userId,
-    action,
-    details,
-    category: 'user',
-    ...options
-  });
-}
-
-/**
- * Convenience function for logging security events
- */
-export async function logSecurityEvent(
-  userId: string,
-  action: string,
-  details: Record<string, any>,
-  options?: Partial<AuditLogOptions>
-): Promise<AuditLogResult> {
-  return logAudit({
-    userId,
-    action,
-    details,
-    category: 'security',
-    severity: 'high',
-    ...options
-  });
-}
-
-/**
- * Convenience function for logging project actions
- */
-export async function logProjectAction(
-  userId: string,
-  action: string,
-  projectId: string,
-  details: Record<string, any>,
-  options?: Partial<AuditLogOptions>
-): Promise<AuditLogResult> {
-  return logAudit({
-    userId,
-    action,
-    details,
-    resourceType: 'project',
-    resourceId: projectId,
-    category: 'project',
-    ...options
-  });
-}
-
-/**
- * Convenience function for logging billing events
- */
-export async function logBillingEvent(
-  userId: string,
-  action: string,
-  details: Record<string, any>,
-  options?: Partial<AuditLogOptions>
-): Promise<AuditLogResult> {
-  return logAudit({
-    userId,
-    action,
-    details,
-    category: 'billing',
-    ...options
-  });
-}
-
-/**
- * Convenience function for logging system events
- */
-export async function logSystemEvent(
-  action: string,
-  details: Record<string, any>,
-  options?: Partial<AuditLogOptions>
-): Promise<AuditLogResult> {
-  return logAudit({
-    userId: 'system',
-    action,
-    details,
-    category: 'system',
-    ...options
-  });
-}
-
-/**
- * Batch log multiple audit events
- */
-export async function logAuditBatch(
-  auditEvents: Omit<AuditLogOptions, 'skipDatabase' | 'logToConsole'>[]
-): Promise<AuditLogResult[]> {
-  const results: AuditLogResult[] = [];
-  
-  for (const event of auditEvents) {
-    try {
-      const result = await logAudit(event);
-      results.push(result);
-    } catch (error) {
-      results.push({
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date()
-      });
-    }
-  }
-  
-  return results;
-}
-
-/**
- * Get audit logs with filtering and pagination
- */
-export async function getAuditLogs(options: {
-  userId?: string;
-  action?: string;
-  category?: string;
-  severity?: string;
-  resourceType?: string;
-  resourceId?: string;
-  startDate?: Date;
-  endDate?: Date;
-  limit?: number;
-  skip?: number;
-}): Promise<{ logs: IAuditLog[]; total: number }> {
+// Get audit logs with filtering
+export const getAuditLogs = async (
+  filter: {
+    userId?: mongoose.Types.ObjectId;
+    action?: string;
+    resource?: string;
+    resourceId?: string;
+    severity?: IAuditLog['severity'];
+    category?: IAuditLog['category'];
+    outcome?: IAuditLog['outcome'];
+    startDate?: Date;
+    endDate?: Date;
+  } = {},
+  limit: number = 100,
+  skip: number = 0
+): Promise<IAuditLog[]> => {
   try {
-    await connectToDatabase();
-    
-    const {
-      userId,
-      action,
-      category,
-      severity,
-      resourceType,
-      resourceId,
-      startDate,
-      endDate,
-      limit = 100,
-      skip = 0
-    } = options;
-
-    // Build query
     const query: any = {};
-    
-    if (userId) query.userId = userId;
-    if (action) query.action = action;
-    if (category) query.category = category;
-    if (severity) query.severity = severity;
-    if (resourceType) query.resourceType = resourceType;
-    if (resourceId) query.resourceId = resourceId;
-    
-    if (startDate || endDate) {
+
+    if (filter.userId) query.userId = filter.userId;
+    if (filter.action) query.action = filter.action;
+    if (filter.resource) query.resource = filter.resource;
+    if (filter.resourceId) query.resourceId = filter.resourceId;
+    if (filter.severity) query.severity = filter.severity;
+    if (filter.category) query.category = filter.category;
+    if (filter.outcome) query.outcome = filter.outcome;
+
+    if (filter.startDate || filter.endDate) {
       query.timestamp = {};
-      if (startDate) query.timestamp.$gte = startDate;
-      if (endDate) query.timestamp.$lte = endDate;
+      if (filter.startDate) query.timestamp.$gte = filter.startDate;
+      if (filter.endDate) query.timestamp.$lte = filter.endDate;
     }
 
-    // Get total count
-    const total = await AuditLog.countDocuments(query);
-    
-    // Get logs with pagination
     const logs = await AuditLog.find(query)
       .sort({ timestamp: -1 })
       .limit(limit)
       .skip(skip)
+      .populate('userId', 'name email')
       .lean();
 
-    return { logs, total };
-    
+    return logs as IAuditLog[];
   } catch (error) {
     console.error('Failed to get audit logs:', error);
-    throw error;
+    throw new Error('Failed to retrieve audit logs');
   }
-}
+};
 
-/**
- * Get audit statistics
- */
-export async function getAuditStats(startDate?: Date, endDate?: Date) {
+// Get audit statistics
+export const getAuditStats = async (
+  startDate?: Date,
+  endDate?: Date
+): Promise<{
+  totalLogs: number;
+  logsBySeverity: Record<string, number>;
+  logsByCategory: Record<string, number>;
+  logsByOutcome: Record<string, number>;
+  logsByAction: Record<string, number>;
+}> => {
   try {
-    await connectToDatabase();
-    const stats = await AuditLog.getAuditStats(startDate, endDate);
-    return stats[0] || {
-      totalLogs: 0,
-      uniqueUsers: 0,
-      uniqueActions: 0,
-      uniqueCategories: 0,
-      uniqueSeverities: 0
+    const dateFilter = {};
+    if (startDate || endDate) {
+      if (startDate) dateFilter.$gte = startDate;
+      if (endDate) dateFilter.$lte = endDate;
+    }
+
+    const matchStage = dateFilter.$gte || dateFilter.$lte ? { timestamp: dateFilter } : {};
+
+    const stats = await AuditLog.aggregate([
+      { $match: matchStage },
+      {
+        $group: {
+          _id: null,
+          totalLogs: { $sum: 1 },
+          logsBySeverity: {
+            $push: '$severity'
+          },
+          logsByCategory: {
+            $push: '$category'
+          },
+          logsByOutcome: {
+            $push: '$outcome'
+          },
+          logsByAction: {
+            $push: '$action'
+          }
+        }
+      }
+    ]);
+
+    if (stats.length === 0) {
+      return {
+        totalLogs: 0,
+        logsBySeverity: {},
+        logsByCategory: {},
+        logsByOutcome: {},
+        logsByAction: {},
+      };
+    }
+
+    const result = stats[0];
+    
+    // Count occurrences
+    const countOccurrences = (arr: string[]) => {
+      return arr.reduce((acc: Record<string, number>, val: string) => {
+        acc[val] = (acc[val] || 0) + 1;
+        return acc;
+      }, {});
+    };
+
+    return {
+      totalLogs: result.totalLogs,
+      logsBySeverity: countOccurrences(result.logsBySeverity),
+      logsByCategory: countOccurrences(result.logsByCategory),
+      logsByOutcome: countOccurrences(result.logsByOutcome),
+      logsByAction: countOccurrences(result.logsByAction),
     };
   } catch (error) {
     console.error('Failed to get audit stats:', error);
-    throw error;
+    throw new Error('Failed to retrieve audit statistics');
   }
-}
+};
 
-/**
- * Clean old audit logs
- */
-export async function cleanOldAuditLogs(daysOld: number = 90): Promise<{ deletedCount: number }> {
+// Clean old audit logs
+export const cleanOldAuditLogs = async (daysToKeep: number = 90): Promise<number> => {
   try {
-    await connectToDatabase();
-    const result = await AuditLog.cleanOldLogs(daysOld);
-    return { deletedCount: result.deletedCount || 0 };
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
+
+    const result = await AuditLog.deleteMany({
+      timestamp: { $lt: cutoffDate }
+    });
+
+    return result.deletedCount || 0;
   } catch (error) {
     console.error('Failed to clean old audit logs:', error);
-    throw error;
+    throw new Error('Failed to clean old audit logs');
   }
-}
+};
 
-/**
- * Export audit logs to JSON (for compliance/backup)
- */
-export async function exportAuditLogs(
-  startDate: Date,
-  endDate: Date,
-  format: 'json' | 'csv' = 'json'
-): Promise<string> {
-  try {
-    await connectToDatabase();
-    
-    const logs = await AuditLog.find({
-      timestamp: {
-        $gte: startDate,
-        $lte: endDate
-      }
-    })
-    .sort({ timestamp: -1 })
-    .lean();
-
-    if (format === 'json') {
-      return JSON.stringify(logs, null, 2);
-    } else {
-      // Simple CSV export
-      const headers = ['timestamp', 'userId', 'action', 'category', 'severity', 'details'];
-      const csvRows = [
-        headers.join(','),
-        ...logs.map(log => [
-          log.timestamp.toISOString(),
-          log.userId,
-          log.action,
-          log.category,
-          log.severity,
-          JSON.stringify(log.details)
-        ].join(','))
-      ];
-      return csvRows.join('\n');
-    }
-    
-  } catch (error) {
-    console.error('Failed to export audit logs:', error);
-    throw error;
-  }
-}
-
-// Export types
-export type { AuditLogOptions, AuditLogResult };
+// Export the model and functions
+export default AuditLog;
+export { logAudit, getAuditLogs, getAuditStats, cleanOldAuditLogs };

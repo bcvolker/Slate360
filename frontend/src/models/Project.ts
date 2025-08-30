@@ -368,7 +368,7 @@ projectSchema.virtual('budgetUtilization').get(function(this: IProject): number 
 });
 
 projectSchema.virtual('teamSize').get(function(this: IProject): number {
-  return this.team.filter(member => member.isActive).length;
+  return this.team.filter((member: ITeamMember) => member.isActive).length;
 });
 
 // Indexes for better query performance
@@ -387,7 +387,7 @@ projectSchema.methods.addTeamMember = async function(
   permissions: ITeamMember['permissions'] = ['read']
 ): Promise<void> {
   // Check if user is already a team member
-  const existingMember = this.team.find(member => member.userId.equals(userId));
+  const existingMember = this.team.find((member: ITeamMember) => member.userId.equals(userId));
   if (existingMember) {
     throw new Error('User is already a team member');
   }
@@ -406,7 +406,7 @@ projectSchema.methods.addTeamMember = async function(
 projectSchema.methods.removeTeamMember = async function(
   userId: mongoose.Types.ObjectId
 ): Promise<void> {
-  const memberIndex = this.team.findIndex(member => member.userId.equals(userId));
+  const memberIndex = this.team.findIndex((member: ITeamMember) => member.userId.equals(userId));
   if (memberIndex === -1) {
     throw new Error('User is not a team member');
   }
@@ -420,7 +420,7 @@ projectSchema.methods.updateTeamMemberPermissions = async function(
   userId: mongoose.Types.ObjectId,
   permissions: ITeamMember['permissions']
 ): Promise<void> {
-  const member = this.team.find(member => member.userId.equals(userId));
+  const member = this.team.find((member: ITeamMember) => member.userId.equals(userId));
   if (!member) {
     throw new Error('User is not a team member');
   }
@@ -436,12 +436,12 @@ projectSchema.methods.calculateProgress = function(): number {
 
   // Calculate progress based on completed milestones
   if (this.timeline.milestones && this.timeline.milestones.length > 0) {
-    const completedMilestones = this.timeline.milestones.filter(m => m.completed).length;
+    const completedMilestones = this.timeline.milestones.filter((m: any) => m.completed).length;
     return Math.round((completedMilestones / this.timeline.milestones.length) * 100);
   }
 
   // Fallback: estimate progress based on status
-  const statusProgress = {
+  const statusProgress: Record<string, number> = {
     'planning': 0,
     'active': 50,
     'on-hold': 50,
@@ -481,7 +481,7 @@ projectSchema.methods.completeMilestone = async function(milestoneName: string):
     throw new Error('No milestones found');
   }
 
-  const milestone = this.timeline.milestones.find(m => m.name === milestoneName);
+  const milestone = this.timeline.milestones.find((m: any) => m.name === milestoneName);
   if (!milestone) {
     throw new Error('Milestone not found');
   }
@@ -539,8 +539,8 @@ projectSchema.pre('save', function(next) {
   next();
 });
 
-// Pre-remove middleware
-projectSchema.pre('remove', function(next) {
+// Pre-delete middleware (updated for Mongoose 6+)
+projectSchema.pre('deleteOne', { document: true, query: false }, function(next) {
   // Add any cleanup logic here
   // For example, remove related documents, files, etc.
   next();

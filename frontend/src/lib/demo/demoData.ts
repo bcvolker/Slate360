@@ -1,64 +1,76 @@
+import mongoose from 'mongoose';
 import { IProject } from '../../models/Project';
 
-// Demo project data
-export const demoProjects: IProject[] = [
+// Helper function to create ObjectId
+const createObjectId = (id: string) => new mongoose.Types.ObjectId(id);
+
+// Demo project data - using Partial<IProject> to allow for demo data flexibility
+export const demoProjects: Partial<IProject>[] = [
   {
-    _id: 'demo_proj_001',
+    _id: createObjectId('demo_proj_001'),
     name: 'Modern Office Complex',
     description: 'A state-of-the-art office building featuring sustainable design, smart building technology, and collaborative workspaces.',
-    status: 'in_progress',
+    status: 'active',
     type: 'commercial',
     location: {
-      address: '123 Innovation Drive',
-      city: 'Tech City',
+      address: '123 Business Ave',
+      city: 'Los Angeles',
       state: 'CA',
       zipCode: '90210',
+      country: 'USA',
       coordinates: { lat: 34.0522, lng: -118.2437 }
     },
     client: {
       name: 'TechCorp Industries',
-      company: 'TechCorp Inc.',
       email: 'projects@techcorp.com',
-      phone: '+1-555-0123'
+      phone: '+1-555-0101'
     },
     timeline: {
-      startDate: new Date('2024-01-15'),
-      endDate: new Date('2024-12-31'),
-      milestones: [
-        { name: 'Design Approval', date: new Date('2024-02-15'), completed: true },
-        { name: 'Foundation Complete', date: new Date('2024-04-30'), completed: true },
-        { name: 'Structural Framework', date: new Date('2024-07-15'), completed: false },
-        { name: 'Interior Finishing', date: new Date('2024-10-31'), completed: false },
-        { name: 'Final Inspection', date: new Date('2024-12-15'), completed: false }
-      ]
+      startDate: new Date('2024-01-10'),
+      estimatedDuration: 365
     },
     budget: {
-      total: 2500000,
-      spent: 850000,
-      currency: 'USD',
-      breakdown: {
-        materials: 1200000,
-        labor: 800000,
-        equipment: 300000,
-        permits: 50000,
-        contingency: 150000
-      }
+      estimated: 25000000,
+      actual: 8500000,
+      currency: 'USD'
     },
     team: [
-      { name: 'Sarah Johnson', role: 'Project Manager', email: 'sarah.j@demo.com' },
-      { name: 'Mike Chen', role: 'Lead Architect', email: 'mike.c@demo.com' },
-      { name: 'Lisa Rodriguez', role: 'Structural Engineer', email: 'lisa.r@demo.com' },
-      { name: 'David Kim', role: 'Site Supervisor', email: 'david.k@demo.com' }
+      { 
+        userId: createObjectId('demo_user_001'),
+        role: 'project_manager',
+        permissions: ['read', 'write', 'admin'],
+        joinedAt: new Date(),
+        isActive: true
+      },
+      { 
+        userId: createObjectId('demo_user_002'),
+        role: 'architect',
+        permissions: ['read', 'write'],
+        joinedAt: new Date(),
+        isActive: true
+      },
+      { 
+        userId: createObjectId('demo_user_003'),
+        role: 'engineer',
+        permissions: ['read', 'write'],
+        joinedAt: new Date(),
+        isActive: true
+      },
+      { 
+        userId: createObjectId('demo_user_004'),
+        role: 'contractor',
+        permissions: ['read'],
+        joinedAt: new Date(),
+        isActive: true
+      }
     ],
     tags: ['commercial', 'sustainable', 'smart-building', 'office'],
-    priority: 'high',
-    riskLevel: 'medium',
-    createdBy: 'demo_user_001',
+    createdBy: createObjectId('demo_user_001'),
     createdAt: new Date('2024-01-10'),
     updatedAt: new Date('2024-06-15')
   },
   {
-    _id: 'demo_proj_002',
+    _id: createObjectId('demo_proj_002'),
     name: 'Residential Community',
     description: 'A mixed-use residential development featuring luxury apartments, townhouses, and community amenities.',
     status: 'planning',
@@ -68,159 +80,130 @@ export const demoProjects: IProject[] = [
       city: 'Suburbia',
       state: 'NY',
       zipCode: '10001',
+      country: 'USA',
       coordinates: { lat: 40.7128, lng: -74.0060 }
     },
     client: {
       name: 'Urban Living Group',
-      company: 'Urban Living Development',
       email: 'info@urbanliving.com',
       phone: '+1-555-0456'
     },
     timeline: {
       startDate: new Date('2024-08-01'),
-      endDate: new Date('2026-06-30'),
-      milestones: [
-        { name: 'Zoning Approval', date: new Date('2024-09-15'), completed: false },
-        { name: 'Design Development', date: new Date('2024-11-30'), completed: false },
-        { name: 'Construction Start', date: new Date('2025-03-01'), completed: false },
-        { name: 'Phase 1 Complete', date: new Date('2025-12-31'), completed: false },
-        { name: 'Final Delivery', date: new Date('2026-06-30'), completed: false }
-      ]
+      estimatedDuration: 670
     },
     budget: {
-      total: 4500000,
-      spent: 150000,
-      currency: 'USD',
-      breakdown: {
-        materials: 2200000,
-        labor: 1500000,
-        equipment: 400000,
-        permits: 200000,
-        contingency: 200000
-      }
+      estimated: 4500000,
+      currency: 'USD'
     },
     team: [
-      { name: 'Alex Thompson', role: 'Development Manager', email: 'alex.t@demo.com' },
-      { name: 'Emma Wilson', role: 'Lead Designer', email: 'emma.w@demo.com' },
-      { name: 'James Brown', role: 'Civil Engineer', email: 'james.b@demo.com' }
+      { 
+        userId: createObjectId('demo_user_005'),
+        role: 'project_manager',
+        permissions: ['read', 'write', 'admin'],
+        joinedAt: new Date(),
+        isActive: true
+      },
+      { 
+        userId: createObjectId('demo_user_006'),
+        role: 'architect',
+        permissions: ['read', 'write'],
+        joinedAt: new Date(),
+        isActive: true
+      }
     ],
     tags: ['residential', 'mixed-use', 'luxury', 'community'],
-    priority: 'medium',
-    riskLevel: 'low',
-    createdBy: 'demo_user_001',
+    createdBy: createObjectId('demo_user_001'),
     createdAt: new Date('2024-03-20'),
     updatedAt: new Date('2024-06-10')
   },
   {
-    _id: 'demo_proj_003',
+    _id: createObjectId('demo_proj_003'),
     name: 'Hospital Renovation',
     description: 'Comprehensive renovation of the emergency department and patient care facilities.',
     status: 'completed',
-    type: 'healthcare',
+    type: 'renovation',
     location: {
       address: '789 Medical Center Blvd',
       city: 'Healthville',
       state: 'TX',
       zipCode: '75001',
+      country: 'USA',
       coordinates: { lat: 32.7767, lng: -96.7970 }
     },
     client: {
       name: 'City General Hospital',
-      company: 'City General Healthcare System',
       email: 'facilities@citygeneral.org',
       phone: '+1-555-0789'
     },
     timeline: {
       startDate: new Date('2023-06-01'),
       endDate: new Date('2024-05-31'),
-      milestones: [
-        { name: 'Planning Phase', date: new Date('2023-07-15'), completed: true },
-        { name: 'Construction Start', date: new Date('2023-09-01'), completed: true },
-        { name: 'Phase 1 Complete', date: new Date('2024-01-31'), completed: true },
-        { name: 'Final Inspection', date: new Date('2024-05-15'), completed: true },
-        { name: 'Project Closeout', date: new Date('2024-05-31'), completed: true }
-      ]
+      estimatedDuration: 365
     },
     budget: {
-      total: 1800000,
-      spent: 1750000,
-      currency: 'USD',
-      breakdown: {
-        materials: 900000,
-        labor: 600000,
-        equipment: 200000,
-        permits: 50000,
-        contingency: 50000
-      }
+      estimated: 1800000,
+      actual: 1750000,
+      currency: 'USD'
     },
     team: [
-      { name: 'Dr. Maria Garcia', role: 'Medical Director', email: 'maria.g@demo.com' },
-      { name: 'Robert Lee', role: 'Facilities Manager', email: 'robert.l@demo.com' },
-      { name: 'Jennifer White', role: 'Project Coordinator', email: 'jennifer.w@demo.com' }
+      { 
+        userId: createObjectId('demo_user_007'),
+        role: 'project_manager',
+        permissions: ['read', 'write', 'admin'],
+        joinedAt: new Date(),
+        isActive: true
+      }
     ],
     tags: ['healthcare', 'renovation', 'emergency', 'patient-care'],
-    priority: 'high',
-    riskLevel: 'high',
-    createdBy: 'demo_user_001',
+    createdBy: createObjectId('demo_user_001'),
     createdAt: new Date('2023-05-15'),
     updatedAt: new Date('2024-06-01')
   },
   {
-    _id: 'demo_proj_004',
+    _id: createObjectId('demo_proj_004'),
     name: 'Solar Farm Installation',
     description: 'Large-scale solar energy farm with battery storage and grid integration.',
-    status: 'in_progress',
-    type: 'energy',
+    status: 'active',
+    type: 'industrial',
     location: {
       address: 'Solar Valley Ranch',
       city: 'Desert Springs',
       state: 'AZ',
       zipCode: '85001',
+      country: 'USA',
       coordinates: { lat: 33.4484, lng: -112.0740 }
     },
     client: {
       name: 'Green Energy Solutions',
-      company: 'Green Energy Corp',
       email: 'projects@greenenergy.com',
       phone: '+1-555-0321'
     },
     timeline: {
       startDate: new Date('2024-02-01'),
-      endDate: new Date('2024-11-30'),
-      milestones: [
-        { name: 'Site Preparation', date: new Date('2024-03-15'), completed: true },
-        { name: 'Panel Installation', date: new Date('2024-06-30'), completed: false },
-        { name: 'Electrical Systems', date: new Date('2024-08-31'), completed: false },
-        { name: 'Testing & Commissioning', date: new Date('2024-10-31'), completed: false },
-        { name: 'Grid Connection', date: new Date('2024-11-30'), completed: false }
-      ]
+      estimatedDuration: 300
     },
     budget: {
-      total: 3200000,
-      spent: 1200000,
-      currency: 'USD',
-      breakdown: {
-        materials: 1800000,
-        labor: 800000,
-        equipment: 400000,
-        permits: 100000,
-        contingency: 100000
-      }
+      estimated: 3200000,
+      actual: 1200000,
+      currency: 'USD'
     },
     team: [
-      { name: 'Dr. Sarah Chen', role: 'Energy Engineer', email: 'sarah.c@demo.com' },
-      { name: 'Tom Martinez', role: 'Site Manager', email: 'tom.m@demo.com' },
-      { name: 'Rachel Green', role: 'Electrical Engineer', email: 'rachel.g@demo.com' }
+      { 
+        userId: createObjectId('demo_user_008'),
+        role: 'project_manager',
+        permissions: ['read', 'write', 'admin'],
+        joinedAt: new Date(),
+        isActive: true
+      }
     ],
     tags: ['energy', 'solar', 'renewable', 'sustainability'],
-    priority: 'high',
-    riskLevel: 'medium',
-    createdBy: 'demo_user_001',
+    createdBy: createObjectId('demo_user_001'),
     createdAt: new Date('2024-01-25'),
     updatedAt: new Date('2024-06-12')
   },
   {
-    _id: 'demo_proj_005',
+    _id: createObjectId('demo_proj_005'),
     name: 'Bridge Rehabilitation',
     description: 'Structural rehabilitation and seismic retrofit of the historic downtown bridge.',
     status: 'planning',
@@ -230,46 +213,33 @@ export const demoProjects: IProject[] = [
       city: 'Riverside',
       state: 'CA',
       zipCode: '92501',
+      country: 'USA',
       coordinates: { lat: 33.9533, lng: -117.3962 }
     },
     client: {
       name: 'City of Riverside',
-      company: 'Riverside Public Works',
       email: 'engineering@riverside.gov',
       phone: '+1-555-0654'
     },
     timeline: {
       startDate: new Date('2025-01-01'),
-      endDate: new Date('2026-12-31'),
-      milestones: [
-        { name: 'Engineering Design', date: new Date('2025-03-31'), completed: false },
-        { name: 'Environmental Review', date: new Date('2025-06-30'), completed: false },
-        { name: 'Construction Start', date: new Date('2025-09-01'), completed: false },
-        { name: 'Phase 1 Complete', date: new Date('2026-06-30'), completed: false },
-        { name: 'Final Inspection', date: new Date('2026-12-31'), completed: false }
-      ]
+      estimatedDuration: 730
     },
     budget: {
-      total: 8500000,
-      spent: 250000,
-      currency: 'USD',
-      breakdown: {
-        materials: 4000000,
-        labor: 3000000,
-        equipment: 800000,
-        permits: 400000,
-        contingency: 300000
-      }
+      estimated: 8500000,
+      currency: 'USD'
     },
     team: [
-      { name: 'Dr. Michael Chang', role: 'Structural Engineer', email: 'michael.c@demo.com' },
-      { name: 'Patricia Davis', role: 'Project Manager', email: 'patricia.d@demo.com' },
-      { name: 'Kevin O\'Connor', role: 'Construction Manager', email: 'kevin.o@demo.com' }
+      { 
+        userId: createObjectId('demo_user_009'),
+        role: 'project_manager',
+        permissions: ['read', 'write', 'admin'],
+        joinedAt: new Date(),
+        isActive: true
+      }
     ],
     tags: ['infrastructure', 'bridge', 'rehabilitation', 'seismic'],
-    priority: 'medium',
-    riskLevel: 'high',
-    createdBy: 'demo_user_001',
+    createdBy: createObjectId('demo_user_001'),
     createdAt: new Date('2024-04-10'),
     updatedAt: new Date('2024-06-08')
   }
@@ -519,29 +489,35 @@ export const simulateDataSync = async (): Promise<{ success: boolean; syncedItem
 };
 
 // Get demo project by ID
-export const getDemoProject = (id: string): IProject | undefined => {
-  return demoProjects.find(project => project._id === id);
+export const getDemoProject = (id: string): Partial<IProject> | undefined => {
+  return demoProjects.find(project => project._id?.toString() === id);
 };
 
 // Get demo projects by status
-export const getDemoProjectsByStatus = (status: string): IProject[] => {
+export const getDemoProjectsByStatus = (status: string): Partial<IProject>[] => {
   return demoProjects.filter(project => project.status === status);
 };
 
 // Get demo projects by type
-export const getDemoProjectsByType = (type: string): IProject[] => {
+export const getDemoProjectsByType = (type: string): Partial<IProject>[] => {
   return demoProjects.filter(project => project.type === type);
 };
 
 // Search demo projects
-export const searchDemoProjects = (query: string): IProject[] => {
+export const searchDemoProjects = (query: string, limit?: number): Partial<IProject>[] => {
   const lowerQuery = query.toLowerCase();
-  return demoProjects.filter(project => 
-    project.name.toLowerCase().includes(lowerQuery) ||
-    project.description.toLowerCase().includes(lowerQuery) ||
-    project.client.name.toLowerCase().includes(lowerQuery) ||
-    project.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+  const filtered = demoProjects.filter(project => 
+    project.name?.toLowerCase().includes(lowerQuery) ||
+    project.description?.toLowerCase().includes(lowerQuery) ||
+    project.client?.name?.toLowerCase().includes(lowerQuery) ||
+    project.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
   );
+  
+  const sorted = filtered.sort((a, b) => 
+    (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0)
+  );
+  
+  return limit ? sorted.slice(0, limit) : sorted;
 };
 
 // Get demo user by ID

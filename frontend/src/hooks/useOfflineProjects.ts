@@ -1,8 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSession } from 'next-auth/react';
 import { ProjectSyncService, networkManager } from '../lib/sync/projectSync';
-import { db, OfflineProject } from '../lib/db/indexedDB';
+import { db } from '../lib/db/indexedDB';
 import { toast } from 'react-hot-toast';
+
+// Define OfflineProject interface locally since it's not exported from indexedDB
+interface OfflineProject {
+  id: string;
+  name: string;
+  data: any;
+  [key: string]: any;
+}
 
 export interface UseOfflineProjectsReturn {
   // State
@@ -36,7 +43,7 @@ export interface UseOfflineProjectsReturn {
  * @returns Object with project management utilities and state
  */
 export function useOfflineProjects(): UseOfflineProjectsReturn {
-  const { data: session } = useSession();
+  const [session] = useState(null); // Placeholder for session, as next-auth is removed
   const [projects, setProjects] = useState<OfflineProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,10 +52,10 @@ export function useOfflineProjects(): UseOfflineProjectsReturn {
 
   // Initialize sync service and load projects
   useEffect(() => {
-    if (session?.user) {
+    if (session) {
       initializeOfflineProjects();
     }
-  }, [session?.user]);
+  }, [session]);
 
   // Network status listener
   useEffect(() => {

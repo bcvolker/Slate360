@@ -85,7 +85,7 @@ const nextConfig = {
 
   // Image optimization
   images: {
-    domains: [],
+    domains: ['localhost'],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,
   },
@@ -93,11 +93,6 @@ const nextConfig = {
   // Redirects for security and build testing
   async redirects() {
     return [
-      {
-        source: '/',
-        destination: '/test-build',
-        permanent: false,
-      },
       {
         source: '/admin',
         destination: '/dashboard/admin',

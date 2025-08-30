@@ -1,8 +1,7 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface RoleAccess {
   isAuthenticated: boolean;
@@ -16,12 +15,34 @@ export interface RoleAccess {
 }
 
 export function useRole(): RoleAccess {
-  const { data: session, status } = useSession();
   const router = useRouter();
+  const [session, setSession] = useState(null);
+  const [status, setStatus] = useState<'authenticated' | 'loading' | 'unauthenticated'>('loading');
+
+  useEffect(() => {
+    const loadSession = async () => {
+      try {
+        const response = await fetch('/api/auth/session');
+        if (response.ok) {
+          const data = await response.json();
+          setSession(data);
+          setStatus('authenticated');
+        } else {
+          setStatus('unauthenticated');
+        }
+      } catch (error) {
+        setStatus('unauthenticated');
+      }
+    };
+
+    loadSession();
+    const interval = setInterval(loadSession, 10000); // Poll every 10 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   const isAuthenticated = status === 'authenticated';
-  const userRole = session?.user?.role || null;
-  const userTier = session?.user?.tier || null;
+  const userRole = (session as any)?.user?.role || null;
+  const userTier = (session as any)?.user?.tier || null;
   
   const isCEO = userRole === 'ceo';
   const isAdmin = userRole === 'admin' || userRole === 'ceo';

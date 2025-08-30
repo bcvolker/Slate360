@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 
 export interface SessionConfig {
   maxAge: number; // Session timeout in milliseconds
@@ -139,10 +139,12 @@ export class SessionManager {
    */
   async cleanupExpiredSessions(): Promise<void> {
     const now = Date.now();
+    const oneDayAgo = now - 24 * 60 * 60 * 1000; // 1 day ago
     const expiredSessions = Array.from(this.sessions.values())
       .filter(session => 
         now - session.createdAt.getTime() > this.config.maxAge ||
-        now - session.lastActivity.getTime() > this.config.activityTimeout
+        now - session.lastActivity.getTime() > this.config.activityTimeout ||
+        session.createdAt.getTime() < oneDayAgo // Also remove sessions older than 1 day
       );
 
     expiredSessions.forEach(session => {
@@ -216,9 +218,9 @@ export const enhancedAuthOptions = {
     },
     async session({ session, token }: any) {
       // Add security information to session
-      session.lastActivity = token.lastActivity;
-      session.deviceFingerprint = token.deviceFingerprint;
-      session.sessionId = token.sessionId;
+      (session as any).lastActivity = token.lastActivity;
+      (session as any).deviceFingerprint = token.deviceFingerprint;
+      (session as any).sessionId = token.sessionId;
       
       return session;
     }
@@ -254,7 +256,7 @@ export const sessionMiddleware = async (req: any, res: any, next: any) => {
     }
 
     // Check session activity
-    if (session.lastActivity && Date.now() - session.lastActivity > 30 * 60 * 1000) {
+    if ((session as any).lastActivity && Date.now() - (session as any).lastActivity > 30 * 60 * 1000) {
       return res.status(401).json({
         error: 'Session expired',
         code: 'SESSION_EXPIRED'

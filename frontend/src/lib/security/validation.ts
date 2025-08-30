@@ -1,9 +1,8 @@
 import { z } from 'zod';
 
 // Basic sanitization function (in production, use DOMPurify)
-const sanitizeString = (input: string): string => {
+const sanitizeString = (input: unknown): string => {
   if (typeof input !== 'string') return '';
-  
   return input
     .replace(/[<>]/g, '') // Remove < and >
     .replace(/javascript:/gi, '') // Remove javascript: protocol
@@ -105,16 +104,25 @@ export const budgetSchema = z.object({
 
 // Timeline schemas
 export const timelineSchema = z.object({
-  startDate: z.date({
+  startDate: z.preprocess((arg) => {
+    if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
+    return undefined;
+  }, z.date({
     required_error: 'Start date is required',
     invalid_type_error: 'Start date must be a valid date'
-  }),
-  endDate: z.date({
+  })),
+  endDate: z.preprocess((arg) => {
+    if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
+    return undefined;
+  }, z.date({
     invalid_type_error: 'End date must be a valid date'
-  }).optional(),
+  })).optional(),
   milestones: z.array(z.object({
     title: sanitizedStringSchema.min(3).max(100),
-    date: z.date(),
+    date: z.preprocess((arg) => {
+      if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
+      return undefined;
+    }, z.date()),
     description: sanitizedStringSchema.max(500).optional()
   })).optional()
 });
@@ -174,8 +182,14 @@ export const projectSearchSchema = z.object({
   client: sanitizedStringSchema.max(200).optional(),
   tags: z.array(sanitizedStringSchema).optional(),
   dateRange: z.object({
-    start: z.date().optional(),
-    end: z.date().optional()
+    start: z.preprocess((arg) => {
+      if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
+      return undefined;
+    }, z.date().optional()),
+    end: z.preprocess((arg) => {
+      if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
+      return undefined;
+    }, z.date().optional())
   }).optional(),
   budgetRange: z.object({
     min: z.number().min(0).optional(),

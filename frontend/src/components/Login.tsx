@@ -1,21 +1,25 @@
 'use client';
 
-import { useState } from 'react';
-import { signIn, getSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import styles from '../styles/Login.module.css';
+import React, { useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
+import styles from '@/styles/Login.module.css';
 
 interface LoginProps {
   onClose?: () => void;
   isModal?: boolean;
 }
 
-export default function Login({ onClose, isModal = true }: LoginProps) {
+export default function Login({ isModal = false, onClose }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const router = useRouter();
+  
+  // Initialize Supabase client (you'll need to add these to your .env file)
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key'
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,20 +27,19 @@ export default function Login({ onClose, isModal = true }: LoginProps) {
     setError('');
 
     try {
-      const result = await signIn('credentials', {
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
-        redirect: false,
       });
 
-      if (result?.error) {
-        setError('Invalid email or password. Please try again.');
-      } else if (result?.ok) {
+      if (error) {
+        setError(error.message || 'Invalid email or password. Please try again.');
+      } else if (data.user) {
         // Redirect to dashboard on successful login
         if (isModal && onClose) {
           onClose();
         } else {
-          router.push('/dashboard');
+          window.location.href = '/dashboard';
         }
       }
     } catch (err) {
@@ -52,7 +55,17 @@ export default function Login({ onClose, isModal = true }: LoginProps) {
     setError('');
     
     try {
-      await signIn('google', { callbackUrl: '/dashboard' });
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`
+        }
+      });
+      
+      if (error) {
+        setError('Google sign-in failed. Please try again.');
+        setIsLoading(false);
+      }
     } catch (err) {
       setError('Google sign-in failed. Please try again.');
       setIsLoading(false);
@@ -61,14 +74,14 @@ export default function Login({ onClose, isModal = true }: LoginProps) {
 
   const handleForgotPassword = () => {
     // Redirect to password reset page
-    router.push('/forgot-password');
+    window.location.href = '/forgot-password';
   };
 
   const handleSignUp = () => {
     if (isModal && onClose) {
       onClose();
     }
-    router.push('/signup');
+    window.location.href = '/signup';
   };
 
   if (isModal) {

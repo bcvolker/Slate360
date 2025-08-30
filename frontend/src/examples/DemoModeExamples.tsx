@@ -2,22 +2,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import DemoModeToggle from '../components/DemoModeToggle';
 import DemoBanner from '../components/DemoBanner';
-import DemoWorkflowWalkthrough from '../components/DemoWorkflowWalkthrough';
+import { Zap, CheckCircle, Star, Users, BarChart3 } from 'lucide-react';
 import { useDemo } from '../contexts/DemoContext';
-import { 
-  Play, 
-  BookOpen, 
-  Users, 
-  BarChart3, 
-  Upload, 
-  Plus, 
-  FileText,
-  CheckCircle,
-  Clock,
-  DollarSign,
-  MapPin,
-  Tag
-} from 'lucide-react';
 
 export function DemoModeExamples() {
   const { 
@@ -144,7 +130,7 @@ export function DemoModeExamples() {
                   onClick={startWorkflowTour}
                   className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 flex items-center space-x-2"
                 >
-                  <Play size={20} />
+                  <Zap size={20} />
                   <span>Start Workflow Tour</span>
                 </button>
                 
@@ -152,7 +138,7 @@ export function DemoModeExamples() {
                   onClick={() => setShowWorkflow(true)}
                   className="px-6 py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition-all duration-200 flex items-center space-x-2"
                 >
-                  <BookOpen size={20} />
+                  <CheckCircle size={20} />
                   <span>Open Workflow Guide</span>
                 </button>
               </div>
@@ -195,15 +181,12 @@ export function DemoModeExamples() {
                       
                       <div className="space-y-2 mb-4">
                         <div className="flex items-center text-sm text-gray-500">
-                          <MapPin size={16} className="mr-2" />
                           <span>{project.location.city}, {project.location.state}</span>
                         </div>
                         <div className="flex items-center text-sm text-gray-500">
-                          <DollarSign size={16} className="mr-2" />
                           <span>${(((project as any).budget?.estimated ?? 0) / 1000000).toFixed(1)}M</span>
                         </div>
                         <div className="flex items-center text-sm text-gray-500">
-                          <Clock size={16} className="mr-2" />
                           <span>{(((project as any).timeline?.milestones ?? []).filter((m: any) => m?.completed).length)}/{(((project as any).timeline?.milestones ?? []).length)} milestones</span>
                         </div>
                       </div>
@@ -269,7 +252,7 @@ export function DemoModeExamples() {
                   {/* Budget Overview */}
                   <div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                      <DollarSign size={24} className="mr-2 text-green-600" />
+                      <Star size={24} className="mr-2 text-green-600" />
                       Budget Overview
                     </h3>
                     <div className="space-y-4">
@@ -304,7 +287,7 @@ export function DemoModeExamples() {
                 {/* Recent Activity */}
                 <div className="mt-8 pt-8 border-t border-gray-200">
                   <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                    <Clock size={24} className="mr-2 text-gray-600" />
+                    <Zap size={24} className="mr-2 text-gray-600" />
                     Recent Activity
                   </h3>
                   <div className="space-y-3">
@@ -340,7 +323,7 @@ export function DemoModeExamples() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
                   {
-                    icon: <BookOpen size={32} className="text-blue-600" />,
+                    icon: <Star size={32} className="text-blue-600" />,
                     title: 'Sample Projects',
                     description: 'Explore 5 realistic projects with full details, budgets, and timelines.',
                     color: 'bg-blue-50 border-blue-200'
@@ -358,19 +341,19 @@ export function DemoModeExamples() {
                     color: 'bg-purple-50 border-purple-200'
                   },
                   {
-                    icon: <Upload size={32} className="text-orange-600" />,
+                    icon: <Zap size={32} className="text-orange-600" />,
                     title: 'File Management',
                     description: 'Test file uploads and management with sample documents.',
                     color: 'bg-orange-50 border-orange-200'
                   },
                   {
-                    icon: <Plus size={32} className="text-red-600" />,
+                    icon: <Star size={32} className="text-red-600" />,
                     title: 'Project Creation',
                     description: 'Create new demo projects to test the creation workflow.',
                     color: 'bg-red-50 border-red-200'
                   },
                   {
-                    icon: <FileText size={32} className="text-indigo-600" />,
+                    icon: <CheckCircle size={32} className="text-indigo-600" />,
                     title: 'Documentation',
                     description: 'Access comprehensive help and documentation throughout.',
                     color: 'bg-indigo-50 border-indigo-200'
@@ -419,11 +402,79 @@ export function DemoModeExamples() {
       </div>
 
       {/* Workflow Walkthrough Modal */}
-      <DemoWorkflowWalkthrough
-        isOpen={showWorkflow}
-        onClose={() => setShowWorkflow(false)}
-        onStepComplete={handleStepComplete}
-      />
+      {showWorkflow && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setShowWorkflow(false)}
+        >
+          <motion.div
+            className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            initial={{ scale: 0.8, y: 50 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.8, y: 50 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-8">
+              <div className="flex items-start justify-between mb-6">
+                <h2 className="text-3xl font-bold text-gray-900">Workflow Guide</h2>
+                <button
+                  onClick={() => setShowWorkflow(false)}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <span className="sr-only">Close</span>
+                  <span className="text-2xl">×</span>
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Introduction</h3>
+                  <p className="text-gray-900">
+                    Welcome to the Slate360 Demo Mode! This guide will help you navigate through the platform's key features and workflows.
+                    You can interact with the demo data and test various functionalities.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Getting Started</h3>
+                  <ul className="list-disc list-inside text-gray-900 space-y-2">
+                    <li>Click on the "Demo Mode Toggle" to enable/disable demo mode.</li>
+                    <li>Explore the "Sample Projects" to see real-world examples.</li>
+                    <li>Use the "Workflow Tour" to see how tasks are managed.</li>
+                    <li>Check the "Analytics Overview" to see project statistics.</li>
+                    <li>Test "File Management" and "Project Creation" features.</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="mt-8 pt-8 border-t border-gray-200">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-blue-50 rounded-lg">
+                    <h4 className="text-lg font-semibold text-blue-900 mb-2">Project Management</h4>
+                    <p className="text-gray-700">Create, edit, and manage projects with detailed information.</p>
+                  </div>
+                  <div className="p-4 bg-green-50 rounded-lg">
+                    <h4 className="text-lg font-semibold text-green-900 mb-2">Team Collaboration</h4>
+                    <p className="text-gray-700">Assign roles, manage permissions, and track team activity.</p>
+                  </div>
+                  <div className="p-4 bg-purple-50 rounded-lg">
+                    <h4 className="text-lg font-semibold text-purple-900 mb-2">Analytics & Reports</h4>
+                    <p className="text-gray-700">View detailed project statistics, budget overviews, and activity logs.</p>
+                  </div>
+                  <div className="p-4 bg-orange-50 rounded-lg">
+                    <h4 className="text-lg font-semibold text-orange-900 mb-2">File Management</h4>
+                    <p className="text-gray-700">Upload, organize, and manage sample documents and files.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
 
       {/* Project Detail Modal */}
       {selectedProject && (

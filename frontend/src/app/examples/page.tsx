@@ -23,8 +23,6 @@ import { ProjectAnalytics } from '../../components/ProjectAnalytics';
 import { VirtualProjectList } from '../../components/VirtualProjectList';
 import { Modal, ConfirmModal, FormModal } from '../../components/Modal';
 import { SyncStatus } from '../../components/SyncStatus';
-import { HelpIcon } from '../../components/HelpIcon';
-import { ProcessGuide } from '../../components/ProcessGuide';
 
 export default function ExamplesPage() {
   const { isDemoMode, demoData, toggleDemoMode } = useDemoMode();
@@ -433,37 +431,10 @@ export default function ExamplesPage() {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">HelpIcon Component</h3>
               <div className="space-y-4">
                 <div className="flex items-center space-x-4">
-                  <HelpIcon
-                    content="This is a basic help tooltip with simple text content."
-                    title="Basic Help"
-                    size="md"
-                    position="top"
-                  />
                   <span className="text-sm text-gray-600">Basic help icon</span>
                 </div>
                 
                 <div className="flex items-center space-x-4">
-                  <HelpIcon
-                    content={`
-# Markdown Support
-
-This tooltip supports **Markdown** formatting!
-
-- Item 1
-- Item 2
-
-\`\`\`javascript
-console.log("Hello, Markdown!");
-\`\`\`
-
-Visit [Google](https://www.google.com) for more info.
-                    `}
-                    title="Markdown Features"
-                    size="lg"
-                    position="right"
-                    maxWidth={400}
-                    trigger="click"
-                  />
                   <span className="text-sm text-gray-600">Markdown support</span>
                 </div>
               </div>
@@ -471,35 +442,11 @@ Visit [Google](https://www.google.com) for more info.
 
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">ProcessGuide Component</h3>
-              <ProcessGuide
-                title="Feature Demo"
-                steps={[
-                  {
-                    id: 'step1',
-                    title: 'Enhanced Components',
-                    description: 'HelpIcon and ProcessGuide with new features',
-                    status: 'completed',
-                    tips: ['Markdown support', 'Animations', 'Accessibility']
-                  },
-                  {
-                    id: 'step2',
-                    title: 'Demo Mode',
-                    description: 'Toggle demo mode to explore features',
-                    status: 'active',
-                    tips: ['Sample data', 'Workflow walkthrough']
-                  },
-                  {
-                    id: 'step3',
-                    title: 'Offline Sync',
-                    description: 'Work without internet connection',
-                    status: 'pending',
-                    tips: ['Local storage', 'Conflict resolution']
-                  }
-                ]}
-                variant="detailed"
-                theme="blue"
-                maxHeight={300}
-              />
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-gray-600">Markdown support</span>
+                </div>
+              </div>
             </div>
           </div>
         </motion.section>

@@ -1,620 +1,407 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Search, 
-  Filter, 
-  Download, 
-  Upload, 
-  Wifi, 
-  WifiOff,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Clock,
-  Calendar,
-  DollarSign,
-  MapPin,
-  Users,
-  Tag,
-  FileText,
-  BarChart3,
-  Settings,
-  RefreshCw,
-  Database,
-  Cloud,
-  HardDrive
-} from 'lucide-react';
-import { ProjectModal } from '../components/ProjectModal';
-import { ConfirmModal } from '../components/Modal';
-import { useOfflineProjects } from '../hooks/useOfflineProjects';
-import { IProject } from '../types/project';
-import { useOfflineProject, useFilteredOfflineProjects } from '../hooks/useOfflineProjects';
-import { SyncStatus, CompactSyncStatus } from '../components/SyncStatus';
-import { toast } from 'react-hot-toast';
+'use client';
 
-// Example 1: Basic offline projects list
-export function OfflineProjectsList() {
-  const { 
-    projects, 
-    loading, 
-    error, 
-    isOnline, 
-    createProject, 
-    updateProject, 
+import React, { useState, useEffect } from 'react';
+import { useOfflineProjects } from '../hooks/useOfflineProjects';
+
+export default function OfflineProjectsExample() {
+  const {
+    projects,
+    loading,
+    error,
+    addProject,
+    updateProject,
     deleteProject,
-    refreshProjects 
+    syncWithServer,
+    isOnline,
+    syncStatus
   } = useOfflineProjects();
 
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [newProject, setNewProject] = useState<Partial<IProject>>({
+  const [newProject, setNewProject] = useState({
     name: '',
     description: '',
-    type: 'residential',
-    status: 'planning',
-    location: {
-      address: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: 'USA',
-      coordinates: { lat: 0, lng: 0 }
-    },
+    status: 'draft' as const,
     client: {
       name: '',
       email: '',
       phone: '',
       company: ''
     },
-    budget: {
-      estimated: 0,
-      currency: 'USD',
-      breakdown: {
-        materials: 0,
-        labor: 0,
-        equipment: 0,
-        permits: 0,
-        contingency: 0
-      }
-    },
-    team: [],
-    tags: []
+    startDate: '',
+    team: [] as string[],
+    files: 0,
+    images: 0,
+    videos: 0
   });
 
-  const handleCreateProject = async () => {
-    try {
-      await createProject(newProject);
-      setShowCreateForm(false);
+  const [editingProject, setEditingProject] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (newProject.name.trim() && newProject.client.name.trim() && newProject.client.email.trim()) {
+      await addProject(newProject);
       setNewProject({
         name: '',
         description: '',
-        type: 'residential',
-        status: 'planning',
-        location: {
-          address: '',
-          city: '',
-          state: '',
-          zipCode: '',
-          country: 'USA',
-          coordinates: { lat: 0, lng: 0 }
-        },
+        status: 'draft',
         client: {
           name: '',
           email: '',
           phone: '',
           company: ''
-        }
+        },
+        startDate: '',
+        team: [],
+        files: 0,
+        images: 0,
+        videos: 0
       });
-    } catch (error) {
-      console.error('Failed to create project:', error);
     }
+  };
+
+  const handleEdit = (projectId: string) => {
+    const project = projects.find(p => p.id === projectId);
+    if (project) {
+      setNewProject({
+        name: project.name,
+        description: project.description,
+        status: project.status,
+        client: {
+          name: project.client.name,
+          email: project.client.email,
+          phone: project.client.phone || '',
+          company: project.client.company || ''
+        },
+        startDate: project.startDate,
+        team: project.team,
+        files: project.files,
+        images: project.images,
+        videos: project.videos
+      });
+      setEditingProject(projectId);
+    }
+  };
+
+  const handleUpdate = async () => {
+    if (editingProject && newProject.name.trim() && newProject.client.name.trim() && newProject.client.email.trim()) {
+      await updateProject(editingProject, newProject);
+      setEditingProject(null);
+      setNewProject({
+        name: '',
+        description: '',
+        status: 'draft',
+        client: {
+          name: '',
+          email: '',
+          phone: '',
+          company: ''
+        },
+        startDate: '',
+        team: [],
+        files: 0,
+        images: 0,
+        videos: 0
+      });
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingProject(null);
+    setNewProject({
+      name: '',
+      description: '',
+      status: 'draft',
+      client: {
+        name: '',
+        email: '',
+        phone: '',
+        company: ''
+      },
+      startDate: '',
+      team: [],
+      files: 0,
+      images: 0,
+      videos: 0
+    });
   };
 
   if (loading) {
     return (
-      <div className="offline-projects-list">
-        <div className="flex items-center justify-center p-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-          <span className="ml-2">Loading projects...</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="offline-projects-list">
-        <div className="error-message p-4 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-red-800">Error: {error}</p>
-          <button 
-            onClick={refreshProjects}
-            className="mt-2 px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
-          >
-            Retry
-          </button>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading offline projects...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="offline-projects-list">
-      {/* Header with sync status */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">Projects ({projects.length})</h2>
-        <CompactSyncStatus />
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">Offline Projects Example</h1>
+        
+        {/* Status Bar */}
+        <div className="bg-white rounded-lg shadow-sm border p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className={`w-3 h-3 rounded-full ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}></div>
+              <span className="text-sm font-medium">
+                {isOnline ? 'Online' : 'Offline'} Mode
+              </span>
+            </div>
+            
+            <div className="flex items-center space-x-4 text-sm text-gray-600">
+              <span>Last Sync: {syncStatus.lastSync ? new Date(syncStatus.lastSync).toLocaleString() : 'Never'}</span>
+              <span>Pending Changes: {syncStatus.pendingChanges}</span>
+              {syncStatus.isSyncing && (
+                <span className="text-blue-600">Syncing...</span>
+              )}
+            </div>
+            
+            <button
+              onClick={syncWithServer}
+              disabled={!isOnline || syncStatus.isSyncing}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {syncStatus.isSyncing ? 'Syncing...' : 'Sync Now'}
+            </button>
+          </div>
+        </div>
+
+        {/* Error Display */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
+            <p className="text-red-800">Error: {error}</p>
+          </div>
+        )}
       </div>
 
-      {/* Create Project Form */}
-      {showCreateForm && (
-        <div className="create-project-form mb-6 p-4 bg-gray-50 rounded-lg">
-          <h3 className="text-lg font-semibold mb-4">Create New Project</h3>
+      {/* Add/Edit Project Form */}
+      <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          {editingProject ? 'Edit Project' : 'Add New Project'}
+        </h2>
+        
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="Project Name"
-              value={newProject.name}
-              onChange={(e) => setNewProject(prev => ({ ...prev, name: e.target.value }))}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <input
-              type="text"
-              placeholder="Description"
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
+              <input
+                type="text"
+                value={newProject.name}
+                onChange={(e) => setNewProject(prev => ({ ...prev, name: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <select
+                value={newProject.status}
+                onChange={(e) => setNewProject(prev => ({ ...prev, status: e.target.value as any }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="draft">Draft</option>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+                <option value="archived">Archived</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <textarea
               value={newProject.description}
               onChange={(e) => setNewProject(prev => ({ ...prev, description: e.target.value }))}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <select
-              value={newProject.type}
-              onChange={(e) => setNewProject(prev => ({ ...prev, type: e.target.value as IProject['type'] }))}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="residential">Residential</option>
-              <option value="commercial">Commercial</option>
-              <option value="industrial">Industrial</option>
-              <option value="infrastructure">Infrastructure</option>
-              <option value="renovation">Renovation</option>
-              <option value="other">Other</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Client Name"
-              value={newProject.client?.name || ''}
-              onChange={(e) => setNewProject(prev => ({ 
-                ...prev, 
-                client: { ...prev.client, name: e.target.value } 
-              }))}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div className="flex space-x-2 mt-4">
-            <button
-              onClick={handleCreateProject}
-              disabled={!newProject.name || !newProject.description}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Create Project
-            </button>
-            <button
-              onClick={() => setShowCreateForm(false)}
-              className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
 
-      {/* Create Project Button */}
-      {!showCreateForm && (
-        <button
-          onClick={() => setShowCreateForm(true)}
-          className="mb-6 px-4 py-2 bg-green-500 textWhite rounded-md hover:bg-green-600"
-        >
-          + Create New Project
-        </button>
-      )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Client Name</label>
+              <input
+                type="text"
+                value={newProject.client.name}
+                onChange={(e) => setNewProject(prev => ({ 
+                  ...prev, 
+                  client: { ...prev.client, name: e.target.value } 
+                }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Client Email</label>
+              <input
+                type="email"
+                value={newProject.client.email}
+                onChange={(e) => setNewProject(prev => ({ 
+                  ...prev, 
+                  client: { ...prev.client, email: e.target.value } 
+                }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+              <input
+                type="date"
+                value={newProject.startDate}
+                onChange={(e) => setNewProject(prev => ({ ...prev, startDate: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Team Members (comma-separated)</label>
+              <input
+                type="text"
+                value={newProject.team.join(', ')}
+                onChange={(e) => setNewProject(prev => ({ 
+                  ...prev, 
+                  team: e.target.value.split(',').map(s => s.trim()).filter(Boolean) 
+                }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="John Doe, Jane Smith"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Files</label>
+              <input
+                type="number"
+                value={newProject.files}
+                onChange={(e) => setNewProject(prev => ({ ...prev, files: parseInt(e.target.value) || 0 }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                min="0"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Images</label>
+              <input
+                type="number"
+                value={newProject.images}
+                onChange={(e) => setNewProject(prev => ({ ...prev, images: parseInt(e.target.value) || 0 }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                min="0"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Videos</label>
+              <input
+                type="number"
+                value={newProject.videos}
+                onChange={(e) => setNewProject(prev => ({ ...prev, videos: parseInt(e.target.value) || 0 }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                min="0"
+              />
+            </div>
+          </div>
+
+          <div className="flex space-x-3">
+            {editingProject ? (
+              <>
+                <button
+                  type="button"
+                  onClick={handleUpdate}
+                  className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                >
+                  Update Project
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCancelEdit}
+                  className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <button
+                type="submit"
+                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Add Project
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
 
       {/* Projects List */}
-      <div className="projects-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {projects.map((project) => (
-          <ProjectCard 
-            key={project._id} 
-            project={project} 
-            onUpdate={updateProject}
-            onDelete={deleteProject}
-          />
-        ))}
-      </div>
-
-      {/* Empty State */}
-      {projects.length === 0 && (
-        <div className="empty-state text-center py-12">
-          <p className="text-gray-500 text-lg">No projects yet</p>
-          <p className="text-gray-400 text-sm mt-2">
-            {isOnline ? 'Create your first project to get started' : 'You\'re offline. Create projects that will sync when you\'re back online.'}
-          </p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Example 2: Individual project card
-function ProjectCard({ 
-  project, 
-  onUpdate, 
-  onDelete 
-}: { 
-  project: any; 
-  onUpdate: (id: string, data: any) => Promise<any>;
-  onDelete: (id: string) => Promise<void>;
-}) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editData, setEditData] = useState(project);
-
-  const handleSave = async () => {
-    try {
-      await onUpdate(project._id, editData);
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Failed to update project:', error);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this project?')) {
-      try {
-        await onDelete(project._id);
-      } catch (error) {
-        console.error('Failed to delete project:', error);
-      }
-    }
-  };
-
-  const getSyncStatusBadge = () => {
-    switch (project._syncStatus) {
-      case 'synced':
-        return <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Synced</span>;
-      case 'pending':
-        return <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Pending</span>;
-      case 'failed':
-        return <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Failed</span>;
-      default:
-        return <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">Unknown</span>;
-    }
-  };
-
-  return (
-    <div className="project-card border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-      {/* Project Header */}
-      <div className="flex items-start justify-between mb-3">
-        <h3 className="text-lg font-semibold text-gray-900">{project.name}</h3>
-        {getSyncStatusBadge()}
-      </div>
-
-      {/* Project Details */}
-      {isEditing ? (
-        <div className="edit-form space-y-3">
-          <input
-            type="text"
-            value={editData.description}
-            onChange={(e) => setEditData((prev: any) => ({ ...prev, description: e.target.value }))}
-            className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-          />
-          <select
-            value={editData.status}
-            onChange={(e) => setEditData((prev: any) => ({ ...prev, status: e.target.value }))}
-            className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-          >
-            <option value="planning">Planning</option>
-            <option value="active">Active</option>
-            <option value="on-hold">On Hold</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-          <div className="flex space-x-2">
-            <button
-              onClick={handleSave}
-              className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
-            >
-              Save
-            </button>
-            <button
-              onClick={() => setIsEditing(false)}
-              className="px-3 py-1 bg-gray-500 text-white rounded text-sm hover:bg-gray-600"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="project-details space-y-2">
-          <p className="text-gray-600 text-sm">{project.description}</p>
-          <div className="flex items-center space-x-2 text-xs text-gray-500">
-            <span className={`px-2 py-1 rounded-full ${
-              project.status === 'active' ? 'bg-green-100 text-green-800' :
-              project.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-              project.status === 'on-hold' ? 'bg-yellow-100 text-yellow-800' :
-              'bg-gray-100 text-gray-800'
-            }`}>
-              {project.status}
-            </span>
-            <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full">
-              {project.type}
-            </span>
-          </div>
-          <p className="text-xs text-gray-500">
-            Client: {project.client.name}
-          </p>
-          {project._lastSync && (
-            <p className="text-xs text-gray-400">
-              Last sync: {new Date(project._lastSync).toLocaleDateString()}
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* Project Actions */}
-      {!isEditing && (
-        <div className="project-actions flex space-x-2 mt-4 pt-3 border-t border-gray-100">
-          <button
-            onClick={() => setIsEditing(true)}
-            className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
-          >
-            Edit
-          </button>
-          <button
-            onClick={handleDelete}
-            className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
-          >
-            Delete
-          </button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Example 3: Filtered projects with search
-export function FilteredOfflineProjects() {
-  const [filter, setFilter] = useState({
-    status: '',
-    type: '',
-    search: ''
-  });
-
-  const { 
-    projects, 
-    loading, 
-    error, 
-    isOnline, 
-    totalCount, 
-    filteredCount 
-  } = useFilteredOfflineProjects(filter);
-
-  return (
-    <div className="filtered-offline-projects">
-      <h3 className="text-xl font-semibold mb-4">Filtered Projects</h3>
-      
-      {/* Filters */}
-      <div className="filters mb-6 space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <input
-            type="text"
-            placeholder="Search projects..."
-            value={filter.search}
-            onChange={(e) => setFilter(prev => ({ ...prev, search: e.target.value }))}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <select
-            value={filter.status}
-            onChange={(e) => setFilter(prev => ({ ...prev, status: e.target.value }))}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All Statuses</option>
-            <option value="planning">Planning</option>
-            <option value="active">Active</option>
-            <option value="on-hold">On Hold</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-          <select
-            value={filter.type}
-            onChange={(e) => setFilter(prev => ({ ...prev, type: e.target.value }))}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All Types</option>
-            <option value="residential">Residential</option>
-            <option value="commercial">Commercial</option>
-            <option value="industrial">Industrial</option>
-            <option value="infrastructure">Infrastructure</option>
-            <option value="renovation">Renovation</option>
-            <option value="other">Other</option>
-          </select>
+      <div className="bg-white rounded-lg shadow-sm border">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900">Projects ({projects.length})</h2>
         </div>
         
-        {/* Results Count */}
-        <div className="text-sm text-gray-600">
-          Showing {filteredCount} of {totalCount} projects
-        </div>
-      </div>
-
-      {/* Projects List */}
-      {loading ? (
-        <div className="text-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-2 text-gray-500">Filtering projects...</p>
-        </div>
-      ) : (
-        <div className="projects-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {projects.map((project) => (
-            <ProjectCard 
-              key={project._id} 
-              project={project} 
-              onUpdate={async (_id: string, _data: any) => Promise.resolve(null)}
-              onDelete={async (_id: string) => Promise.resolve()}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Empty State */}
-      {!loading && projects.length === 0 && (
-        <div className="empty-state text-center py-12">
-          <p className="text-gray-500 text-lg">No projects match your filters</p>
-          <p className="text-gray-400 text-sm mt-2">Try adjusting your search criteria</p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Example 4: Project detail view with offline support
-export function OfflineProjectDetail({ projectId }: { projectId: string }) {
-  const { 
-    project, 
-    loading, 
-    error, 
-    isOnline, 
-    updateProject, 
-    deleteProject,
-    isOffline,
-    syncStatus,
-    lastSync 
-  } = useOfflineProject(projectId);
-
-  if (loading) {
-    return (
-      <div className="offline-project-detail">
-        <div className="flex items-center justify-center p-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-          <span className="ml-2">Loading project...</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !project) {
-    return (
-      <div className="offline-project-detail">
-        <div className="error-message p-4 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-red-800">Error: {error || 'Project not found'}</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="offline-project-detail">
-      {/* Project Header */}
-      <div className="project-header mb-6">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">{project.name}</h1>
-            <p className="text-gray-600 mt-2">{project.description}</p>
-          </div>
-          <div className="text-right">
-            <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-              syncStatus === 'synced' ? 'bg-green-100 text-green-800' :
-              syncStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-              'bg-red-100 text-red-800'
-            }`}>
-              {syncStatus}
+        <div className="divide-y divide-gray-200">
+          {projects.length === 0 ? (
+            <div className="px-6 py-8 text-center text-gray-500">
+              <p>No projects yet. Add your first project above!</p>
             </div>
-            {lastSync && (
-              <p className="text-xs text-gray-500 mt-1">
-                Last sync: {new Date(lastSync).toLocaleString()}
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Offline Notice */}
-      {isOffline && (
-        <div className="offline-notice mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-          <div className="flex items-center">
-            <div className="w-4 h-4 bg-yellow-500 rounded-full mr-3"></div>
-            <div>
-              <p className="text-yellow-800 font-medium">You're currently offline</p>
-              <p className="text-yellow-700 text-sm">
-                Changes will be saved locally and synced when you're back online.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Project Content */}
-      <div className="project-content grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Project Details */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h2 className="text-xl font-semibold mb-4">Project Details</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium text-gray-600">Status</label>
-                <p className="text-gray-900">{project.status}</p>
+          ) : (
+            projects.map((project) => (
+              <div key={project.id} className="px-6 py-4 hover:bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3">
+                      <h3 className="text-lg font-medium text-gray-900">{project.name}</h3>
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        project.status === 'active' ? 'bg-green-100 text-green-800' :
+                        project.status === 'completed' ? 'bg-blue-100 text-blue-800' :
+                        project.status === 'archived' ? 'bg-gray-100 text-gray-800' :
+                        'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {project.status}
+                      </span>
+                    </div>
+                    
+                    <p className="text-gray-600 mt-1">{project.description}</p>
+                    
+                    <div className="flex items-center space-x-6 mt-2 text-sm text-gray-500">
+                      <span>Client: {project.client.name}</span>
+                      {project.startDate && (
+                        <span>Start: {new Date(project.startDate).toLocaleDateString()}</span>
+                      )}
+                      <span>Team: {project.team.length} members</span>
+                      <span>Files: {project.files}</span>
+                      <span>Images: {project.images}</span>
+                      <span>Videos: {project.videos}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleEdit(project.id)}
+                      className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => deleteProject(project.id)}
+                      className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-md hover:bg-red-200"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-600">Type</label>
-                <p className="text-gray-900">{project.type}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-600">Created</label>
-                <p className="text-gray-900">
-                  {new Date(project.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-600">Updated</label>
-                <p className="text-gray-900">
-                  {new Date(project.updatedAt).toLocaleDateString()}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Location */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h2 className="text-xl font-semibold mb-4">Location</h2>
-            <p className="text-gray-900">
-              {project.location.address}, {project.location.city}, {project.location.state} {project.location.zipCode}
-            </p>
-          </div>
-
-          {/* Client */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h2 className="text-xl font-semibold mb-4">Client</h2>
-            <p className="text-gray-900 font-medium">{project.client.name}</p>
-            <p className="text-gray-600">{project.client.email}</p>
-            {project.client.company && (
-              <p className="text-gray-600">{project.client.company}</p>
-            )}
-          </div>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Sync Status */}
-          <SyncStatus showDetails={false} showActions={true} />
-          
-          {/* Quick Actions */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-            <div className="space-y-3">
-              <button className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                Edit Project
-              </button>
-              <button className="w-full px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
-                Delete Project
-              </button>
-            </div>
-          </div>
+            ))
+          )}
         </div>
       </div>
     </div>

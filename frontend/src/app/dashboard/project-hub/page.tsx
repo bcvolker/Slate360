@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
@@ -37,7 +36,7 @@ interface Project {
 }
 
 export default function ProjectHubPage() {
-  const { data: session, status } = useSession();
+  const [session, setSession] = useState(null);
   const router = useRouter();
   const { isAuthenticated, userRole, canAccessFeature } = useRole();
   const { projects, loading: isLoading } = useOfflineProjects();
@@ -49,12 +48,23 @@ export default function ProjectHubPage() {
 
   // Redirect if not authenticated
   React.useEffect(() => {
-    if (status === 'unauthenticated') {
+    if (!session) {
       router.push('/auth/signin');
     }
-  }, [status, router]);
+  }, [session, router]);
 
-  if (status === 'loading') {
+  if (!session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-8 h-8 animate-spin mx-auto mb-4 border-4 border-blue-600 border-t-transparent rounded-full"></div>
+          <p className="text-gray-600">Loading authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
@@ -65,7 +75,7 @@ export default function ProjectHubPage() {
     );
   }
 
-  if (!session || !isAuthenticated) {
+  if (!isAuthenticated) {
     return null;
   }
 

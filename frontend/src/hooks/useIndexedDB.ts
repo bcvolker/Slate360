@@ -1,34 +1,21 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
+import { Project } from '../types/project';
 
-// Database schema for IndexedDB
+// Database schema
 interface ProjectDB extends DBSchema {
   projects: {
     key: string;
-    value: {
-      id: string;
-      name: string;
-      description: string;
-      status: 'draft' | 'active' | 'completed' | 'archived';
-      client: string;
-      startDate: string;
-      endDate?: string;
-      team: string[];
-      files: number;
-      images: number;
-      videos: number;
-      lastModified: string;
-      lastSynced?: string;
-      isDirty?: boolean;
-      version: number;
-    };
+    value: Project;
     indexes: {
+      'by-name': string;
       'by-status': string;
+      'by-type': string;
       'by-client': string;
-      'by-lastModified': string;
-      'by-syncStatus': string;
+      'by-createdBy': string;
+      'by-createdAt': number;
     };
   };
   syncQueue: {
@@ -36,116 +23,21 @@ interface ProjectDB extends DBSchema {
     value: {
       id: string;
       action: 'create' | 'update' | 'delete';
-      data: any;
+      project: Project;
       timestamp: number;
       retryCount: number;
     };
   };
-  settings: {
-    key: string;
-    value: {
-      lastSyncTimestamp: number;
-      syncInterval: number;
-      maxRetryCount: number;
-      offlineMode: boolean;
-    };
-  };
 }
-
-// Project interface
-export interface Project {
-  id: string;
-  name: string;
-  description: string;
-  status: 'draft' | 'active' | 'completed' | 'archived';
-  client: string;
-  startDate: string;
-  endDate?: string;
-  team: string[];
-  files: number;
-  images: number;
-  videos: number;
-  lastModified: string;
-  lastSynced?: string;
-  isDirty?: boolean;
-  version: number;
-}
-
-// Sync queue item interface
-interface SyncQueueItem {
-  id: string;
-  action: 'create' | 'update' | 'delete';
-  data: any;
-  timestamp: number;
-  retryCount: number;
-}
-
-// Database settings interface
-interface DBSettings {
-  lastSyncTimestamp: number;
-  syncInterval: number;
-  maxRetryCount: number;
-  offlineMode: boolean;
-}
-
-// Hook return interface
-interface UseIndexedDBReturn {
-  // Data
-  projects: Project[];
-  loading: boolean;
-  error: string | null;
-  
-  // Database operations
-  addProject: (project: Omit<Project, 'id' | 'lastModified' | 'version'>) => Promise<string>;
-  updateProject: (id: string, updates: Partial<Project>) => Promise<void>;
-  deleteProject: (id: string) => Promise<void>;
-  getProject: (id: string) => Promise<Project | null>;
-  
-  // Sync operations
-  syncWithServer: () => Promise<void>;
-  forceSync: () => Promise<void>;
-  clearOfflineData: () => Promise<void>;
-  
-  // Status
-  isOnline: boolean;
-  syncStatus: {
-    lastSync: number | null;
-    pendingChanges: number;
-    isSyncing: boolean;
-    lastError: string | null;
-  };
-  
-  // Settings
-  updateSettings: (settings: Partial<DBSettings>) => Promise<void>;
-  getSettings: () => Promise<DBSettings>;
-}
-
-// Default database settings
-const DEFAULT_SETTINGS: DBSettings = {
-  lastSyncTimestamp: 0,
-  syncInterval: 5 * 60 * 1000, // 5 minutes
-  maxRetryCount: 3,
-  offlineMode: false,
-};
 
 // Database configuration
-const DB_NAME = 'Slate360DB';
+const DB_NAME = 'slate360-projects';
 const DB_VERSION = 1;
 
-export function useIndexedDB(): UseIndexedDBReturn {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+export const useIndexedDB = () => {
+  const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [syncStatus, setSyncStatus] = useState({
-    lastSync: null as number | null,
-    pendingChanges: 0,
-    isSyncing: false,
-    lastError: null as string | null,
-  });
-
   const dbRef = useRef<IDBPDatabase<ProjectDB> | null>(null);
-  const syncTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize database
   const initDB = useCallback(async () => {
@@ -154,346 +46,278 @@ export function useIndexedDB(): UseIndexedDBReturn {
         upgrade(db) {
           // Create projects store
           const projectStore = db.createObjectStore('projects', { keyPath: 'id' });
+          
+          // Create indexes
+          projectStore.createIndex('by-name', 'name');
           projectStore.createIndex('by-status', 'status');
-          projectStore.createIndex('by-client', 'client');
-          projectStore.createIndex('by-lastModified', 'lastModified');
-          projectStore.createIndex('by-syncStatus', 'isDirty');
+          projectStore.createIndex('by-type', 'type');
+          projectStore.createIndex('by-client', 'client.name');
+          projectStore.createIndex('by-createdBy', 'createdBy');
+          projectStore.createIndex('by-createdAt', 'createdAt');
 
           // Create sync queue store
-          const syncStore = db.createObjectStore('syncQueue', { keyPath: 'id' });
-          syncStore.createIndex('by-timestamp', 'timestamp');
-
-          // Create settings store
-          db.createObjectStore('settings', { keyPath: 'key' });
+          db.createObjectStore('syncQueue', { keyPath: 'id' });
         },
       });
 
       dbRef.current = db;
-      
-      // Initialize default settings
-      const settings = await db.get('settings', 'default');
-      if (!settings) {
-        await db.put('settings', {
-          key: 'default',
-          ...DEFAULT_SETTINGS,
-        });
-      }
-
-      // Load initial data
-      await loadProjects();
-      
-      // Start sync interval
-      startSyncInterval();
-      
-      setLoading(false);
+      setIsReady(true);
+      setError(null);
     } catch (err) {
-      setError(`Failed to initialize database: ${err instanceof Error ? err.message : 'Unknown error'}`);
-      setLoading(false);
+      setError(err instanceof Error ? err.message : 'Failed to initialize database');
+      setIsReady(false);
     }
   }, []);
 
-  // Load projects from IndexedDB
-  const loadProjects = useCallback(async () => {
-    if (!dbRef.current) return;
+  // Initialize on mount
+  useEffect(() => {
+    initDB();
+  }, [initDB]);
+
+  // Add project
+  const addProject = useCallback(async (project: Project): Promise<void> => {
+    if (!dbRef.current) throw new Error('Database not initialized');
+
+    try {
+      await dbRef.current.add('projects', project);
+    } catch (err) {
+      throw new Error(`Failed to add project: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }, []);
+
+  // Update project
+  const updateProject = useCallback(async (project: Project): Promise<void> => {
+    if (!dbRef.current) throw new Error('Database not initialized');
+
+    try {
+      await dbRef.current.put('projects', project);
+    } catch (err) {
+      throw new Error(`Failed to update project: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }, []);
+
+  // Delete project
+  const deleteProject = useCallback(async (projectId: string): Promise<void> => {
+    if (!dbRef.current) throw new Error('Database not initialized');
+
+    try {
+      await dbRef.current.delete('projects', projectId);
+    } catch (err) {
+      throw new Error(`Failed to delete project: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }, []);
+
+  // Get project by ID
+  const getProject = useCallback(async (projectId: string): Promise<Project | null> => {
+    if (!dbRef.current) throw new Error('Database not initialized');
+
+    try {
+      const project = await dbRef.current.get('projects', projectId);
+      return project || null;
+    } catch (err) {
+      throw new Error(`Failed to get project: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }, []);
+
+  // Get all projects
+  const getAllProjects = useCallback(async (): Promise<Project[]> => {
+    if (!dbRef.current) throw new Error('Database not initialized');
+
+    try {
+      return await dbRef.current.getAll('projects');
+    } catch (err) {
+      throw new Error(`Failed to get projects: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }, []);
+
+  // Search projects
+  const searchProjects = useCallback(async (query: string): Promise<Project[]> => {
+    if (!dbRef.current) throw new Error('Database not initialized');
 
     try {
       const allProjects = await dbRef.current.getAll('projects');
-      setProjects(allProjects.sort((a, b) => 
-        new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime()
-      ));
+      const lowerQuery = query.toLowerCase();
+      
+      return allProjects.filter(project => 
+        project.name.toLowerCase().includes(lowerQuery) ||
+        project.description.toLowerCase().includes(lowerQuery) ||
+        project.client.name.toLowerCase().includes(lowerQuery) ||
+        project.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+      );
     } catch (err) {
-      setError(`Failed to load projects: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      throw new Error(`Failed to search projects: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
   }, []);
 
-  // Add project to IndexedDB
-  const addProject = useCallback(async (projectData: Omit<Project, 'id' | 'lastModified' | 'version'>): Promise<string> => {
+  // Filter projects
+  const filterProjects = useCallback(async (filter: {
+    status?: string;
+    type?: string;
+    client?: string;
+    createdBy?: string;
+  }): Promise<Project[]> => {
     if (!dbRef.current) throw new Error('Database not initialized');
-
-    const id = `project_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const project: Project = {
-      ...projectData,
-      id,
-      lastModified: new Date().toISOString(),
-      version: 1,
-      isDirty: true,
-    };
-
-    await dbRef.current.put('projects', project);
-    
-    // Add to sync queue
-    await dbRef.current.put('syncQueue', {
-      id: `sync_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      action: 'create',
-      data: project,
-      timestamp: Date.now(),
-      retryCount: 0,
-    });
-
-    await loadProjects();
-    updateSyncStatus();
-    
-    return id;
-  }, [loadProjects]);
-
-  // Update project in IndexedDB
-  const updateProject = useCallback(async (id: string, updates: Partial<Project>): Promise<void> => {
-    if (!dbRef.current) throw new Error('Database not initialized');
-
-    const existingProject = await dbRef.current.get('projects', id);
-    if (!existingProject) throw new Error('Project not found');
-
-    const updatedProject: Project = {
-      ...existingProject,
-      ...updates,
-      lastModified: new Date().toISOString(),
-      version: existingProject.version + 1,
-      isDirty: true,
-    };
-
-    await dbRef.current.put('projects', updatedProject);
-    
-    // Add to sync queue
-    await dbRef.current.put('syncQueue', {
-      id: `sync_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      action: 'update',
-      data: updatedProject,
-      timestamp: Date.now(),
-      retryCount: 0,
-    });
-
-    await loadProjects();
-    updateSyncStatus();
-  }, [loadProjects]);
-
-  // Delete project from IndexedDB
-  const deleteProject = useCallback(async (id: string): Promise<void> => {
-    if (!dbRef.current) throw new Error('Database not initialized');
-
-    const existingProject = await dbRef.current.get('projects', id);
-    if (!existingProject) throw new Error('Project not found');
-
-    await dbRef.current.delete('projects', id);
-    
-    // Add to sync queue
-    await dbRef.current.put('syncQueue', {
-      id: `sync_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      action: 'delete',
-      data: { id },
-      timestamp: Date.now(),
-      retryCount: 0,
-    });
-
-    await loadProjects();
-    updateSyncStatus();
-  }, [loadProjects]);
-
-  // Get single project
-  const getProject = useCallback(async (id: string): Promise<Project | null> => {
-    if (!dbRef.current) return null;
-    return await dbRef.current.get('projects', id);
-  }, []);
-
-  // Update sync status
-  const updateSyncStatus = useCallback(async () => {
-    if (!dbRef.current) return;
 
     try {
-      const pendingChanges = await dbRef.current.count('syncQueue');
-      const settings = await dbRef.current.get('settings', 'default');
-      
-      setSyncStatus(prev => ({
-        ...prev,
-        pendingChanges,
-        lastSync: settings?.lastSyncTimestamp || null,
-      }));
-    } catch (err) {
-      console.error('Failed to update sync status:', err);
-    }
-  }, []);
+      let collection = await dbRef.current.getAll('projects');
 
-  // Sync with server
-  const syncWithServer = useCallback(async () => {
-    if (!dbRef.current || !isOnline || syncStatus.isSyncing) return;
-
-    setSyncStatus(prev => ({ ...prev, isSyncing: true, lastError: null }));
-
-    try {
-      const syncQueue = await dbRef.current.getAll('syncQueue');
-      
-      for (const item of syncQueue) {
-        try {
-          // Attempt to sync with server
-          const response = await fetch(`/api/projects${item.action === 'delete' ? `/${item.data.id}` : ''}`, {
-            method: item.action === 'create' ? 'POST' : item.action === 'update' ? 'PUT' : 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: item.action !== 'delete' ? JSON.stringify(item.data) : undefined,
-          });
-
-          if (response.ok) {
-            // Remove from sync queue on success
-            await dbRef.current!.delete('syncQueue', item.id);
-            
-            // Update project sync status
-            if (item.action !== 'delete') {
-              await dbRef.current!.put('projects', {
-                ...item.data,
-                isDirty: false,
-                lastSynced: new Date().toISOString(),
-              });
-            }
-          } else {
-            // Increment retry count
-            if (item.retryCount < (await dbRef.current!.get('settings', 'default'))?.maxRetryCount) {
-              await dbRef.current!.put('syncQueue', {
-                ...item,
-                retryCount: item.retryCount + 1,
-              });
-            }
-          }
-        } catch (err) {
-          console.error(`Failed to sync ${item.action} for project ${item.data.id}:`, err);
-          
-          // Increment retry count
-          if (item.retryCount < (await dbRef.current!.get('settings', 'default'))?.maxRetryCount) {
-            await dbRef.current!.put('syncQueue', {
-              ...item,
-              retryCount: item.retryCount + 1,
-            });
-          }
-        }
+      if (filter.status) {
+        collection = collection.filter(project => project.status === filter.status);
       }
 
-      // Update last sync timestamp
-      await dbRef.current.put('settings', {
-        key: 'default',
-        ...(await dbRef.current.get('settings', 'default')),
-        lastSyncTimestamp: Date.now(),
-      });
+      if (filter.type) {
+        collection = collection.filter(project => project.type === filter.type);
+      }
 
-      await loadProjects();
-      await updateSyncStatus();
-      
+      if (filter.client) {
+        collection = collection.filter(project => 
+          project.client.name.toLowerCase().includes(filter.client!.toLowerCase()) ||
+          project.client.company?.toLowerCase().includes(filter.client!.toLowerCase())
+        );
+      }
+
+      if (filter.createdBy) {
+        collection = collection.filter(project => project.createdBy === filter.createdBy);
+      }
+
+      return collection;
     } catch (err) {
-      setSyncStatus(prev => ({
-        ...prev,
-        lastError: err instanceof Error ? err.message : 'Sync failed',
-      }));
-    } finally {
-      setSyncStatus(prev => ({ ...prev, isSyncing: false }));
+      throw new Error(`Failed to filter projects: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
-  }, [isOnline, syncStatus.isSyncing, loadProjects, updateSyncStatus]);
+  }, []);
 
-  // Force sync
-  const forceSync = useCallback(async () => {
-    await syncWithServer();
-  }, [syncWithServer]);
+  // Add to sync queue
+  const addToSyncQueue = useCallback(async (action: 'create' | 'update' | 'delete', project: Project): Promise<void> => {
+    if (!dbRef.current) throw new Error('Database not initialized');
 
-  // Clear offline data
-  const clearOfflineData = useCallback(async () => {
-    if (!dbRef.current) return;
+    try {
+      const queueItem = {
+        id: `${action}_${project.id}_${Date.now()}`,
+        action,
+        project,
+        timestamp: Date.now(),
+        retryCount: 0,
+      };
+
+      await dbRef.current.add('syncQueue', queueItem);
+    } catch (err) {
+      throw new Error(`Failed to add to sync queue: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }, []);
+
+  // Get sync queue
+  const getSyncQueue = useCallback(async (): Promise<any[]> => {
+    if (!dbRef.current) throw new Error('Database not initialized');
+
+    try {
+      return await dbRef.current.getAll('syncQueue');
+    } catch (err) {
+      throw new Error(`Failed to get sync queue: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }, []);
+
+  // Remove from sync queue
+  const removeFromSyncQueue = useCallback(async (queueId: string): Promise<void> => {
+    if (!dbRef.current) throw new Error('Database not initialized');
+
+    try {
+      await dbRef.current.delete('syncQueue', queueId);
+    } catch (err) {
+      throw new Error(`Failed to remove from sync queue: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }, []);
+
+  // Clear database
+  const clearDB = useCallback(async (): Promise<void> => {
+    if (!dbRef.current) throw new Error('Database not initialized');
 
     try {
       await dbRef.current.clear('projects');
       await dbRef.current.clear('syncQueue');
-      await loadProjects();
-      await updateSyncStatus();
     } catch (err) {
-      setError(`Failed to clear offline data: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      throw new Error(`Failed to clear database: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
-  }, [loadProjects, updateSyncStatus]);
-
-  // Update settings
-  const updateSettings = useCallback(async (newSettings: Partial<DBSettings>): Promise<void> => {
-    if (!dbRef.current) throw new Error('Database not initialized');
-
-    const currentSettings = await dbRef.current.get('settings', 'default');
-    const updatedSettings = {
-      ...currentSettings,
-      ...newSettings,
-    };
-
-    await dbRef.current.put('settings', updatedSettings);
   }, []);
 
-  // Get settings
-  const getSettings = useCallback(async (): Promise<DBSettings> => {
+  // Get database stats
+  const getStats = useCallback(async (): Promise<{ projects: number; syncQueue: number }> => {
     if (!dbRef.current) throw new Error('Database not initialized');
-    
-    const settings = await dbRef.current.get('settings', 'default');
-    return settings || DEFAULT_SETTINGS;
-  }, []);
 
-  // Start sync interval
-  const startSyncInterval = useCallback(() => {
-    if (syncTimeoutRef.current) {
-      clearTimeout(syncTimeoutRef.current);
-    }
-
-    const performSync = async () => {
-      if (isOnline) {
-        await syncWithServer();
-      }
+    try {
+      const projectCount = await dbRef.current.count('projects');
+      const queueCount = await dbRef.current.count('syncQueue');
       
-      const settings = await getSettings();
-      syncTimeoutRef.current = setTimeout(performSync, settings.syncInterval);
-    };
-
-    syncTimeoutRef.current = setTimeout(performSync, 5000); // Start after 5 seconds
-  }, [isOnline, syncWithServer, getSettings]);
-
-  // Network status monitoring
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
+      return {
+        projects: projectCount,
+        syncQueue: queueCount,
+      };
+    } catch (err) {
+      throw new Error(`Failed to get database stats: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
   }, []);
 
-  // Initialize database on mount
-  useEffect(() => {
-    initDB();
+  // Export data
+  const exportData = useCallback(async (): Promise<{ projects: Project[]; syncQueue: any[] }> => {
+    if (!dbRef.current) throw new Error('Database not initialized');
 
-    return () => {
-      if (syncTimeoutRef.current) {
-        clearTimeout(syncTimeoutRef.current);
-      }
-    };
-  }, [initDB]);
-
-  // Auto-sync when coming back online
-  useEffect(() => {
-    if (isOnline && !syncStatus.isSyncing) {
-      const timer = setTimeout(() => {
-        syncWithServer();
-      }, 2000); // Wait 2 seconds after coming online
-
-      return () => clearTimeout(timer);
+    try {
+      const projects = await dbRef.current.getAll('projects');
+      const syncQueue = await dbRef.current.getAll('syncQueue');
+      
+      return { projects, syncQueue };
+    } catch (err) {
+      throw new Error(`Failed to export data: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
-  }, [isOnline, syncStatus.isSyncing, syncWithServer]);
+  }, []);
+
+  // Import data
+  const importData = useCallback(async (data: { projects: Project[]; syncQueue: any[] }): Promise<void> => {
+    if (!dbRef.current) throw new Error('Database not initialized');
+
+    try {
+      // Clear existing data
+      await clearDB();
+
+      // Import projects
+      for (const project of data.projects) {
+        await dbRef.current.add('projects', project);
+      }
+
+      // Import sync queue
+      for (const queueItem of data.syncQueue) {
+        await dbRef.current.add('syncQueue', queueItem);
+      }
+    } catch (err) {
+      throw new Error(`Failed to import data: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }, [clearDB]);
 
   return {
-    projects,
-    loading,
+    // State
+    isReady,
     error,
+    
+    // Database operations
     addProject,
     updateProject,
     deleteProject,
     getProject,
-    syncWithServer,
-    forceSync,
-    clearOfflineData,
-    isOnline,
-    syncStatus,
-    updateSettings,
-    getSettings,
+    getAllProjects,
+    searchProjects,
+    filterProjects,
+    
+    // Sync queue operations
+    addToSyncQueue,
+    getSyncQueue,
+    removeFromSyncQueue,
+    
+    // Utility operations
+    clearDB,
+    getStats,
+    exportData,
+    importData,
+    
+    // Reinitialize
+    reinit: initDB,
   };
-}
+};

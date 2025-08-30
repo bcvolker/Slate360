@@ -1,61 +1,46 @@
 /**
- * Authentication utilities and NextAuth configuration
+ * Authentication utilities for Supabase
  */
 
-import { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { compare } from 'bcryptjs';
+import { createClient } from '@supabase/supabase-js';
 
-export const authOptions: NextAuthOptions = {
-  providers: [
-    CredentialsProvider({
-      name: 'credentials',
-      credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' }
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+// Initialize Supabase client
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key'
+);
 
-        // TODO: Implement actual user lookup from database
-        // For now, return a mock user
-        return {
-          id: '1',
-          email: credentials.email,
-          name: 'Demo User',
-          role: 'user',
-          tier: 'free'
-        };
-      }
-    })
-  ],
-  session: {
-    strategy: 'jwt',
-    maxAge: 24 * 60 * 60, // 24 hours
+// Simple auth helper functions
+export const auth = {
+  signIn: async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    return { data, error };
   },
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.role = user.role;
-        token.tier = user.tier;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token) {
-        session.user.role = token.role;
-        session.user.tier = token.tier;
-      }
-      return session;
-    }
+
+  signUp: async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    return { data, error };
   },
-  pages: {
-    signIn: '/auth/signin',
-    error: '/auth/error',
+
+  signOut: async () => {
+    const { error } = await supabase.auth.signOut();
+    return { error };
   },
-  secret: process.env.NEXTAUTH_SECRET,
+
+  getSession: async () => {
+    const { data: { session }, error } = await supabase.auth.getSession();
+    return { session, error };
+  },
+
+  onAuthStateChange: (callback: (event: string, session: any) => void) => {
+    return supabase.auth.onAuthStateChange(callback);
+  }
 };
 
-export default authOptions;
+export default auth;
