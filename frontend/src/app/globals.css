@@ -18,10 +18,10 @@ html { scroll-behavior: smooth; }
   flex-direction: column; 
   align-items: center; 
   justify-content: center; 
-  padding-top: 60px; /* Reduced from 80px */
+  padding-top: 30px; /* Reduced for ultra-compact header */
 }
 
-section[id] { scroll-margin-top: 60px; }
+section[id] { scroll-margin-top: 30px; }
 
 /* Navigation dots styling */
 .nav-dot {
