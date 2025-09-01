@@ -1,11 +1,10 @@
-"use client";
-
+'use client';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 
-const ThreeHero = () => {
+export default function ThreeHero() {
   return (
-    <div className="slate360-hero" style={{ height: '400px', backgroundColor: '#111', borderRadius: '12px' }}>
+    <div className="slate360-hero-viewer">
       <Canvas>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
@@ -15,9 +14,6 @@ const ThreeHero = () => {
         </mesh>
         <OrbitControls enableZoom={false} />
       </Canvas>
-      <p className="text-gray-500 -mt-8">3D Model Viewer (Interactive Placeholder)</p>
     </div>
   );
-};
-
-export default ThreeHero;
+}

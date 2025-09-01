@@ -1,8 +1,18 @@
 import mongoose from 'mongoose';
 import { IProject } from '../../models/Project';
 
-// Helper function to create ObjectId
-const createObjectId = (id: string) => new mongoose.Types.ObjectId(id);
+// Helper function to create valid ObjectId from a seed string
+const createObjectId = (seed: string) => {
+  // Create a deterministic ObjectId based on the seed string
+  const hash = seed.split('').reduce((a, b) => {
+    a = ((a << 5) - a) + b.charCodeAt(0);
+    return a & a;
+  }, 0);
+  
+  // Convert to a valid 24-character hex string
+  const hexString = Math.abs(hash).toString(16).padStart(24, '0');
+  return new mongoose.Types.ObjectId(hexString);
+};
 
 // Demo project data - using Partial<IProject> to allow for demo data flexibility
 export const demoProjects: Partial<IProject>[] = [

@@ -43,6 +43,9 @@ class NetworkManager {
   }
 }
 
+// Export the network manager instance
+export const networkManager = new NetworkManager();
+
 // Project sync service
 export class ProjectSyncService {
   private static networkManager: NetworkManager | null = null;

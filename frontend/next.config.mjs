@@ -56,12 +56,6 @@ const nextConfig = {
   // Security configurations
   poweredByHeader: false,
   compress: true,
-  
-  // Experimental features for security
-  experimental: {
-    // Disable typed routes temporarily to fix build issues
-    // typedRoutes: true,
-  },
 
   // Webpack configuration for security
   webpack: (config, { dev, isServer }) => {

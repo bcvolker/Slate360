@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { isValidObjectId } from 'mongoose';
 
 // GET /api/projects/[id] - Get single project
 export async function GET(
@@ -14,6 +15,11 @@ export async function GET(
     }
 
     const { id } = params;
+
+    // Validate ObjectId format
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
+    }
 
     // Return placeholder project data
     return NextResponse.json({
@@ -52,6 +58,11 @@ export async function PUT(
     const { id } = params;
     const body = await request.json();
 
+    // Validate ObjectId format
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
+    }
+
     // Return placeholder response
     return NextResponse.json({
       message: 'Project updated successfully',
@@ -82,6 +93,11 @@ export async function DELETE(
     }
 
     const { id } = params;
+
+    // Validate ObjectId format
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
+    }
 
     // Return placeholder response
     return NextResponse.json({

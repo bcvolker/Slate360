@@ -15,6 +15,7 @@ import { ProjectModal } from '../../components/ProjectModal';
 import { Modal, ConfirmModal, FormModal } from '../../components/Modal';
 import { SyncStatus } from '../../components/SyncStatus';
 import { DemoBanner } from '../../components/DemoBanner';
+import Logo from '../../components/Logo';
 
 export default function DashboardPage() {
   const [session, setSession] = useState<any>(null);
@@ -111,14 +112,7 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">S</span>
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-slate-700 to-blue-600 bg-clip-text text-transparent">
-                SLATE360
-              </span>
-            </div>
+            <Logo size={48} clickable={true} />
 
             {/* Search and Filters */}
             <div className="flex-1 max-w-2xl mx-8">
