@@ -8,10 +8,10 @@ export default function OfflineProjectsExample() {
     projects,
     loading,
     error,
-    addProject,
+    createProject,
     updateProject,
     deleteProject,
-    syncWithServer,
+    forceSync,
     isOnline,
     syncStatus
   } = useOfflineProjects();
@@ -39,7 +39,7 @@ export default function OfflineProjectsExample() {
     e.preventDefault();
     
     if (newProject.name.trim() && newProject.client.name.trim() && newProject.client.email.trim()) {
-      await addProject(newProject);
+      await createProject(newProject);
       setNewProject({
         name: '',
         description: '',
@@ -152,19 +152,17 @@ export default function OfflineProjectsExample() {
             </div>
             
             <div className="flex items-center space-x-4 text-sm text-gray-600">
-              <span>Last Sync: {syncStatus.lastSync ? new Date(syncStatus.lastSync).toLocaleString() : 'Never'}</span>
-              <span>Pending Changes: {syncStatus.pendingChanges}</span>
-              {syncStatus.isSyncing && (
-                <span className="text-blue-600">Syncing...</span>
-              )}
+              <span>Last Sync: {syncStatus?.lastSync ? new Date(syncStatus.lastSync).toLocaleString() : 'Never'}</span>
+              <span>Pending: {syncStatus?.pendingProjects || 0}</span>
+              <span>Failed: {syncStatus?.failedProjects || 0}</span>
             </div>
             
             <button
-              onClick={syncWithServer}
-              disabled={!isOnline || syncStatus.isSyncing}
+              onClick={forceSync}
+              disabled={!isOnline}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {syncStatus.isSyncing ? 'Syncing...' : 'Sync Now'}
+              Sync Now
             </button>
           </div>
         </div>

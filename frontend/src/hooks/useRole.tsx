@@ -9,6 +9,7 @@ export interface RoleAccess {
   userTier: string | null;
   isCEO: boolean;
   isAdmin: boolean;
+  isManager: boolean; // Add the missing property
   isPremium: boolean;
   isEnterprise: boolean;
   canAccessFeature: (feature: string) => boolean;
@@ -46,6 +47,7 @@ export function useRole(): RoleAccess {
   
   const isCEO = userRole === 'ceo';
   const isAdmin = userRole === 'admin' || userRole === 'ceo';
+  const isManager = userRole === 'manager' || isAdmin; // Add manager logic
   const isPremium = userTier === 'premium' || userTier === 'enterprise';
   const isEnterprise = userTier === 'enterprise';
 
@@ -78,6 +80,7 @@ export function useRole(): RoleAccess {
     userTier,
     isCEO,
     isAdmin,
+    isManager,
     isPremium,
     isEnterprise,
     canAccessFeature,

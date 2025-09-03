@@ -16,12 +16,30 @@ import {
   Plus
 } from 'lucide-react';
 import Modal, { ModalProps } from './Modal';
-import { IProject } from '@/models/Project';
+
+// Define a simpler project interface for the modal
+interface SimpleProject {
+  _id: string;
+  name: string;
+  description?: string;
+  type?: string;
+  status?: string;
+  location?: any;
+  client?: any;
+  timeline?: any;
+  budget?: any;
+  team?: any[];
+  tags?: string[];
+  metadata?: Record<string, any>;
+  createdBy?: any;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 interface ProjectModalProps extends Omit<ModalProps, 'children'> {
-  project?: IProject | null;
+  project?: SimpleProject | null;
   mode: 'create' | 'edit' | 'view';
-  onSave?: (project: Partial<IProject>) => Promise<void>;
+  onSave?: (project: Partial<SimpleProject>) => Promise<void>;
   onDelete?: (projectId: string) => Promise<void>;
   loading?: boolean;
 }

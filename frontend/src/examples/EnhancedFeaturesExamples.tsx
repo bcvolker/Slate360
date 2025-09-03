@@ -3,7 +3,26 @@ import DemoModeToggle from '../components/DemoModeToggle';
 import VirtualProjectList from '../components/VirtualProjectList';
 import ProjectAnalytics from '../components/ProjectAnalytics';
 import ProjectModal from '../components/ProjectModal';
-import { IProject } from '@/models/Project';
+import { IProject, OfflineProject, toIProject, isIProject } from '../types/projectTypes';
+
+// Define SimpleProject interface to match ProjectModal expectations
+interface SimpleProject {
+  _id: string;
+  name: string;
+  description?: string;
+  type?: string;
+  status?: string;
+  location?: any;
+  client?: any;
+  timeline?: any;
+  budget?: any;
+  team?: any[];
+  tags?: string[];
+  metadata?: Record<string, any>;
+  createdBy?: any;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 // Sample project data for demonstration
 const sampleProjects = [
@@ -213,7 +232,7 @@ const sampleProjects = [
 ] as any[];
 
 export function EnhancedFeaturesExamples() {
-  const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
+  const [selectedProject, setSelectedProject] = useState<SimpleProject | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>('view');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -223,32 +242,146 @@ export function EnhancedFeaturesExamples() {
     client: ''
   });
 
-  const handleProjectClick = (project: IProject) => {
-    setSelectedProject(project);
+  const handleProjectClick = (project: OfflineProject) => {
+    // Convert OfflineProject to SimpleProject format
+    const simpleProject: SimpleProject = {
+      _id: project.id,
+      name: project.name,
+      description: project.data?.description || '',
+      type: project.data?.type || 'other',
+      status: project.data?.status || 'planning',
+      location: project.data?.location || {
+        address: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: '',
+        coordinates: { lat: 0, lng: 0 }
+      },
+      client: project.data?.client || {
+        name: '',
+        email: '',
+        phone: '',
+        company: ''
+      },
+      timeline: project.data?.timeline || {
+        startDate: new Date(),
+        endDate: new Date(),
+        estimatedDuration: 0
+      },
+      budget: project.data?.budget || {
+        estimated: 0,
+        actual: 0,
+        currency: 'USD'
+      },
+      team: project.data?.team || [],
+      tags: project.data?.tags || [],
+      metadata: project.data?.metadata || {},
+      createdBy: project.data?.createdBy || 'unknown',
+      createdAt: project.data?.createdAt || new Date(),
+      updatedAt: project.data?.updatedAt || new Date()
+    };
+    setSelectedProject(simpleProject);
     setModalMode('view');
     setIsModalOpen(true);
   };
 
-  const handleEditProject = (project: IProject) => {
-    setSelectedProject(project);
+  const handleEditProject = (project: OfflineProject) => {
+    // Convert OfflineProject to SimpleProject format
+    const simpleProject: SimpleProject = {
+      _id: project.id,
+      name: project.name,
+      description: project.data?.description || '',
+      type: project.data?.type || 'other',
+      status: project.data?.status || 'planning',
+      location: project.data?.location || {
+        address: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: '',
+        coordinates: { lat: 0, lng: 0 }
+      },
+      client: project.data?.client || {
+        name: '',
+        email: '',
+        phone: '',
+        company: ''
+      },
+      timeline: project.data?.timeline || {
+        startDate: new Date(),
+        endDate: new Date(),
+        estimatedDuration: 0
+      },
+      budget: project.data?.budget || {
+        estimated: 0,
+        actual: 0,
+        currency: 'USD'
+      },
+      team: project.data?.team || [],
+      tags: project.data?.tags || [],
+      metadata: project.data?.metadata || {},
+      createdBy: project.data?.createdBy || 'unknown',
+      createdAt: project.data?.createdAt || new Date(),
+      updatedAt: project.data?.updatedAt || new Date()
+    };
+    setSelectedProject(simpleProject);
     setModalMode('edit');
     setIsModalOpen(true);
   };
 
-  const handleDeleteProject = (project: IProject) => {
+  const handleDeleteProject = (project: OfflineProject) => {
     if (confirm(`Are you sure you want to delete "${project.name}"?`)) {
-      console.log('Deleting project:', project._id);
+      console.log('Deleting project:', project.id);
       // In a real app, this would call the delete API
     }
   };
 
-  const handleViewProject = (project: IProject) => {
-    setSelectedProject(project);
+  const handleViewProject = (project: OfflineProject) => {
+    // Convert OfflineProject to SimpleProject format
+    const simpleProject: SimpleProject = {
+      _id: project.id,
+      name: project.name,
+      description: project.data?.description || '',
+      type: project.data?.type || 'other',
+      status: project.data?.status || 'planning',
+      location: project.data?.location || {
+        address: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: '',
+        coordinates: { lat: 0, lng: 0 }
+      },
+      client: project.data?.client || {
+        name: '',
+        email: '',
+        phone: '',
+        company: ''
+      },
+      timeline: project.data?.timeline || {
+        startDate: new Date(),
+        endDate: new Date(),
+        estimatedDuration: 0
+      },
+      budget: project.data?.budget || {
+        estimated: 0,
+        actual: 0,
+        currency: 'USD'
+      },
+      team: project.data?.team || [],
+      tags: project.data?.tags || [],
+      metadata: project.data?.metadata || {},
+      createdBy: project.data?.createdBy || 'unknown',
+      createdAt: project.data?.createdAt || new Date(),
+      updatedAt: project.data?.updatedAt || new Date()
+    };
+    setSelectedProject(simpleProject);
     setModalMode('view');
     setIsModalOpen(true);
   };
 
-  const handleSaveProject = async (projectData: Partial<IProject>) => {
+  const handleSaveProject = async (projectData: Partial<SimpleProject>) => {
     console.log('Saving project:', projectData);
     // In a real app, this would call the save API
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call

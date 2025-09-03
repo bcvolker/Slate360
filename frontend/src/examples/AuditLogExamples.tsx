@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
+import mongoose from 'mongoose';
 import {
   logAudit,
-  logUserAction,
-  logSecurityEvent,
-  logProjectAction,
-  logBillingEvent,
-  logSystemEvent,
-  logAuditBatch,
   getAuditLogs,
   getAuditStats,
-  cleanOldAuditLogs,
-  exportAuditLogs
+  cleanOldAuditLogs
 } from '../lib/audit';
 import { toast } from 'react-hot-toast';
 
@@ -21,26 +15,25 @@ export function BasicAuditLogExample() {
   const handleBasicLog = async () => {
     setLoading(true);
     try {
-      const result = await logAudit({
-        userId: 'user123',
-        userEmail: 'user@example.com',
-        userRole: 'manager',
-        action: 'user.login',
-        details: {
+      await logAudit(
+        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        'user.login', // action
+        'user', // resource
+        'user123', // resourceId
+        {
           method: 'email',
           success: true,
           ipAddress: '192.168.1.1'
-        },
-        category: 'security',
-        severity: 'low',
-        logToConsole: true // Enable console logging for development
-      });
+        }, // details
+        '192.168.1.1', // ipAddress
+        'Mozilla/5.0...', // userAgent
+        'low', // severity
+        'security', // category
+        'success', // outcome
+        {} // metadata
+      );
 
-      if (result.success) {
-        toast.success(`Audit logged successfully! ID: ${result.auditLogId}`);
-      } else {
-        toast.error(`Failed to log audit: ${result.error}`);
-      }
+      toast.success('Audit logged successfully!');
     } catch (error) {
       toast.error('Error logging audit');
       console.error(error);
@@ -82,15 +75,23 @@ export function ConvenienceFunctionsExample() {
   const handleUserAction = async () => {
     setLoading(true);
     try {
-      await logUserAction(
-        'user123',
-        'user.update',
+      await logAudit(
+        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        'user.update', // action
+        'user', // resource
+        'user123', // resourceId
         {
           field: 'profile',
           oldValue: 'John Doe',
           newValue: 'John Smith',
           reason: 'Name correction'
-        }
+        }, // details
+        '192.168.1.1', // ipAddress
+        'Mozilla/5.0...', // userAgent
+        'low', // severity
+        'data', // category
+        'success', // outcome
+        {} // metadata
       );
       toast.success('User action logged');
     } catch (error) {
@@ -103,15 +104,23 @@ export function ConvenienceFunctionsExample() {
   const handleSecurityEvent = async () => {
     setLoading(true);
     try {
-      await logSecurityEvent(
-        'user123',
-        'security.permission_denied',
+      await logAudit(
+        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        'security.permission_denied', // action
+        'security', // resource
+        'permission_denied', // resourceId
         {
           resource: '/admin/users',
           reason: 'Insufficient privileges',
           userRole: 'manager',
           requiredRole: 'admin'
-        }
+        }, // details
+        '192.168.1.1', // ipAddress
+        'Mozilla/5.0...', // userAgent
+        'high', // severity
+        'security', // category
+        'failure', // outcome
+        {} // metadata
       );
       toast.success('Security event logged');
     } catch (error) {
@@ -124,16 +133,23 @@ export function ConvenienceFunctionsExample() {
   const handleProjectAction = async () => {
     setLoading(true);
     try {
-      await logProjectAction(
-        'user123',
-        'project.create',
-        'proj_456',
+      await logAudit(
+        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        'project.create', // action
+        'project', // resource
+        'proj_456', // resourceId
         {
           projectName: 'New Office Building',
           budget: 500000,
           timeline: '12 months',
           client: 'ABC Corp'
-        }
+        }, // details
+        '192.168.1.1', // ipAddress
+        'Mozilla/5.0...', // userAgent
+        'low', // severity
+        'project', // category
+        'success', // outcome
+        {} // metadata
       );
       toast.success('Project action logged');
     } catch (error) {
@@ -146,16 +162,24 @@ export function ConvenienceFunctionsExample() {
   const handleBillingEvent = async () => {
     setLoading(true);
     try {
-      await logBillingEvent(
-        'user123',
-        'billing.subscription_created',
+      await logAudit(
+        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        'billing.subscription_created', // action
+        'billing', // resource
+        'sub_123456', // resourceId
         {
           plan: 'Premium',
           amount: 99.99,
           currency: 'USD',
           billingCycle: 'monthly',
           stripeSubscriptionId: 'sub_123456'
-        }
+        }, // details
+        '192.168.1.1', // ipAddress
+        'Mozilla/5.0...', // userAgent
+        'low', // severity
+        'billing', // category
+        'success', // outcome
+        {} // metadata
       );
       toast.success('Billing event logged');
     } catch (error) {
@@ -168,14 +192,23 @@ export function ConvenienceFunctionsExample() {
   const handleSystemEvent = async () => {
     setLoading(true);
     try {
-      await logSystemEvent(
-        'system.maintenance',
+      await logAudit(
+        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        'system.maintenance', // action
+        'system', // resource
+        'maintenance_001', // resourceId
         {
           type: 'scheduled',
           duration: '2 hours',
           affectedServices: ['database', 'api'],
           maintenanceWindow: '2024-01-15 02:00-04:00 UTC'
-        }
+        }, // details
+        '192.168.1.1', // ipAddress
+        'Mozilla/5.0...', // userAgent
+        'medium', // severity
+        'system', // category
+        'success', // outcome
+        {} // metadata
       );
       toast.success('System event logged');
     } catch (error) {
@@ -273,7 +306,26 @@ export function BatchLoggingExample() {
         }
       ];
 
-      const results = await logAuditBatch(auditEvents);
+      const results = await Promise.all(auditEvents.map(async (event) => {
+        try {
+          await logAudit(
+            new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+            event.action, // action
+            'user', // resource
+            'batch_event', // resourceId
+            event.details, // details
+            '192.168.1.1', // ipAddress
+            'Mozilla/5.0...', // userAgent
+            'low', // severity
+            event.category, // category
+            'success', // outcome
+            {} // metadata
+          );
+          return { success: true };
+        } catch (error) {
+          return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+        }
+      }));
       
       const successCount = results.filter(r => r.success).length;
       const failureCount = results.length - successCount;
@@ -324,13 +376,10 @@ export function RetrieveAuditLogsExample() {
   const handleGetLogs = async () => {
     setLoading(true);
     try {
-      const result = await getAuditLogs({
-        limit: 10,
-        skip: 0
-      });
+      const result = await getAuditLogs({}, 10, 0);
       
-      setLogs(result.logs);
-      toast.success(`Retrieved ${result.logs.length} audit logs`);
+      setLogs(result);
+      toast.success(`Retrieved ${result.length} audit logs`);
       
     } catch (error) {
       toast.error('Failed to retrieve audit logs');
@@ -362,7 +411,12 @@ export function RetrieveAuditLogsExample() {
       startDate.setDate(startDate.getDate() - 7); // Last 7 days
       const endDate = new Date();
       
-      const jsonData = await exportAuditLogs(startDate, endDate, 'json');
+      const logs = await getAuditLogs({
+        startDate,
+        endDate
+      }, 1000, 0);
+      
+      const jsonData = JSON.stringify(logs, null, 2);
       
       // Create download link
       const blob = new Blob([jsonData], { type: 'application/json' });
@@ -487,39 +541,38 @@ export function AdvancedAuditExample() {
         requestId: 'req_789012'
       };
 
-      const result = await logAudit({
-        userId: 'user123',
-        userEmail: 'admin@example.com',
-        userRole: 'admin',
-        action: 'admin.user_management',
-        details: {
+      await logAudit(
+        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        'admin.user_management', // action
+        'user_management', // resource
+        'bulk_update_001', // resourceId
+        {
           operation: 'bulk_user_update',
           affectedUsers: ['user1', 'user2', 'user3'],
           changes: {
             role: 'manager',
             tier: 'premium'
           },
-          reason: 'Department restructuring'
-        },
-        resourceType: 'user_management',
-        resourceId: 'bulk_update_001',
-        category: 'system',
-        severity: 'high',
-        ipAddress: requestContext.ipAddress,
-        userAgent: requestContext.userAgent,
-        metadata: {
+          reason: 'Department restructuring',
           sessionId: requestContext.sessionId,
           requestId: requestContext.requestId,
           processingTime: '2.5s',
           batchSize: 3
-        }
-      });
+        }, // details
+        requestContext.ipAddress, // ipAddress
+        requestContext.userAgent, // userAgent
+        'high', // severity
+        'system', // category
+        'success', // outcome
+        {
+          sessionId: requestContext.sessionId,
+          requestId: requestContext.requestId,
+          processingTime: '2.5s',
+          batchSize: 3
+        } // metadata
+      );
 
-      if (result.success) {
-        toast.success(`Advanced audit logged! ID: ${result.auditLogId}`);
-      } else {
-        toast.error(`Failed to log audit: ${result.error}`);
-      }
+      toast.success('Advanced audit logged successfully!');
       
     } catch (error) {
       toast.error('Error logging advanced audit');

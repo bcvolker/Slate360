@@ -9,6 +9,8 @@ const useFeatureFlags = () => {
     canUseAdvanced3D: false,
     canCreateTours: false,
     canCollaborate: false,
+    canAccessAPI: false,
+    canWhiteLabel: false,
     tourLimit: 5,
     storageLimit: '10GB'
   };

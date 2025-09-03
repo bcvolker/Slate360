@@ -39,10 +39,10 @@ interface DemoContextType {
   syncDemoData: () => Promise<{ success: boolean; syncedItems: number }>;
   
   // Demo queries
-  getProject: (id: string) => IProject | undefined;
-  getProjectsByStatus: (status: string) => IProject[];
-  getProjectsByType: (type: string) => IProject[];
-  searchProjects: (query: string) => IProject[];
+  getProject: (id: string) => Partial<IProject> | undefined;
+  getProjectsByStatus: (status: string) => Partial<IProject>[];
+  getProjectsByType: (type: string) => Partial<IProject>[];
+  searchProjects: (query: string) => Partial<IProject>[];
   getUser: (id: string) => any;
   getFilesByProject: (projectId: string) => any[];
   getNotifications: (limit?: number) => any[];
