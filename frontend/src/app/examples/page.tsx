@@ -19,8 +19,8 @@ import {
 import DemoModeToggle from '../../components/DemoModeToggle';
 import { useDemoMode } from '../../hooks/useDemoMode';
 import { useOfflineProjects } from '../../hooks/useOfflineProjects';
-import { ProjectAnalytics } from '../../components/ProjectAnalytics';
-import { VirtualProjectList } from '../../components/VirtualProjectList';
+import ProjectAnalytics from '../../components/ProjectAnalytics';
+import VirtualProjectList from '../../components/VirtualProjectList';
 import { Modal, ConfirmModal, FormModal } from '../../components/Modal';
 import { SyncStatus } from '../../components/SyncStatus';
 
@@ -28,10 +28,8 @@ export default function ExamplesPage() {
   const { isDemoMode, demoData, toggleDemoMode } = useDemoMode();
   const { 
     projects, 
-    loading: isLoading, 
-    syncStatus, 
-    forceSync: syncProjects, 
-    isOnline 
+    isLoading, 
+    refreshProjects 
   } = useOfflineProjects();
 
   const [showModal, setShowModal] = useState(false);
@@ -148,23 +146,17 @@ export default function ExamplesPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Network Status:</span>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    isOnline ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                  }`}>
-                    {isOnline ? 'Online' : 'Offline'}
+                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Online
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Total Projects:</span>
-                  <span className="font-medium">{syncStatus?.totalProjects || 0}</span>
+                  <span className="font-medium">{projects.length}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Synced Projects:</span>
-                  <span className="font-medium">{syncStatus?.syncedProjects || 0}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Pending Sync:</span>
-                  <span className="font-medium">{syncStatus?.pendingProjects || 0}</span>
+                  <span className="text-gray-600">Loading Status:</span>
+                  <span className="font-medium">{isLoading ? 'Loading...' : 'Ready'}</span>
                 </div>
               </div>
             </div>
@@ -216,16 +208,7 @@ export default function ExamplesPage() {
               <div className="bg-gray-50 rounded-lg p-4 h-96">
                 <VirtualProjectList
                   projects={projects}
-                  onProjectClick={(project: any) => console.log('Project clicked:', project)}
-                  onEditProject={(project: any) => console.log('Edit project:', project)}        
-                  onDeleteProject={(project: any) => console.log('Delete project:', project)}
-                  onViewProject={(project: any) => console.log('View project:', project)}
-                  loading={isLoading}
-                  emptyMessage="No projects to display"
-                  className="h-full"
-                  showActions={false}
-                  itemHeight={80}
-                  containerHeight={350}
+                  onSelectProject={(project: any) => console.log('Project clicked:', project)}
                 />
               </div>
             </div>
@@ -291,14 +274,11 @@ export default function ExamplesPage() {
             </p>
           </div>
 
-          <ProjectAnalytics
-            projects={projects}
-            showCharts={true}
-            showMetrics={true}
-            showTrends={true}
-            timeRange="all"
-            className="bg-gray-50 rounded-lg p-6"
-          />
+          {projects.length > 0 && (
+            <ProjectAnalytics
+              project={projects[0]}
+            />
+          )}
         </motion.section>
 
         {/* Specialized Modals Section */}

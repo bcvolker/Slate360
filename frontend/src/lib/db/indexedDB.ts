@@ -1,25 +1,20 @@
 // frontend/src/lib/db/indexedDB.ts
 import Dexie, { Table } from 'dexie';
-import { Project } from '@/types/project';
 
-// Define the shape of the data as it will be stored in IndexedDB
 export interface IndexedProject {
-  id: string;
+  id: string; // Primary key
   name: string;
   status: 'draft' | 'active' | 'archived';
-  createdAt: string | Date;
   updatedAt: string | Date;
-  description?: string;
 }
 
 export class SlateDB extends Dexie {
-  projects!: Table<IndexedProject, string>; // The 'string' is the type of the primary key
+  projects!: Table<IndexedProject, string>; // Defines the 'projects' table
 
   constructor() {
-    super('Slate360DB');
+    super('Slate360Database');
     this.version(1).stores({
-      // Primary key is 'id', and we can index other properties for faster lookups
-      projects: 'id, name, status, updatedAt',
+      projects: 'id, name, status, updatedAt', // Primary key and indexed fields
     });
   }
 }

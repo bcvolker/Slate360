@@ -7,7 +7,7 @@ interface VirtualProjectListProps {
 
 export default function VirtualProjectList({ projects, onSelectProject }: VirtualProjectListProps) {
   if (!projects.length) {
-    return <div className="p-4 text-gray-500">No local projects found.</div>;
+    return <div className="p-4 text-gray-400">No projects found.</div>;
   }
   return (
     <ul className="space-y-2">
