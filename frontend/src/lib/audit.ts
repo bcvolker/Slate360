@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { IAuditLog } from '../models/AuditLog';
 
 // Audit log interface
 export interface IAuditLog {
@@ -277,4 +276,3 @@ export const cleanOldAuditLogs = async (daysToKeep: number = 90): Promise<number
 
 // Export the model and functions
 export default AuditLog;
-export { logAudit, getAuditLogs, getAuditStats, cleanOldAuditLogs };

@@ -1,17 +1,17 @@
 // frontend/src/types/project.ts
 import { z } from 'zod';
 
-// Define the schema for a project using Zod for runtime validation.
+// This Zod schema is the single, canonical definition for a project's structure.
+// It provides runtime validation, making your application far more robust than interfaces alone.
 export const ProjectSchema = z.object({
-  // Use a canonical 'id' field. Adapters will handle mapping _id to this.
+  // The 'id' will be the standardized identifier. Adapters will handle mapping _id to this.
   id: z.string(),
-  name: z.string().min(1, { message: "Project name is required" }),
+  name: z.string().min(1, { message: "Project name cannot be empty" }),
   description: z.string().optional(),
   status: z.enum(['draft', 'active', 'archived']).default('draft'),
   createdAt: z.date().or(z.string()),
   updatedAt: z.date().or(z.string()),
-  
-  // Optional complex properties
+  // Define other essential fields, keeping them optional to avoid breaking UI components initially.
   tasks: z.array(
     z.object({
       id: z.string(),
@@ -21,5 +21,5 @@ export const ProjectSchema = z.object({
   ).optional(),
 });
 
-// Infer the TypeScript type from the Zod schema.
+// This is now the only Project type you will import across the entire application.
 export type Project = z.infer<typeof ProjectSchema>;

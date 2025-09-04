@@ -6,8 +6,10 @@ import { getDB } from '@/lib/db/indexedDB';
 export class ProjectSyncService {
   static async fetchAllFromServer(): Promise<Project[]> {
     console.log("MOCK: Fetching projects from API...");
-    // In a real app, this would be: const response = await fetch('/api/projects');
-    const mockApiResponse = [{ _id: 'mongo123', name: 'Server-Side Project', status: 'active' }];
+    // This is where you will put your real API call next week.
+    // const response = await fetch('/api/projects');
+    // const data = await response.json();
+    const mockApiResponse = [{ _id: 'server123', name: 'Server-Side Project', status: 'active' }];
     return mockApiResponse.map(fromMongo);
   }
 
@@ -23,8 +25,7 @@ export class ProjectSyncService {
   }
 }
 
-// Export the missing networkManager to satisfy legacy imports
+// Export the missing networkManager to satisfy any legacy imports
 export const networkManager = {
   fetchProjects: ProjectSyncService.fetchAllFromServer,
-  // Add other functions if they are imported elsewhere
 };

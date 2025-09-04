@@ -9,6 +9,7 @@ export default function DashboardPage() {
   const { projects, isLoading } = useOfflineProjects();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
+  // Automatically select the first project once data has loaded
   useEffect(() => {
     if (!isLoading && projects.length > 0 && !selectedProject) {
       setSelectedProject(projects[0]);

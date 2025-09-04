@@ -3,7 +3,7 @@ import DemoModeToggle from '../components/DemoModeToggle';
 import VirtualProjectList from '../components/VirtualProjectList';
 import ProjectAnalytics from '../components/ProjectAnalytics';
 import ProjectModal from '../components/ProjectModal';
-import { IProject, OfflineProject, toIProject, isIProject } from '../types/projectTypes';
+import { Project } from '../types/project';
 
 // Define SimpleProject interface to match ProjectModal expectations
 interface SimpleProject {
@@ -242,7 +242,7 @@ export function EnhancedFeaturesExamples() {
     client: ''
   });
 
-  const handleProjectClick = (project: OfflineProject) => {
+  const handleProjectClick = (project: Project) => {
     // Convert OfflineProject to SimpleProject format
     const simpleProject: SimpleProject = {
       _id: project.id,
@@ -286,7 +286,7 @@ export function EnhancedFeaturesExamples() {
     setIsModalOpen(true);
   };
 
-  const handleEditProject = (project: OfflineProject) => {
+  const handleEditProject = (project: Project) => {
     // Convert OfflineProject to SimpleProject format
     const simpleProject: SimpleProject = {
       _id: project.id,
@@ -330,22 +330,22 @@ export function EnhancedFeaturesExamples() {
     setIsModalOpen(true);
   };
 
-  const handleDeleteProject = (project: OfflineProject) => {
+  const handleDeleteProject = (project: Project) => {
     if (confirm(`Are you sure you want to delete "${project.name}"?`)) {
       console.log('Deleting project:', project.id);
       // In a real app, this would call the delete API
     }
   };
 
-  const handleViewProject = (project: OfflineProject) => {
-    // Convert OfflineProject to SimpleProject format
+  const handleViewProject = (project: Project) => {
+    // Convert Project to SimpleProject format
     const simpleProject: SimpleProject = {
       _id: project.id,
       name: project.name,
-      description: project.data?.description || '',
-      type: project.data?.type || 'other',
-      status: project.data?.status || 'planning',
-      location: project.data?.location || {
+      description: project.description || '',
+      type: 'other',
+      status: project.status,
+      location: {
         address: '',
         city: '',
         state: '',
@@ -353,28 +353,28 @@ export function EnhancedFeaturesExamples() {
         country: '',
         coordinates: { lat: 0, lng: 0 }
       },
-      client: project.data?.client || {
+      client: {
         name: '',
         email: '',
         phone: '',
         company: ''
       },
-      timeline: project.data?.timeline || {
-        startDate: new Date(),
-        endDate: new Date(),
+      timeline: {
+        startDate: project.createdAt instanceof Date ? project.createdAt : new Date(project.createdAt),
+        endDate: project.updatedAt instanceof Date ? project.updatedAt : new Date(project.updatedAt),
         estimatedDuration: 0
       },
-      budget: project.data?.budget || {
+      budget: {
         estimated: 0,
         actual: 0,
         currency: 'USD'
       },
-      team: project.data?.team || [],
-      tags: project.data?.tags || [],
-      metadata: project.data?.metadata || {},
-      createdBy: project.data?.createdBy || 'unknown',
-      createdAt: project.data?.createdAt || new Date(),
-      updatedAt: project.data?.updatedAt || new Date()
+      team: [],
+      tags: [],
+      metadata: {},
+      createdBy: 'unknown',
+      createdAt: project.createdAt instanceof Date ? project.createdAt : new Date(project.createdAt),
+      updatedAt: project.updatedAt instanceof Date ? project.updatedAt : new Date(project.updatedAt)
     };
     setSelectedProject(simpleProject);
     setModalMode('view');

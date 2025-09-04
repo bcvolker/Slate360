@@ -2,13 +2,13 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
-import { IProject } from '../types/project';
+import { Project } from '../types/project';
 
 // Database schema
 interface ProjectDB extends DBSchema {
   projects: {
     key: string;
-    value: IProject;
+    value: Project;
     indexes: {
       'by-name': string;
       'by-status': string;
@@ -23,7 +23,7 @@ interface ProjectDB extends DBSchema {
     value: {
       id: string;
       action: 'create' | 'update' | 'delete';
-      project: IProject;
+      project: Project;
       timestamp: number;
       retryCount: number;
     };
@@ -75,7 +75,7 @@ export const useIndexedDB = () => {
   }, [initDB]);
 
   // Add project
-  const addProject = useCallback(async (project: IProject): Promise<void> => {
+  const addProject = useCallback(async (project: Project): Promise<void> => {
     if (!dbRef.current) throw new Error('Database not initialized');
 
     try {
@@ -86,7 +86,7 @@ export const useIndexedDB = () => {
   }, []);
 
   // Update project
-  const updateProject = useCallback(async (project: IProject): Promise<void> => {
+  const updateProject = useCallback(async (project: Project): Promise<void> => {
     if (!dbRef.current) throw new Error('Database not initialized');
 
     try {
@@ -108,7 +108,7 @@ export const useIndexedDB = () => {
   }, []);
 
   // Get project by ID
-  const getProject = useCallback(async (projectId: string): Promise<IProject | null> => {
+  const getProject = useCallback(async (projectId: string): Promise<Project | null> => {
     if (!dbRef.current) throw new Error('Database not initialized');
 
     try {
@@ -120,7 +120,7 @@ export const useIndexedDB = () => {
   }, []);
 
   // Get all projects
-  const getAllProjects = useCallback(async (): Promise<IProject[]> => {
+  const getAllProjects = useCallback(async (): Promise<Project[]> => {
     if (!dbRef.current) throw new Error('Database not initialized');
 
     try {
@@ -131,7 +131,7 @@ export const useIndexedDB = () => {
   }, []);
 
   // Search projects
-  const searchProjects = useCallback(async (query: string): Promise<IProject[]> => {
+  const searchProjects = useCallback(async (query: string): Promise<Project[]> => {
     if (!dbRef.current) throw new Error('Database not initialized');
 
     try {
@@ -140,9 +140,7 @@ export const useIndexedDB = () => {
       
       return allProjects.filter(project => 
         project.name.toLowerCase().includes(lowerQuery) ||
-        project.description.toLowerCase().includes(lowerQuery) ||
-        project.client.name.toLowerCase().includes(lowerQuery) ||
-        project.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+        (project.description && project.description.toLowerCase().includes(lowerQuery))
       );
     } catch (err) {
       throw new Error(`Failed to search projects: ${err instanceof Error ? err.message : 'Unknown error'}`);
@@ -152,10 +150,7 @@ export const useIndexedDB = () => {
   // Filter projects
   const filterProjects = useCallback(async (filter: {
     status?: string;
-    type?: string;
-    client?: string;
-    createdBy?: string;
-  }): Promise<IProject[]> => {
+  }): Promise<Project[]> => {
     if (!dbRef.current) throw new Error('Database not initialized');
 
     try {
@@ -165,21 +160,6 @@ export const useIndexedDB = () => {
         collection = collection.filter(project => project.status === filter.status);
       }
 
-      if (filter.type) {
-        collection = collection.filter(project => project.type === filter.type);
-      }
-
-      if (filter.client) {
-        collection = collection.filter(project => 
-          project.client.name.toLowerCase().includes(filter.client!.toLowerCase()) ||
-          project.client.company?.toLowerCase().includes(filter.client!.toLowerCase())
-        );
-      }
-
-      if (filter.createdBy) {
-        collection = collection.filter(project => project.createdBy === filter.createdBy);
-      }
-
       return collection;
     } catch (err) {
       throw new Error(`Failed to filter projects: ${err instanceof Error ? err.message : 'Unknown error'}`);
@@ -187,7 +167,7 @@ export const useIndexedDB = () => {
   }, []);
 
   // Add to sync queue
-  const addToSyncQueue = useCallback(async (action: 'create' | 'update' | 'delete', project: IProject): Promise<void> => {
+  const addToSyncQueue = useCallback(async (action: 'create' | 'update' | 'delete', project: Project): Promise<void> => {
     if (!dbRef.current) throw new Error('Database not initialized');
 
     try {
@@ -257,7 +237,7 @@ export const useIndexedDB = () => {
   }, []);
 
   // Export data
-  const exportData = useCallback(async (): Promise<{ projects: IProject[]; syncQueue: any[] }> => {
+  const exportData = useCallback(async (): Promise<{ projects: Project[]; syncQueue: any[] }> => {
     if (!dbRef.current) throw new Error('Database not initialized');
 
     try {
@@ -271,7 +251,7 @@ export const useIndexedDB = () => {
   }, []);
 
   // Import data
-  const importData = useCallback(async (data: { projects: IProject[]; syncQueue: any[] }): Promise<void> => {
+  const importData = useCallback(async (data: { projects: Project[]; syncQueue: any[] }): Promise<void> => {
     if (!dbRef.current) throw new Error('Database not initialized');
 
     try {
