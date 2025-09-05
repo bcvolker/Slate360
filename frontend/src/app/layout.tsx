@@ -1,6 +1,6 @@
 import './globals.css';
 import Providers from '@/app-shell/Providers';
-import AppShell from '@/app-shell/AppShell';
+import SimpleAppShell from '@/app-shell/SimpleAppShell';
 
 export const metadata = { title: 'SLATE360', description: 'The future of construction technology.' };
 
@@ -9,9 +9,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="bg-gray-50">
         <Providers>
-          <AppShell>
+          <SimpleAppShell>
             {children}
-          </AppShell>
+          </SimpleAppShell>
         </Providers>
       </body>
     </html>

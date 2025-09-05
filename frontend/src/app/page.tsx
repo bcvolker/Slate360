@@ -389,48 +389,6 @@ export default function Homepage() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* Boring Company Style Navigation Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <div className="flex items-center space-x-4">
-              <Link href="/" className="text-2xl font-bold text-white hover:text-gray-300 transition-colors">
-                SLATE360
-              </Link>
-            </div>
-            
-            {/* Navigation Links */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <Link href="/dashboard" className="text-white hover:text-gray-300 transition-colors font-medium">
-                DASHBOARD
-              </Link>
-              <Link href="/dashboard/project-hub" className="text-white hover:text-gray-300 transition-colors font-medium">
-                PROJECTS
-              </Link>
-              <Link href="/examples" className="text-white hover:text-gray-300 transition-colors font-medium">
-                BIM STUDIO
-              </Link>
-              <Link href="/examples" className="text-white hover:text-gray-300 transition-colors font-medium">
-                360° TOURS
-              </Link>
-              <Link href="/examples" className="text-white hover:text-gray-300 transition-colors font-medium">
-                ANALYTICS
-              </Link>
-              <Link href="/contact" className="text-white hover:text-gray-300 transition-colors font-medium">
-                CONTACT
-              </Link>
-            </nav>
-
-            {/* CTA Button */}
-            <div className="flex items-center space-x-4">
-              <Link href="/login" className="bg-white text-black px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition-colors">
-                GET STARTED
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
 
       {/* Floating Navigation - Boring Company Style */}
       <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-40">
@@ -454,7 +412,7 @@ export default function Homepage() {
       <div ref={tilesRef} className="tiles-container">
         {tiles.map((tile, index) => (
           <div key={tile.id} className="tile-item">
-            <section id={tile.id} className="w-full max-w-7xl mx-auto px-6 py-20" style={{ minHeight: '100vh', paddingTop: '120px' }}>
+            <section id={tile.id} className="w-full max-w-7xl mx-auto px-6 py-20" style={{ minHeight: '100vh', paddingTop: '140px' }}>
               {/* Title Section */}
               <div className="text-center mb-16">
                 <h1 className="text-6xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
