@@ -3,8 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import SimpleAppShell from '@/app-shell/SimpleAppShell';
-import CleanHeader from '@/components/CleanHeader';
-import { Providers } from '@/app-shell/Providers';
+import Providers from '@/app-shell/Providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <SimpleAppShell header={<CleanHeader />}>
+          <SimpleAppShell>
             {children}
           </SimpleAppShell>
         </Providers>
