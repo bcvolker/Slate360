@@ -67,7 +67,7 @@ export interface SecurityConfig {
     maxConcurrent: number;
     deviceFingerprinting: boolean;
   };
-  logging: {
+  logging: {`n    enabled: boolean; // Added to match code usage`n    
     enabled: boolean;
     level: 'error' | 'warn' | 'info' | 'debug';
     securityEvents: boolean;
@@ -134,7 +134,7 @@ export const defaultSecurityConfig: SecurityConfig = {
     maxConcurrent: 3,
     deviceFingerprinting: true
   },
-  logging: {
+  logging: {`n    enabled: boolean; // Added to match code usage`n    
     enabled: true,
     level: process.env.NODE_ENV === 'production' ? 'warn' : 'debug',
     securityEvents: true,
