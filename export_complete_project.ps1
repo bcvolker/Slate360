@@ -1,5 +1,4 @@
-# SLATE360 Complete Project Export Script
-# Run as Administrator to ensure full access to all files
+# SLATE360 Complete Project Export Script - Simple Version
 # This script exports ALL code from every frontend and backend file
 
 param(
@@ -37,8 +36,22 @@ function Get-SourceFiles {
         $extensions = @('*.ts', '*.tsx', '*.js', '*.jsx', '*.json', '*.css', '*.scss', '*.md', '*.txt', '*.ps1', '*.bat')
         $files = @()
         
+        # Scan frontend directory structure
+        $frontendPath = "frontend"
+        
+        if (Test-Path $frontendPath) {
+            foreach ($ext in $extensions) {
+                $files += Get-ChildItem -Path $frontendPath -Filter $ext -Recurse -File | Where-Object { 
+                    $_.FullName -notlike "*node_modules*" -and 
+                    $_.FullName -notlike "*.next*" -and 
+                    $_.FullName -notlike "*.git*" 
+                }
+            }
+        }
+        
+        # Also scan root level files
         foreach ($ext in $extensions) {
-            $files += Get-ChildItem -Path $Path -Filter $ext -Recurse -File | Where-Object { 
+            $files += Get-ChildItem -Path "." -Filter $ext -File | Where-Object { 
                 $_.FullName -notlike "*node_modules*" -and 
                 $_.FullName -notlike "*.next*" -and 
                 $_.FullName -notlike "*.git*" 
@@ -84,7 +97,7 @@ $content = @"
 # SLATE360 Complete Project Export - SINGLE COMPREHENSIVE DOCUMENT
 
 **Generated on:** $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
-**Script Version:** 2.0
+**Script Version:** 3.0 (Updated for New Architecture)
 **Project:** SLATE360
 **Total Files Exported:** $($sourceFiles.Count)
 
@@ -94,16 +107,7 @@ $content = @"
 
 1. [Complete Project Overview](#complete-project-overview)
 2. [All Configuration Files](#all-configuration-files)
-3. [Core Components](#core-components)
-4. [Key Models & Database](#key-models--database)
-5. [Complete Error Analysis](#complete-error-analysis)
-6. [Remaining Files Summary](#remaining-files-summary)
-7. [Frontend Source Code](#frontend-source-code)
-8. [Backend Source Code](#backend-source-code)
-9. [API Routes](#api-routes)
-10. [Security Implementation](#security-implementation)
-11. [Project Structure](#project-structure)
-12. [Complete Source Code Export](#complete-source-code-export)
+3. [Complete Source Code Export](#complete-source-code-export)
 
 ---
 
@@ -111,6 +115,8 @@ $content = @"
 
 ### Tech Stack
 - **Frontend:** Next.js 14.2.5, React 18.3.1, TypeScript 5.4.5
+- **Architecture:** Feature-based organization with service layer
+- **Type Safety:** Zod schemas for runtime validation
 - **Styling:** Tailwind CSS 3.4.3
 - **Database:** MongoDB with Mongoose, IndexedDB for offline storage
 - **Authentication:** Supabase Auth
@@ -120,6 +126,7 @@ $content = @"
 - **File Handling:** AWS S3 integration
 - **Payment:** Stripe integration
 - **State Management:** React Query, Context API
+- **Validation:** Zod for schema validation and type inference
 
 ### Features
 - Advanced project management with role-based access control
@@ -132,415 +139,286 @@ $content = @"
 - File management with cloud storage
 - Team collaboration tools
 - Project timeline and milestone tracking
-
-### Security Implementation
-- CSRF protection with secure tokens
-- Comprehensive security headers
-- Input validation and sanitization
-- Rate limiting and DDoS protection
-- Multi-factor authentication (TOTP)
-- Session security with device fingerprinting
-- Data encryption for sensitive fields
-- File upload security and malware scanning
-- Real-time threat detection
-- Audit logging and monitoring
+- Feature-based component organization
+- Service layer for business logic separation
 
 ---
 
 ## All Configuration Files
 
 ### package.json
-\`\`\`json
+```json
 $(Read-FileContent "frontend/package.json")
-\`\`\`
+```
 
 ### next.config.mjs
-\`\`\`javascript
+```javascript
 $(Read-FileContent "frontend/next.config.mjs")
-\`\`\`
+```
 
 ### tailwind.config.js
-\`\`\`javascript
+```javascript
 $(Read-FileContent "frontend/tailwind.config.js")
-\`\`\`
+```
 
 ### tsconfig.json
-\`\`\`json
+```json
 $(Read-FileContent "frontend/tsconfig.json")
-\`\`\`
-
-### .eslintrc.json
-\`\`\`json
-$(Read-FileContent "frontend/.eslintrc.json")
-\`\`\`
-
-### postcss.config.js
-\`\`\`javascript
-$(Read-FileContent "frontend/postcss.config.js")
-\`\`\`
-
-### env.example
-\`\`\`bash
-$(Read-FileContent "frontend/env.example")
-\`\`\`
+```
 
 ---
 
-## Core Components
+## Project File/Folder Structure
 
-### layout.tsx
-\`\`\`typescript
-$(Read-FileContent "frontend/src/app/layout.tsx")
-\`\`\`
+This section shows the complete file and folder organization of the SLATE360 project:
 
-### page.tsx
-\`\`\`typescript
-$(Read-FileContent "frontend/src/app/page.tsx")
-\`\`\`
+"@
 
-### globals.css
-\`\`\`css
-$(Read-FileContent "frontend/src/app/globals.css")
-\`\`\`
+# Add comprehensive project structure
+Write-Host "Adding project file/folder structure..." -ForegroundColor Cyan
 
-### ToastProvider.tsx
-\`\`\`typescript
-$(Read-FileContent "frontend/src/components/ToastProvider.tsx")
-\`\`\`
+$content += @"
 
----
-
-## Key Models & Database
-
-### Project.ts
-\`\`\`typescript
-$(Read-FileContent "frontend/src/models/Project.ts")
-\`\`\`
-
-### User.ts
-\`\`\`typescript
-$(Read-FileContent "frontend/src/models/User.ts")
-\`\`\`
-
-### AuditLog.ts
-\`\`\`typescript
-$(Read-FileContent "frontend/src/models/AuditLog.ts")
-\`\`\`
-
-### db.ts
-\`\`\`typescript
-$(Read-FileContent "frontend/src/lib/db.ts")
-\`\`\`
-
-### mongodb.ts
-\`\`\`typescript
-$(Read-FileContent "frontend/src/lib/mongodb.ts")
-\`\`\`
-
-### useIndexedDB.ts
-\`\`\`typescript
-$(Read-FileContent "frontend/src/hooks/useIndexedDB.ts")
-\`\`\`
-
-### demoData.ts
-\`\`\`typescript
-$(Read-FileContent "frontend/src/lib/demo/demoData.ts")
-\`\`\`
-
----
-
-## Complete Error Analysis
-
-### TypeScript Build Errors
-The project currently has TypeScript errors that are bypassed in the build configuration:
-
-\`\`\`typescript
-// From next.config.mjs
-typescript: {
-  ignoreBuildErrors: true
-}
-\`\`\`
-
-### Common Error Patterns
-1. **Type Mismatches:** Interface definitions vs actual usage
-2. **Missing Dependencies:** Some components reference undefined types
-3. **Import Issues:** Path resolution problems in some modules
-4. **React Hooks:** Some custom hooks have dependency array issues
-
-### Error Resolution Strategy
-- Temporarily bypassed for build compatibility
-- Need systematic type checking and fixing
-- Consider using strict TypeScript configuration
-- Implement proper error boundaries
-
----
-
-## Remaining Files Summary
-
-### Components Directory
-- **Login.tsx:** Authentication component with form validation
-- **IntegratedDashboard.tsx:** Main dashboard interface
-- **ProjectAnalytics.tsx:** Analytics and reporting component
-- **ProjectModal.tsx:** Project creation/editing modal
-- **SecurityDashboard.tsx:** Security monitoring interface
-- **DemoModeToggle.tsx:** Demo mode functionality
-- **HelpIcon.tsx:** Contextual help system
-- **ProcessGuide.tsx:** Workflow guidance component
-
-### API Routes
-- **/api/auth:** Authentication endpoints
-- **/api/projects:** Project CRUD operations
-- **/api/security:** Security monitoring endpoints
-- **/api/billing:** Subscription management
-- **/api/stripe:** Payment processing
-- **/api/contact:** Contact form handling
-
-### Hooks and Utilities
-- **useIndexedDB:** Offline database management
-- **Security utilities:** CSRF, validation, headers
-- **File handling:** Upload, processing, storage
-- **Real-time:** WebSocket connections, collaboration
-
----
-
-## Frontend Source Code
-
-### Main App Structure
-\`\`\`typescript
-// App routing structure
-frontend/src/app/
-├── layout.tsx          # Root layout
-├── page.tsx            # Homepage
-├── globals.css         # Global styles
-├── dashboard/          # Dashboard pages
-├── api/                # API routes
-├── about/              # About page
-├── pricing/            # Pricing page
-├── contact/            # Contact page
-└── examples/           # Example pages
-\`\`\`
-
-### Component Architecture
-\`\`\`typescript
-// Component hierarchy
-frontend/src/components/
-├── ToastProvider.tsx   # Toast notifications
-├── Login.tsx           # Authentication
-├── IntegratedDashboard.tsx # Main dashboard
-├── ProjectAnalytics.tsx    # Analytics
-├── ProjectModal.tsx        # Project management
-├── SecurityDashboard.tsx   # Security monitoring
-├── DemoModeToggle.tsx      # Demo functionality
-├── HelpIcon.tsx            # Help system
-├── ProcessGuide.tsx        # Workflow guidance
-└── Modal.tsx               # Modal components
-\`\`\`
-
----
-
-## Backend Source Code
-
-### API Route Structure
-\`\`\`typescript
-// API endpoints
-frontend/src/app/api/
-├── auth/
-│   ├── login/route.ts
-│   ├── register/route.ts
-│   └── logout/route.ts
-├── projects/
-│   ├── route.ts
-│   └── [id]/route.ts
-├── security/
-│   ├── audit/route.ts
-│   └── monitoring/route.ts
-├── billing/
-│   ├── subscription/route.ts
-│   └── invoices/route.ts
-├── stripe/
-│   ├── webhook/route.ts
-│   └── checkout/route.ts
-└── contact/
-    └── route.ts
-\`\`\`
-
-### Database Models
-\`\`\`typescript
-// Data models
-frontend/src/models/
-├── Project.ts          # Project schema and methods
-├── User.ts             # User schema and methods
-└── AuditLog.ts         # Audit logging schema
-\`\`\`
-
-### Database Utilities
-\`\`\`typescript
-// Database connections
-frontend/src/lib/
-├── db.ts               # MongoDB connection
-├── mongodb.ts          # MongoDB utilities
-└── db/
-    └── indexedDB.ts    # IndexedDB setup
-\`\`\`
-
----
-
-## Security Implementation
-
-### Core Security Modules
-\`\`\`typescript
-// Security framework
-frontend/src/lib/security/
-├── csrf.ts             # CSRF protection
-├── headers.ts          # Security headers
-├── validation.ts       # Input validation
-├── rateLimit.ts        # Rate limiting
-├── encryption.ts       # Data encryption
-├── mfa.ts              # Multi-factor auth
-├── session.ts          # Session management
-├── monitoring.ts       # Threat detection
-├── fileSecurity.ts     # File upload security
-└── errorHandling.ts    # Security error handling
-\`\`\`
-
-### Security Features
-- **Authentication:** Supabase Auth with role-based access
-- **Authorization:** Tier-based permissions system
-- **Input Validation:** Zod schemas with XSS protection
-- **CSRF Protection:** Secure token-based prevention
-- **Rate Limiting:** Per-IP and per-user limits
-- **Session Security:** Device fingerprinting and validation
-- **Data Encryption:** Field-level encryption for sensitive data
-- **MFA:** TOTP-based with backup codes
-- **File Security:** Malware scanning and validation
-- **Monitoring:** Real-time threat detection
-
----
-
-## Project Structure
-
-### Directory Layout
-\`\`\`
+### Complete Directory Tree
+```
 Slate360/
-├── frontend/                    # Next.js application
-│   ├── src/
-│   │   ├── app/                # App router pages
-│   │   ├── components/         # React components
-│   │   ├── hooks/              # Custom React hooks
-│   │   ├── lib/                # Utility libraries
-│   │   ├── models/             # Database models
-│   │   ├── types/              # TypeScript types
-│   │   ├── contexts/           # React contexts
-│   │   ├── middleware/         # Custom middleware
-│   │   └── styles/             # CSS and styling
-│   ├── public/                 # Static assets
-│   ├── package.json            # Dependencies
-│   ├── next.config.mjs         # Next.js configuration
-│   ├── tailwind.config.js      # Tailwind configuration
-│   ├── tsconfig.json           # TypeScript configuration
-│   └── SECURITY_IMPLEMENTATION.md # Security documentation
-├── backend/                     # Backend services (if any)
-├── shared/                      # Shared utilities
-└── exported_code/               # Export outputs
-\`\`\`
+├── backend/                          # Backend services directory
+├── frontend/                         # Next.js frontend application
+│   ├── .eslintrc.json               # ESLint configuration
+│   ├── exported_code/               # Export outputs
+│   │   └── frontend.txt            # Frontend code export
+│   ├── IMPROVEMENTS_SUMMARY.md      # Project improvements documentation
+│   ├── next-env.d.ts               # Next.js TypeScript declarations
+│   ├── next.config.mjs             # Next.js configuration
+│   ├── package.json                 # Node.js dependencies and scripts
+│   ├── package-lock.json            # Dependency lock file
+│   ├── postcss.config.js            # PostCSS configuration
+│   ├── README-DemoMode.md           # Demo mode documentation
+│   ├── scripts/                     # Utility scripts
+│   │   └── test-security.js         # Security testing script
+│   ├── SECURITY_IMPLEMENTATION.md   # Security implementation guide
+│   ├── SECURITY_REVIEW.md           # Security review documentation
+│   ├── tailwind.config.js           # Tailwind CSS configuration
+│   ├── tsconfig.json                # TypeScript configuration
+│   ├── public/                      # Static assets
+│   │   ├── favicon.svg              # Site favicon
+│   │   ├── slate360 logo.PNG        # Company logo (PNG)
+│   │   └── slate360-logo.png       # Company logo (optimized)
+│   └── src/                         # Source code directory
+│       ├── app/                      # Next.js App Router pages
+│       │   ├── about/               # About page
+│       │   │   └── page.tsx         # About page component
+│       │   ├── api/                 # API routes
+│       │   │   ├── (mock)/          # Mock API routes
+│       │   │   │   └── [...slug]/   # Catch-all mock routes
+│       │   │   │       └── route.ts # Mock route handler
+│       │   │   ├── auth/            # Authentication API
+│       │   │   │   └── session/     # Session management
+│       │   │   │       └── route.ts # Session API handler
+│       │   │   ├── contact/         # Contact form API
+│       │   │   │   └── route.ts     # Contact API handler
+│       │   │   ├── health/          # Health check API
+│       │   │   │   └── check/       # Health check endpoint
+│       │   │   │       └── route.ts # Health check handler
+│       │   │   ├── preview/         # Preview mode API
+│       │   │   │   └── login/       # Preview login
+│       │   │   │       └── route.ts # Preview login handler
+│       │   │   ├── projects/        # Project management API
+│       │   │   │   ├── [id]/        # Individual project routes
+│       │   │   │   │   └── route.ts # Project detail handler
+│       │   │   │   └── route.ts     # Projects list handler
+│       │   │   ├── security/        # Security API
+│       │   │   │   └── example/     # Security examples
+│       │   │   │       └── route.ts # Security example handler
+│       │   │   ├── stripe/          # Stripe payment API
+│       │   │   │   └── create-checkout-session/ # Checkout session
+│       │   │   │       └── route.ts # Checkout handler
+│       │   │   └── users/           # User management API
+│       │   │       └── me/          # Current user endpoint
+│       │   │           └── route.ts # User profile handler
+│       │   ├── ceo/                 # CEO page
+│       │   │   └── page.tsx         # CEO page component
+│       │   ├── contact/             # Contact page
+│       │   │   └── page.tsx         # Contact page component
+│       │   ├── dashboard/           # Dashboard pages
+│       │   │   ├── page.tsx         # Main dashboard page
+│       │   │   └── project-hub/     # Project hub page
+│       │   │       └── page.tsx     # Project hub component
+│       │   ├── examples/            # Examples page
+│       │   │   └── page.tsx         # Examples page component
+│       │   ├── login/               # Login page
+│       │   │   └── page.tsx         # Login page component
+│       │   ├── pricing/             # Pricing page
+│       │   │   └── page.tsx         # Pricing page component
+│       │   ├── test/                # Test page
+│       │   │   └── page.tsx         # Test page component
+│       │   ├── test-build/          # Build test page
+│       │   │   └── page.tsx         # Build test component
+│       │   ├── globals.css          # Global CSS styles
+│       │   ├── layout.tsx           # Root layout component
+│       │   └── page.tsx             # Homepage component
+│       ├── app-shell/               # Application shell components
+│       │   ├── AppShell.tsx         # Main app shell component
+│       │   ├── hooks/               # App shell hooks
+│       │   │   └── useSidebar.ts    # Sidebar management hook
+│       │   ├── index.ts             # App shell exports
+│       │   ├── Providers.tsx        # Provider wrapper component
+│       │   ├── README.md            # App shell documentation
+│       │   └── SimpleLayout.tsx     # Simple layout component
+│       ├── components/              # Reusable React components
+│       │   ├── dashboard/           # Dashboard-specific components
+│       │   │   └── Toolbar.tsx      # Dashboard toolbar
+│       │   ├── homepage/            # Homepage components
+│       │   │   ├── DashboardPreview.tsx # Dashboard preview
+│       │   │   ├── FeaturesPreview.tsx  # Features preview
+│       │   │   └── HeroSection.tsx      # Hero section
+│       │   ├── layout/              # Layout components
+│       │   │   └── Header.tsx       # Header component
+│       │   ├── ContentViewer.tsx    # Content viewer component
+│       │   ├── DemoBanner.tsx       # Demo mode banner
+│       │   ├── DemoModeToggle.tsx   # Demo mode toggle
+│       │   ├── DemoWorkflowWalkthrough.tsx # Demo workflow guide
+│       │   ├── ErrorBoundary.tsx    # Error boundary component
+│       │   ├── Header.tsx           # Main header component
+│       │   ├── HelpIcon.tsx         # Help icon component
+│       │   ├── IntegratedDashboard.tsx # Integrated dashboard
+│       │   ├── Login.tsx            # Login component
+│       │   ├── Logo.tsx             # Logo component
+│       │   ├── Modal.tsx            # Modal component
+│       │   ├── ProcessGuide.tsx     # Process guide component
+│       │   ├── ProjectAnalytics.tsx # Project analytics component
+│       │   ├── ProjectModal.tsx     # Project modal component
+│       │   ├── SecurityDashboard.tsx # Security dashboard
+│       │   ├── SyncStatus.tsx       # Sync status component
+│       │   ├── ThreeHero.tsx        # Three.js hero component
+│       │   ├── ThreeModelViewer.tsx # Three.js model viewer
+│       │   ├── ThreeScene.tsx       # Three.js scene component
+│       │   ├── ToastProvider.tsx     # Toast notification provider
+│       │   └── VirtualProjectList.tsx # Virtual project list
+│       ├── contexts/                # React contexts
+│       │   └── DemoContext.tsx      # Demo mode context
+│       ├── examples/                # Example components and code
+│       │   ├── AuditLogExamples.tsx # Audit log examples
+│       │   ├── BillingPortalAPI.ts  # Billing portal API examples
+│       │   ├── BillingPortalExample.tsx # Billing portal examples
+│       │   ├── DemoModeExamples.tsx # Demo mode examples
+│       │   ├── EnhancedComponentsExamples.tsx # Enhanced components
+│       │   ├── ModalExamples.tsx    # Modal examples
+│       │   ├── ProjectsAPI.ts       # Projects API examples
+│       │   └── RoleUsage.tsx        # Role usage examples
+│       ├── features/                # Feature-based organization
+│       │   ├── dashboard/           # Dashboard feature
+│       │   │   ├── components/      # Dashboard components
+│       │   │   │   ├── ProjectAnalytics.tsx # Project analytics
+│       │   │   │   └── VirtualProjectList.tsx # Virtual project list
+│       │   │   ├── hooks/           # Dashboard hooks
+│       │   │   │   └── useProjects.ts # Projects management hook
+│       │   │   ├── pages/           # Dashboard pages
+│       │   │   │   ├── DashboardPage.tsx # Main dashboard page
+│       │   │   │   └── ProjectHubPage.tsx # Project hub page
+│       │   │   ├── index.ts         # Dashboard feature exports
+│       │   │   └── README.md        # Dashboard documentation
+│       │   ├── projects/            # Projects feature (placeholder)
+│       │   └── README.md            # Features documentation
+│       ├── hooks/                   # Custom React hooks
+│       │   ├── useBillingPortal.ts  # Billing portal hook
+│       │   ├── useDemoMode.ts       # Demo mode hook
+│       │   ├── useIndexedDB.ts      # IndexedDB hook
+│       │   ├── useOfflineProjects.ts # Offline projects hook
+│       │   └── useRole.tsx          # Role management hook
+│       ├── lib/                     # Utility libraries
+│       │   ├── adapters/            # Data adapters
+│       │   │   ├── auditAdapters.ts # Audit data adapters
+│       │   │   ├── globalTypeAdapter.ts # Global type adapter
+│       │   │   └── projectAdapters.ts # Project data adapters
+│       │   ├── db/                  # Database utilities
+│       │   │   └── indexedDB.ts     # IndexedDB setup
+│       │   ├── demo/                # Demo data
+│       │   │   └── demoData.ts      # Demo data definitions
+│       │   ├── security/            # Security utilities
+│       │   │   ├── apiSecurity.ts   # API security utilities
+│       │   │   ├── csrf.ts          # CSRF protection
+│       │   │   ├── encryption.ts    # Data encryption
+│       │   │   ├── errorHandler.ts  # Error handling
+│       │   │   ├── fileUpload.ts    # File upload security
+│       │   │   ├── headers.ts       # Security headers
+│       │   │   ├── index.ts         # Security exports
+│       │   │   ├── logging.ts       # Security logging
+│       │   │   ├── mfa.ts           # Multi-factor authentication
+│       │   │   ├── monitoring.ts    # Security monitoring
+│       │   │   ├── rateLimit.ts     # Rate limiting
+│       │   │   ├── session.ts       # Session management
+│       │   │   └── validation.ts    # Input validation
+│       │   ├── sync/                # Data synchronization
+│       │   │   ├── enhancedProjectSync.ts # Enhanced project sync
+│       │   │   └── projectSync.ts   # Project synchronization
+│       │   ├── audit.ts             # Audit logging utilities
+│       │   ├── auth.ts              # Authentication utilities
+│       │   ├── db.ts                # Database connection
+│       │   ├── env.ts               # Environment variables
+│       │   └── mongodb.ts           # MongoDB utilities
+│       ├── middleware/              # Custom middleware
+│       │   └── requireRole.ts       # Role requirement middleware
+│       ├── middleware.ts            # Next.js middleware
+│       ├── models/                  # Data models
+│       │   ├── AuditLog.ts          # Audit log model
+│       │   ├── Project.ts           # Project model
+│       │   └── User.ts              # User model
+│       ├── services/                # Business logic services
+│       │   ├── index.ts             # Service exports
+│       │   └── project.service.ts   # Project service
+│       ├── styles/                  # CSS and styling
+│       │   ├── Contact.module.css   # Contact page styles
+│       │   ├── Login.module.css     # Login page styles
+│       │   ├── mobile-responsive.css # Mobile responsive styles
+│       │   └── Pricing.module.css  # Pricing page styles
+│       └── types/                   # TypeScript type definitions
+│           ├── types/                # Nested types directory
+│           │   ├── index.ts          # Type exports
+│           │   ├── project.schema.ts # Project Zod schemas
+│           │   └── security.schema.ts # Security Zod schemas
+│           ├── audit.ts             # Audit type definitions
+│           └── next-auth.d.ts       # NextAuth type definitions
+├── shared/                          # Shared utilities (placeholder)
+├── export_complete_project.bat      # Batch export script
+├── export_complete_project.ps1      # PowerShell export script
+├── run_export.bat                   # Simple export runner
+├── SLATE360_AI_Assistant_Fix_Guide.md # AI assistant fix guide
+├── SLATE360_Complete_Project_Export.md # Generated project export
+└── SLATE360_Complete_Project_Export.md # Complete project documentation
+```
 
-### Key Dependencies
-\`\`\`json
-{
-  "core": {
-    "next": "14.2.5",
-    "react": "18.3.1",
-    "typescript": "5.4.5"
-  },
-  "database": {
-    "mongoose": "^8.6.4",
-    "dexie": "^4.0.7",
-    "@supabase/supabase-js": "^2.45.0"
-  },
-  "3D/VR": {
-    "three": "^0.179.1",
-    "@react-three/fiber": "^8.15.19",
-    "cesium": "^1.132.0"
-  },
-  "security": {
-    "zod": "^3.23.8",
-    "jsonwebtoken": "^9.0.2",
-    "@upstash/ratelimit": "^1.2.0"
-  }
-}
-\`\`\`
+### Key Directory Explanations
 
----
+**Frontend Structure:**
+- `src/app/` - Next.js App Router pages and API routes
+- `src/components/` - Reusable React components organized by feature
+- `src/features/` - Feature-based organization (dashboard, projects, etc.)
+- `src/lib/` - Utility libraries (security, database, adapters)
+- `src/hooks/` - Custom React hooks for state management
+- `src/types/` - TypeScript type definitions and Zod schemas
+- `src/services/` - Business logic services
+- `src/models/` - Data models and schemas
+- `src/middleware/` - Custom middleware for authentication and authorization
 
-## Development Setup
+**API Routes Structure:**
+- `api/auth/` - Authentication and session management
+- `api/projects/` - Project CRUD operations
+- `api/security/` - Security monitoring and examples
+- `api/stripe/` - Payment processing
+- `api/users/` - User management
+- `api/(mock)/` - Mock API routes for development/preview
 
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-- MongoDB instance
-- Supabase account
-- AWS S3 bucket (for file storage)
+**Security Implementation:**
+- Comprehensive security utilities in `src/lib/security/`
+- CSRF protection, encryption, validation, rate limiting
+- Multi-factor authentication and session management
+- File upload security and threat monitoring
 
-### Environment Variables
-\`\`\`bash
-# Required environment variables
-MONGODB_URI=mongodb://localhost:27017/slate360
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-AWS_ACCESS_KEY_ID=your_aws_access_key
-AWS_SECRET_ACCESS_KEY=your_aws_secret_key
-AWS_S3_BUCKET=your_s3_bucket_name
-STRIPE_SECRET_KEY=your_stripe_secret_key
-STRIPE_WEBHOOK_SECRET=your_webhook_secret
-\`\`\`
-
-### Installation Steps
-\`\`\`bash
-# Clone repository
-git clone <repository-url>
-cd Slate360
-
-# Install dependencies
-cd frontend
-npm install
-
-# Set up environment variables
-cp env.example .env.local
-# Edit .env.local with your values
-
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-npm start
-\`\`\`
-
----
-
-## Deployment
-
-### Production Build
-\`\`\`bash
-# Build the application
-npm run build
-
-# Start production server
-npm start
-
-# Or use PM2 for process management
-pm2 start npm --name "slate360" -- start
-\`\`\`
-
-### Environment Considerations
-- **Database:** Use production MongoDB cluster
-- **File Storage:** Configure production S3 bucket
-- **CDN:** Set up CDN for static assets
-- **Monitoring:** Implement application monitoring
-- **Backup:** Regular database and file backups
-- **SSL:** Ensure HTTPS is enabled
-- **Security:** Regular security audits and updates
+**Feature Organization:**
+- Dashboard feature with components, hooks, and pages
+- Modular architecture for easy maintenance and scaling
+- Service layer for business logic separation
 
 ---
 
@@ -567,9 +445,9 @@ foreach ($file in $sourceFiles) {
 **File Size:** $fileSize  
 **File Type:** $($file.Extension)
 
-\`\`\`$($file.Extension.TrimStart('.'))
+```$($file.Extension.TrimStart('.'))
 $(Read-FileContent $file.FullName)
-\`\`\`
+```
 
 ---
 "@
@@ -586,14 +464,6 @@ This comprehensive export contains:
 
 ✅ **Complete Project Overview** - Tech stack, features, security implementation  
 ✅ **All Configuration Files** - package.json, next.config.mjs, tailwind.config.js, tsconfig.json  
-✅ **Core Components** - layout.tsx, page.tsx, globals.css, ToastProvider.tsx  
-✅ **Key Models & Database** - Project.ts, db.ts, demoData.ts, useIndexedDB.ts  
-✅ **Complete Error Analysis** - TypeScript errors and resolution strategy  
-✅ **Remaining Files Summary** - Overview of all other project files  
-✅ **Frontend Source Code** - Complete component structure and implementation  
-✅ **Backend Source Code** - API routes and database models  
-✅ **Security Implementation** - Comprehensive security framework  
-✅ **Project Structure** - Complete directory layout and dependencies  
 ✅ **Complete Source Code Export** - ALL files with complete code content  
 
 **Total Files Exported:** $($sourceFiles.Count)  
@@ -602,7 +472,7 @@ This comprehensive export contains:
 
 ---
 
-*This document was automatically generated by the SLATE360 Complete Project Export Script v2.0*
+*This document was automatically generated by the SLATE360 Complete Project Export Script v3.0 (Updated for New Architecture)*
 "@
 
 # Write the content to the output file
@@ -623,224 +493,3 @@ catch {
 Write-Host ""
 Write-Host "Export completed! Check the generated file for complete project information." -ForegroundColor Green
 Write-Host "This export contains ALL code from every frontend and backend file!" -ForegroundColor Cyan
-
-# Create AI Assistant Fix Script
-Write-Host ""
-Write-Host "Creating AI Assistant Fix Script..." -ForegroundColor Magenta
-
-$fixScriptContent = @"
-# SLATE360 AI Assistant Fix Script
-# This script helps AI assistants fix dependency and TypeScript errors
-# to make the website visible on localhost
-
-## Quick Fix Commands
-
-### 1. Install Dependencies
-\`\`\`bash
-cd frontend
-npm install
-# or if using yarn
-yarn install
-\`\`\`
-
-### 2. Fix TypeScript Errors
-\`\`\`bash
-# Check TypeScript errors
-npx tsc --noEmit
-
-# Fix common TypeScript issues
-npm run lint -- --fix
-\`\`\`
-
-### 3. Clear Build Cache
-\`\`\`bash
-# Remove build artifacts
-rm -rf .next
-rm -rf node_modules/.cache
-rm -rf .tsbuildinfo
-
-# Reinstall dependencies
-npm install
-\`\`\`
-
-### 4. Environment Setup
-\`\`\`bash
-# Copy environment template
-cp env.example .env.local
-
-# Edit .env.local with your values:
-# MONGODB_URI=mongodb://localhost:27017/slate360
-# NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-# NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-\`\`\`
-
-### 5. Start Development Server
-\`\`\`bash
-npm run dev
-# Website will be available at http://localhost:3000
-\`\`\`
-
-## Common Issues and Fixes
-
-### Issue 1: TypeScript Build Errors
-**Problem:** \`typescript: { ignoreBuildErrors: true }\` in next.config.mjs
-**Solution:** Fix TypeScript errors systematically:
-
-1. **Fix import paths:**
-\`\`\`typescript
-// Change from
-import { Component } from '@/components/Component'
-// To
-import { Component } from '../components/Component'
-// Or ensure tsconfig.json paths are correct
-\`\`\`
-
-2. **Fix type mismatches:**
-\`\`\`typescript
-// Add proper type definitions
-interface Project {
-  id: string;
-  name: string;
-  description: string;
-  // ... other properties
-}
-\`\`\`
-
-3. **Fix React hooks dependencies:**
-\`\`\`typescript
-// Add missing dependencies to useEffect
-useEffect(() => {
-  // effect code
-}, [dependency1, dependency2]); // Add all dependencies
-\`\`\`
-
-### Issue 2: Missing Dependencies
-**Problem:** Import errors for missing packages
-**Solution:** Install missing dependencies:
-
-\`\`\`bash
-# Install common missing packages
-npm install @types/node @types/react @types/react-dom
-npm install @types/leaflet @types/three
-npm install lucide-react framer-motion
-\`\`\`
-
-### Issue 3: Path Resolution Issues
-**Problem:** Module not found errors
-**Solution:** Check tsconfig.json paths:
-
-\`\`\`json
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/lib/*": ["./src/lib/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/models/*": ["./src/models/*"]
-    }
-  }
-}
-\`\`\`
-
-### Issue 4: Build Configuration Issues
-**Problem:** Build fails due to configuration
-**Solution:** Update next.config.mjs:
-
-\`\`\`javascript
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // Remove this line once TypeScript errors are fixed
-  // typescript: {
-  //   ignoreBuildErrors: true
-  // },
-  
-  experimental: {
-    // Enable features as needed
-    appDir: true,
-  },
-  
-  // Ensure proper image domains
-  images: {
-    domains: ['localhost', 'your-domain.com'],
-  },
-};
-
-export default nextConfig;
-\`\`\`
-
-## Step-by-Step Fix Process
-
-### Phase 1: Dependencies
-1. Delete \`node_modules\` and \`package-lock.json\`
-2. Run \`npm install\`
-3. Check for any missing peer dependencies
-
-### Phase 2: TypeScript
-1. Run \`npx tsc --noEmit\` to see all errors
-2. Fix import/export issues first
-3. Fix type definition issues
-4. Fix React hooks issues
-5. Run \`npm run lint\` to check for more issues
-
-### Phase 3: Configuration
-1. Ensure \`.env.local\` is properly configured
-2. Check \`tsconfig.json\` paths are correct
-3. Verify \`next.config.mjs\` settings
-4. Remove \`ignoreBuildErrors: true\` once errors are fixed
-
-### Phase 4: Testing
-1. Run \`npm run build\` to ensure build succeeds
-2. Run \`npm run dev\` to start development server
-3. Open \`http://localhost:3000\` in browser
-4. Check browser console for any runtime errors
-
-## AI Assistant Task List
-
-1. **Analyze TypeScript errors** from \`npx tsc --noEmit\`
-2. **Fix import/export issues** systematically
-3. **Add missing type definitions** where needed
-4. **Resolve dependency conflicts** if any
-5. **Update configuration files** as needed
-6. **Test the build process** step by step
-7. **Verify localhost accessibility** at http://localhost:3000
-
-## Success Criteria
-
-✅ **npm install** completes without errors  
-✅ **npx tsc --noEmit** shows no TypeScript errors  
-✅ **npm run build** completes successfully  
-✅ **npm run dev** starts without errors  
-✅ **Website is accessible** at http://localhost:3000  
-✅ **No console errors** in browser developer tools  
-
-## Emergency Fallback
-
-If all else fails, temporarily enable:
-\`\`\`javascript
-// In next.config.mjs
-typescript: {
-  ignoreBuildErrors: true
-}
-\`\`\`
-
-This will allow the site to run while you fix errors incrementally.
-"@
-
-# Write the fix script to a separate file
-$fixScriptPath = "SLATE360_AI_Assistant_Fix_Guide.md"
-try {
-    $fixScriptContent | Out-File -FilePath $fixScriptPath -Encoding UTF8
-    Write-Host "✅ AI Assistant Fix Guide created: $fixScriptPath" -ForegroundColor Green
-}
-catch {
-    Write-Host "❌ Error creating fix guide: $($_.Exception.Message)" -ForegroundColor Red
-}
-
-Write-Host ""
-Write-Host "🎯 Two files created:" -ForegroundColor Cyan
-Write-Host "   1. $OutputPath - Complete project export" -ForegroundColor Yellow
-Write-Host "   2. $fixScriptPath - AI Assistant fix guide" -ForegroundColor Yellow
-Write-Host ""
-Write-Host "Other AI assistants can use the fix guide to resolve all issues!" -ForegroundColor Magenta

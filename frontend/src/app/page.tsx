@@ -3,10 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronDown } from 'lucide-react';
-import dynamic from 'next/dynamic';
-
-// Dynamic imports for viewers
-const ThreeModelViewer = dynamic(() => import('@/components/ThreeModelViewer'), { ssr: false });
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 export default function Homepage() {
   const [currentTile, setCurrentTile] = useState(0);
@@ -19,8 +16,12 @@ export default function Homepage() {
       subtitle: 'The Future of Construction Technology',
       description: 'Experience the next generation of construction workflows, 3D modeling, and immersive technologies in one unified platform.',
       viewer: (
-        <div className="w-full h-full bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-          <ThreeModelViewer />
+        <div className="w-full h-full bg-gray-800 rounded-lg border border-gray-700 flex items-center justify-center">
+          <div className="text-center text-gray-400">
+            <div className="text-6xl mb-4">🏗️</div>
+            <p className="text-lg">SLATE360 Platform</p>
+            <p className="text-sm">Construction Technology Platform</p>
+          </div>
         </div>
       ),
       content: (
