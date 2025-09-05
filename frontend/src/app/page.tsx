@@ -1,4 +1,5 @@
 'use client';
+// Updated homepage with improved layout and content
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
