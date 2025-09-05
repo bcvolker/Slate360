@@ -1,15 +1,28 @@
+// frontend/src/app/layout.tsx
 import './globals.css';
-import Providers from '@/app-shell/Providers';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import SimpleAppShell from '@/app-shell/SimpleAppShell';
+import CleanHeader from '@/components/CleanHeader';
+import { Providers } from '@/app-shell/Providers';
 
-export const metadata = { title: 'SLATE360', description: 'The future of construction technology.' };
+const inter = Inter({ subsets: ['latin'] });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+  title: 'SLATE360',
+  description: 'The All-In-One Platform for the Built World.',
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
-      <body className="bg-gray-50">
+      <body className={inter.className}>
         <Providers>
-          <SimpleAppShell>
+          <SimpleAppShell header={<CleanHeader />}>
             {children}
           </SimpleAppShell>
         </Providers>
