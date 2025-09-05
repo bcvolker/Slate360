@@ -1,18 +1,54 @@
 import React, { useState } from 'react';
-import { 
-  IProject, 
-  IProjectResponse, 
-  IProjectsResponse, 
-  IProjectFilters, 
-  IProjectStats,
-  IProjectError 
-} from '../types/project';
+import { Project } from '@/types/types';
+
+// Define the API response types locally since they're specific to this example
+interface IProjectResponse {
+  success: boolean;
+  project: Project;
+  message?: string;
+}
+
+interface IProjectsResponse {
+  success: boolean;
+  projects: Project[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+  message?: string;
+}
+
+interface IProjectFilters {
+  status?: string;
+  type?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
+
+interface IProjectStats {
+  total: number;
+  byStatus: Record<string, number>;
+  byType: Record<string, number>;
+  averageBudget: number;
+  totalBudget: number;
+}
+
+interface IProjectError {
+  success: false;
+  error: string;
+  message?: string;
+}
 
 // Examples of how to use the Projects API endpoints
 
 // Example 1: Create a new project
-export const createProjectExample = async (): Promise<IProject> => {
-  const projectData: Omit<IProject, '_id' | 'createdAt' | 'updatedAt'> = {
+export const createProjectExample = async (): Promise<Project> => {
+  const projectData: Omit<Project, 'id' | 'createdAt' | 'updatedAt'> = {
     name: "Downtown Office Complex",
     description: "Modern 15-story office building with sustainable design features and LEED certification",
     type: "commercial",
@@ -301,7 +337,7 @@ export const searchProjectsExample = async () => {
 
 // Example 8: React hook for projects - Simplified version
 export const useProjects = () => {
-  const [projects, setProjects] = useState<IProject[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -330,7 +366,7 @@ export const useProjects = () => {
     }
   };
 
-  const createProject = async (projectData: Omit<IProject, '_id' | 'createdAt' | 'updatedAt'>): Promise<IProject> => {
+  const createProject = async (projectData: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>): Promise<Project> => {
     setLoading(true);
     setError(null);
     
@@ -360,7 +396,7 @@ export const useProjects = () => {
     }
   };
 
-  const updateProject = async (projectId: string, updateData: Partial<IProject>): Promise<IProject> => {
+  const updateProject = async (projectId: string, updateData: Partial<Project>): Promise<Project> => {
     setLoading(true);
     setError(null);
     
@@ -376,7 +412,7 @@ export const useProjects = () => {
       if (response.ok) {
         const result: IProjectResponse = await response.json();
         setProjects(prev => 
-          prev.map((p: IProject) => p._id === projectId ? result.project : p)
+          prev.map((p: Project) => p.id === projectId ? result.project : p)
         );
         return result.project;
       } else {
@@ -402,7 +438,7 @@ export const useProjects = () => {
       });
 
       if (response.ok) {
-        setProjects(prev => prev.filter((p: IProject) => p._id !== projectId));
+        setProjects(prev => prev.filter((p: Project) => p.id !== projectId));
         return true;
       } else {
         const errorData: IProjectError = await response.json();
@@ -456,7 +492,7 @@ export const getProjectStats = async (): Promise<IProjectStats> => {
         }
       };
 
-      projects.forEach((project: IProject) => {
+      projects.forEach((project: Project) => {
         // Status distribution
         stats.byStatus[project.status] = (stats.byStatus[project.status] || 0) + 1;
         
@@ -483,12 +519,12 @@ export const getProjectStats = async (): Promise<IProjectStats> => {
       });
 
       // Calculate averages
-      const projectsWithBudget = projects.filter((p: IProject) => p.budget?.estimated);
+      const projectsWithBudget = projects.filter((p: Project) => p.budget?.estimated);
       if (projectsWithBudget.length > 0) {
         stats.byBudget.averageEstimated = stats.byBudget.totalEstimated / projectsWithBudget.length;
       }
       
-      const projectsWithActualBudget = projects.filter((p: IProject) => p.budget?.actual);
+      const projectsWithActualBudget = projects.filter((p: Project) => p.budget?.actual);
       if (projectsWithActualBudget.length > 0) {
         stats.byBudget.averageActual = stats.byBudget.totalActual / projectsWithActualBudget.length;
       }

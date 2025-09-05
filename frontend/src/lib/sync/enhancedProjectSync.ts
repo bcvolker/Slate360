@@ -1,5 +1,5 @@
 import { ProjectDatabase } from '../db/indexedDB';
-import { IProject } from '@/models/Project';
+import { Project } from '@/types/types';
 import { OfflineProject, SyncQueueItem } from '../db/indexedDB';
 import { logAudit } from '../audit';
 
@@ -46,7 +46,7 @@ export class EnhancedProjectSync {
   private syncAbortController: AbortController | null = null;
 
   constructor() {
-    this.db = new ProjectDatabase();
+    this.db = new (require('../db/indexedDB').SlateDB)();
   }
 
   /**
@@ -379,7 +379,7 @@ export class EnhancedProjectSync {
    */
   private detectConflict(
     localProject: OfflineProject, 
-    serverProject: IProject, 
+    serverProject: Project, 
     updateData: any
   ): { type: string; details: any } | null {
     // Version conflict
@@ -400,7 +400,7 @@ export class EnhancedProjectSync {
     }
 
     // Deletion conflict
-    if (updateData.deleted && !serverProject.deletedAt) {
+    if (updateData.deleted && !(serverProject as any).deletedAt) {
       return {
         type: 'deletion',
         details: {
@@ -438,7 +438,7 @@ export class EnhancedProjectSync {
   private async resolveConflict(
     conflict: any,
     localProject: OfflineProject,
-    serverProject: IProject,
+    serverProject: Project,
     strategy: string
   ): Promise<{ resolved: boolean; data: any; strategy: string }> {
     switch (strategy) {
@@ -497,7 +497,7 @@ export class EnhancedProjectSync {
    */
   private findConflictingFields(
     localProject: OfflineProject,
-    serverProject: IProject,
+    serverProject: Project,
     updateData: any
   ): string[] {
     const conflictingFields: string[] = [];

@@ -82,7 +82,6 @@ export class SecurityMonitor {
   private initializeDefaultRules(): void {
     // Brute force detection
     this.addRule({
-      id: 'brute_force_detection',
       name: 'Brute Force Detection',
       description: 'Detect multiple failed login attempts from the same IP',
       conditions: [
@@ -99,7 +98,6 @@ export class SecurityMonitor {
 
     // Suspicious user agent
     this.addRule({
-      id: 'suspicious_user_agent',
       name: 'Suspicious User Agent',
       description: 'Detect suspicious or malicious user agents',
       conditions: [
@@ -115,7 +113,6 @@ export class SecurityMonitor {
 
     // Data access anomaly
     this.addRule({
-      id: 'data_access_anomaly',
       name: 'Data Access Anomaly',
       description: 'Detect unusual data access patterns',
       conditions: [

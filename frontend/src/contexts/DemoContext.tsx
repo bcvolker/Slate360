@@ -17,7 +17,7 @@ import {
   getDemoFilesByProject,
   getDemoNotifications
 } from '../lib/demo/demoData';
-import { IProject } from '../models/Project';
+import { Project } from '@/types/types';
 
 interface DemoContextType {
   // Demo mode state
@@ -32,17 +32,17 @@ interface DemoContextType {
   analytics: any;
   
   // Demo operations
-  createDemoProject: (projectData: Partial<IProject>) => Promise<{ success: boolean; projectId?: string; error?: string }>;
-  updateDemoProject: (id: string, updates: Partial<IProject>) => Promise<{ success: boolean; error?: string }>;
+  createDemoProject: (projectData: Partial<Project>) => Promise<{ success: boolean; projectId?: string; error?: string }>;
+  updateDemoProject: (id: string, updates: Partial<Project>) => Promise<{ success: boolean; error?: string }>;
   deleteDemoProject: (id: string) => Promise<{ success: boolean; error?: string }>;
   uploadDemoFile: (file: File, projectId: string, onProgress?: (progress: number) => void) => Promise<{ success: boolean; fileId?: string; error?: string }>;
   syncDemoData: () => Promise<{ success: boolean; syncedItems: number }>;
   
   // Demo queries
-  getProject: (id: string) => Partial<IProject> | undefined;
-  getProjectsByStatus: (status: string) => Partial<IProject>[];
-  getProjectsByType: (type: string) => Partial<IProject>[];
-  searchProjects: (query: string) => Partial<IProject>[];
+  getProject: (id: string) => Partial<Project> | undefined;
+  getProjectsByStatus: (status: string) => Partial<Project>[];
+  getProjectsByType: (type: string) => Partial<Project>[];
+  searchProjects: (query: string) => Partial<Project>[];
   getUser: (id: string) => any;
   getFilesByProject: (projectId: string) => any[];
   getNotifications: (limit?: number) => any[];
@@ -93,7 +93,7 @@ export function DemoProvider({ children }: DemoProviderProps) {
   };
 
   // Demo project operations
-  const createDemoProject = async (projectData: Partial<IProject>) => {
+  const createDemoProject = async (projectData: Partial<Project>) => {
     try {
       toast.loading('Creating demo project...', { id: 'demo-project-create' });
       
@@ -142,7 +142,7 @@ export function DemoProvider({ children }: DemoProviderProps) {
           createdBy: 'demo_user_001' as any,
           createdAt: new Date(),
           updatedAt: new Date()
-        } as any as IProject;
+        } as any as Project;
 
         setProjects(prev => [newProject, ...prev]);
         
@@ -159,7 +159,7 @@ export function DemoProvider({ children }: DemoProviderProps) {
     }
   };
 
-  const updateDemoProject = async (id: string, updates: Partial<IProject>) => {
+  const updateDemoProject = async (id: string, updates: Partial<Project>) => {
     try {
       setProjects(prev => 
         prev.map(project => 

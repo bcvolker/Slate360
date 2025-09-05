@@ -1,6 +1,6 @@
 export interface RateLimitConfig {
-  windowMs: number;
-  max: number;
+  windowMs?: number;
+  max?: number;
   message?: string;
   statusCode?: number;
   skipSuccessfulRequests?: boolean;
@@ -125,7 +125,7 @@ export class RateLimiter {
 
   constructor(config: RateLimitConfig, store?: RateLimitStore) {
     this.config = {
-      windowMs: 15 * 60 * 1000, // 15 minutes
+      windowMs: 15 * 60 * 1000, // 15 minutes default
       max: 100,
       message: 'Too many requests from this IP, please try again later.',
       statusCode: 429,

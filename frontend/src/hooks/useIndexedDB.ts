@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
-import { Project } from '../types/project';
+import { Project } from '@/types/types';
 
 // Database schema
 interface ProjectDB extends DBSchema {

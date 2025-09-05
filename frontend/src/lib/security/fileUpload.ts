@@ -65,7 +65,7 @@ export class FileUploadSecurity {
         '.txt', '.csv'
       ],
       scanForMalware: true,
-      virusTotalApiKey: process.env.VIRUS_TOTAL_API_KEY,
+      virusTotalApiKey: process.env.VIRUS_TOTAL_API_KEY || '',
       clamAVEnabled: !!process.env.CLAMAV_HOST,
       clamAVHost: process.env.CLAMAV_HOST || 'localhost',
       clamAVPort: parseInt(process.env.CLAMAV_PORT || '3310'),
@@ -247,7 +247,7 @@ export class FileUploadSecurity {
     }
 
     // Basic heuristic scanning
-    const heuristicThreats = this.performHeuristicScan(file);
+    const heuristicThreats = await this.performHeuristicScan(file);
     threats.push(...heuristicThreats);
 
     return {
@@ -347,11 +347,17 @@ export class FileUploadSecurity {
   /**
    * Perform basic heuristic scanning
    */
-  private performHeuristicScan(file: File | Buffer): string[] {
+  private async performHeuristicScan(file: File | Buffer): Promise<string[]> {
     const threats: string[] = [];
     
     try {
-      const buffer = file instanceof File ? Buffer.from(file.slice(0, 1024).arrayBuffer()) : file.slice(0, 1024);
+      let buffer: Buffer;
+      if (file instanceof File) {
+        const arrayBuffer = await file.slice(0, 1024).arrayBuffer();
+        buffer = Buffer.from(arrayBuffer);
+      } else {
+        buffer = file.slice(0, 1024);
+      }
       
       // Check for executable signatures
       const executableSignatures = [

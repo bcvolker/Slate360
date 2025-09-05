@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IProject } from '../../models/Project';
+import { Project } from '@/types/types';
 
 // Helper function to create valid ObjectId from a seed string
 const createObjectId = (seed: string) => {
@@ -14,10 +14,10 @@ const createObjectId = (seed: string) => {
   return new mongoose.Types.ObjectId(hexString);
 };
 
-// Demo project data - using Partial<IProject> to allow for demo data flexibility
-export const demoProjects: Partial<IProject>[] = [
+// Demo project data - using Partial<Project> to allow for demo data flexibility
+export const demoProjects: Partial<Project>[] = [
   {
-    _id: createObjectId('demo_proj_001'),
+    id: 'demo_proj_001',
     name: 'Modern Office Complex',
     description: 'A state-of-the-art office building featuring sustainable design, smart building technology, and collaborative workspaces.',
     status: 'active',
@@ -37,37 +37,39 @@ export const demoProjects: Partial<IProject>[] = [
     },
     timeline: {
       startDate: new Date('2024-01-10'),
-      estimatedDuration: 365
+      estimatedDuration: 365,
+      milestones: []
     },
     budget: {
       estimated: 25000000,
       actual: 8500000,
-      currency: 'USD'
+      currency: 'USD',
+      invoices: []
     },
     team: [
       { 
-        userId: createObjectId('demo_user_001'),
+        userId: 'demo_user_001',
         role: 'project_manager',
         permissions: ['read', 'write', 'admin'],
         joinedAt: new Date(),
         isActive: true
       },
       { 
-        userId: createObjectId('demo_user_002'),
+        userId: 'demo_user_002',
         role: 'architect',
         permissions: ['read', 'write'],
         joinedAt: new Date(),
         isActive: true
       },
       { 
-        userId: createObjectId('demo_user_003'),
+        userId: 'demo_user_003',
         role: 'engineer',
         permissions: ['read', 'write'],
         joinedAt: new Date(),
         isActive: true
       },
       { 
-        userId: createObjectId('demo_user_004'),
+        userId: 'demo_user_004',
         role: 'contractor',
         permissions: ['read'],
         joinedAt: new Date(),
@@ -75,12 +77,12 @@ export const demoProjects: Partial<IProject>[] = [
       }
     ],
     tags: ['commercial', 'sustainable', 'smart-building', 'office'],
-    createdBy: createObjectId('demo_user_001'),
+    createdBy: 'demo_user_001',
     createdAt: new Date('2024-01-10'),
     updatedAt: new Date('2024-06-15')
   },
   {
-    _id: createObjectId('demo_proj_002'),
+    id: 'demo_proj_002',
     name: 'Residential Community',
     description: 'A mixed-use residential development featuring luxury apartments, townhouses, and community amenities.',
     status: 'planning',
@@ -100,22 +102,24 @@ export const demoProjects: Partial<IProject>[] = [
     },
     timeline: {
       startDate: new Date('2024-08-01'),
-      estimatedDuration: 670
+      estimatedDuration: 670,
+      milestones: []
     },
     budget: {
       estimated: 4500000,
-      currency: 'USD'
+      currency: 'USD',
+      invoices: []
     },
     team: [
       { 
-        userId: createObjectId('demo_user_005'),
+        userId: 'demo_user_005',
         role: 'project_manager',
         permissions: ['read', 'write', 'admin'],
         joinedAt: new Date(),
         isActive: true
       },
       { 
-        userId: createObjectId('demo_user_006'),
+        userId: 'demo_user_006',
         role: 'architect',
         permissions: ['read', 'write'],
         joinedAt: new Date(),
@@ -123,12 +127,12 @@ export const demoProjects: Partial<IProject>[] = [
       }
     ],
     tags: ['residential', 'mixed-use', 'luxury', 'community'],
-    createdBy: createObjectId('demo_user_001'),
+    createdBy: 'demo_user_001',
     createdAt: new Date('2024-03-20'),
     updatedAt: new Date('2024-06-10')
   },
   {
-    _id: createObjectId('demo_proj_003'),
+    id: 'demo_proj_003',
     name: 'Hospital Renovation',
     description: 'Comprehensive renovation of the emergency department and patient care facilities.',
     status: 'completed',
@@ -149,16 +153,18 @@ export const demoProjects: Partial<IProject>[] = [
     timeline: {
       startDate: new Date('2023-06-01'),
       endDate: new Date('2024-05-31'),
-      estimatedDuration: 365
+      estimatedDuration: 365,
+      milestones: []
     },
     budget: {
       estimated: 1800000,
       actual: 1750000,
-      currency: 'USD'
+      currency: 'USD',
+      invoices: []
     },
     team: [
       { 
-        userId: createObjectId('demo_user_007'),
+        userId: 'demo_user_007',
         role: 'project_manager',
         permissions: ['read', 'write', 'admin'],
         joinedAt: new Date(),
@@ -166,12 +172,12 @@ export const demoProjects: Partial<IProject>[] = [
       }
     ],
     tags: ['healthcare', 'renovation', 'emergency', 'patient-care'],
-    createdBy: createObjectId('demo_user_001'),
+    createdBy: 'demo_user_001',
     createdAt: new Date('2023-05-15'),
     updatedAt: new Date('2024-06-01')
   },
   {
-    _id: createObjectId('demo_proj_004'),
+    id: 'demo_proj_004',
     name: 'Solar Farm Installation',
     description: 'Large-scale solar energy farm with battery storage and grid integration.',
     status: 'active',
@@ -191,16 +197,18 @@ export const demoProjects: Partial<IProject>[] = [
     },
     timeline: {
       startDate: new Date('2024-02-01'),
-      estimatedDuration: 300
+      estimatedDuration: 300,
+      milestones: []
     },
     budget: {
       estimated: 3200000,
       actual: 1200000,
-      currency: 'USD'
+      currency: 'USD',
+      invoices: []
     },
     team: [
       { 
-        userId: createObjectId('demo_user_008'),
+        userId: 'demo_user_008',
         role: 'project_manager',
         permissions: ['read', 'write', 'admin'],
         joinedAt: new Date(),
@@ -208,12 +216,12 @@ export const demoProjects: Partial<IProject>[] = [
       }
     ],
     tags: ['energy', 'solar', 'renewable', 'sustainability'],
-    createdBy: createObjectId('demo_user_001'),
+    createdBy: 'demo_user_001',
     createdAt: new Date('2024-01-25'),
     updatedAt: new Date('2024-06-12')
   },
   {
-    _id: createObjectId('demo_proj_005'),
+    id: 'demo_proj_005',
     name: 'Bridge Rehabilitation',
     description: 'Structural rehabilitation and seismic retrofit of the historic downtown bridge.',
     status: 'planning',
@@ -233,15 +241,17 @@ export const demoProjects: Partial<IProject>[] = [
     },
     timeline: {
       startDate: new Date('2025-01-01'),
-      estimatedDuration: 730
+      estimatedDuration: 730,
+      milestones: []
     },
     budget: {
       estimated: 8500000,
-      currency: 'USD'
+      currency: 'USD',
+      invoices: []
     },
     team: [
       { 
-        userId: createObjectId('demo_user_009'),
+        userId: 'demo_user_009',
         role: 'project_manager',
         permissions: ['read', 'write', 'admin'],
         joinedAt: new Date(),
@@ -249,7 +259,7 @@ export const demoProjects: Partial<IProject>[] = [
       }
     ],
     tags: ['infrastructure', 'bridge', 'rehabilitation', 'seismic'],
-    createdBy: createObjectId('demo_user_001'),
+    createdBy: 'demo_user_001',
     createdAt: new Date('2024-04-10'),
     updatedAt: new Date('2024-06-08')
   }
@@ -477,7 +487,7 @@ export const simulateFileUpload = async (
 
 // Simulate project creation
 export const simulateProjectCreation = async (
-  projectData: Partial<IProject>
+  projectData: Partial<Project>
 ): Promise<{ success: boolean; projectId?: string; error?: string }> => {
   return new Promise((resolve) => {
     // Simulate processing time
@@ -499,22 +509,22 @@ export const simulateDataSync = async (): Promise<{ success: boolean; syncedItem
 };
 
 // Get demo project by ID
-export const getDemoProject = (id: string): Partial<IProject> | undefined => {
-  return demoProjects.find(project => project._id?.toString() === id);
+export const getDemoProject = (id: string): Partial<Project> | undefined => {
+  return demoProjects.find(project => project.id === id);
 };
 
 // Get demo projects by status
-export const getDemoProjectsByStatus = (status: string): Partial<IProject>[] => {
+export const getDemoProjectsByStatus = (status: string): Partial<Project>[] => {
   return demoProjects.filter(project => project.status === status);
 };
 
 // Get demo projects by type
-export const getDemoProjectsByType = (type: string): Partial<IProject>[] => {
+export const getDemoProjectsByType = (type: string): Partial<Project>[] => {
   return demoProjects.filter(project => project.type === type);
 };
 
 // Search demo projects
-export const searchDemoProjects = (query: string, limit?: number): Partial<IProject>[] => {
+export const searchDemoProjects = (query: string, limit?: number): Partial<Project>[] => {
   const lowerQuery = query.toLowerCase();
   const filtered = demoProjects.filter(project => 
     project.name?.toLowerCase().includes(lowerQuery) ||

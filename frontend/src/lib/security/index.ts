@@ -5,7 +5,6 @@
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      NODE_ENV?: 'development' | 'production' | 'test';
       CSRF_SECRET?: string;
       ENCRYPTION_MASTER_KEY?: string;
       VIRUS_TOTAL_API_KEY?: string;
@@ -54,6 +53,7 @@ export interface SecurityConfig {
     strictMode: boolean;
   };
   validation: {
+    enabled: boolean;
     sanitization: boolean;
     strictMode: boolean;
   };
@@ -68,6 +68,7 @@ export interface SecurityConfig {
     deviceFingerprinting: boolean;
   };
   logging: {
+    enabled: boolean;
     level: 'error' | 'warn' | 'info' | 'debug';
     securityEvents: boolean;
     auditTrail: boolean;
@@ -119,6 +120,7 @@ export const defaultSecurityConfig: SecurityConfig = {
     strictMode: process.env.NODE_ENV === 'production'
   },
   validation: {
+    enabled: true,
     sanitization: true,
     strictMode: process.env.NODE_ENV === 'production'
   },
@@ -133,6 +135,7 @@ export const defaultSecurityConfig: SecurityConfig = {
     deviceFingerprinting: true
   },
   logging: {
+    enabled: true,
     level: process.env.NODE_ENV === 'production' ? 'warn' : 'debug',
     securityEvents: true,
     auditTrail: true
@@ -461,7 +464,7 @@ export const createSecurityMiddleware = (options: {
       if (req.files && req.files.length > 0) {
         // Validate each file
         for (const file of req.files) {
-          validateFile(file, file.name).then(result => {
+          validateFile(file, file.name).then((result: any) => {
             if (!result.isValid) {
               console.warn('File validation failed:', result.errors);
             }

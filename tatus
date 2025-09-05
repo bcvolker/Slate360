@@ -1,0 +1,5 @@
+[33m6076d2b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Complete website improvements and CEO dashboard
+[33me8b3d0f[m Fix homepage layout and improve header design
+[33m3560c4c[m Remove sidebar menu and implement clean header with Slate360 logo
+[33m977a60c[m feat: Transform Slate360 homepage with Boring Company-inspired design
+[33m3984378[m feat: Add Vercel deployment patches and preview mode

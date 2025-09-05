@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import DemoModeToggle from '../../components/DemoModeToggle';
 import { useDemoMode } from '../../hooks/useDemoMode';
-import { useOfflineProjects } from '../../hooks/useOfflineProjects';
+import { useProjects } from '../../features/dashboard/hooks/useProjects';
 import ProjectAnalytics from '../../components/ProjectAnalytics';
 import VirtualProjectList from '../../components/VirtualProjectList';
 import { Modal, ConfirmModal, FormModal } from '../../components/Modal';
@@ -30,7 +30,7 @@ export default function ExamplesPage() {
     projects, 
     isLoading, 
     refreshProjects 
-  } = useOfflineProjects();
+  } = useProjects();
 
   const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);

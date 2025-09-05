@@ -32,13 +32,15 @@ export const sanitizedPhoneSchema = z.string()
   .transform(sanitizeString);
 
 // Project-related schemas
-export const projectNameSchema = sanitizedStringSchema
+export const projectNameSchema = z.string()
   .min(3, 'Project name must be at least 3 characters')
-  .max(100, 'Project name must be less than 100 characters');
+  .max(100, 'Project name must be less than 100 characters')
+  .transform(sanitizeString);
 
-export const projectDescriptionSchema = sanitizedStringSchema
+export const projectDescriptionSchema = z.string()
   .min(10, 'Description must be at least 10 characters')
-  .max(2000, 'Description must be less than 2000 characters');
+  .max(2000, 'Description must be less than 2000 characters')
+  .transform(sanitizeString);
 
 export const projectTypeSchema = z.enum([
   'residential',
@@ -65,26 +67,31 @@ export const projectPrioritySchema = z.enum([
 ]);
 
 // Client schemas
-export const clientNameSchema = sanitizedStringSchema
+export const clientNameSchema = z.string()
   .min(2, 'Client name must be at least 2 characters')
-  .max(100, 'Client name must be less than 100 characters');
+  .max(100, 'Client name must be less than 100 characters')
+  .transform(sanitizeString);
 
-export const clientCompanySchema = sanitizedStringSchema
+export const clientCompanySchema = z.string()
   .max(200, 'Company name must be less than 200 characters')
+  .transform(sanitizeString)
   .optional();
 
 // Location schemas
-export const addressSchema = sanitizedStringSchema
+export const addressSchema = z.string()
   .min(5, 'Address must be at least 5 characters')
-  .max(500, 'Address must be less than 500 characters');
+  .max(500, 'Address must be less than 500 characters')
+  .transform(sanitizeString);
 
-export const citySchema = sanitizedStringSchema
+export const citySchema = z.string()
   .min(2, 'City must be at least 2 characters')
-  .max(100, 'City must be less than 100 characters');
+  .max(100, 'City must be less than 100 characters')
+  .transform(sanitizeString);
 
-export const stateSchema = sanitizedStringSchema
+export const stateSchema = z.string()
   .min(2, 'State must be at least 2 characters')
-  .max(100, 'State must be less than 100 characters');
+  .max(100, 'State must be less than 100 characters')
+  .transform(sanitizeString);
 
 export const zipCodeSchema = z.string()
   .regex(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code format')
@@ -107,40 +114,42 @@ export const timelineSchema = z.object({
   startDate: z.preprocess((arg) => {
     if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
     return undefined;
-  }, z.date({
-    required_error: 'Start date is required',
-    invalid_type_error: 'Start date must be a valid date'
+  }, z.date().refine((date) => date instanceof Date && !isNaN(date.getTime()), {
+    message: 'Start date must be a valid date'
   })),
   endDate: z.preprocess((arg) => {
     if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
     return undefined;
-  }, z.date({
-    invalid_type_error: 'End date must be a valid date'
+  }, z.date().refine((date) => date instanceof Date && !isNaN(date.getTime()), {
+    message: 'End date must be a valid date'
   })).optional(),
   milestones: z.array(z.object({
-    title: sanitizedStringSchema.min(3).max(100),
+    title: z.string().min(3).max(100).transform(sanitizeString),
     date: z.preprocess((arg) => {
       if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
       return undefined;
-    }, z.date()),
-    description: sanitizedStringSchema.max(500).optional()
+    }, z.date().refine((date) => date instanceof Date && !isNaN(date.getTime()), {
+      message: 'Milestone date must be a valid date'
+    })),
+    description: z.string().max(500).transform(sanitizeString).optional()
   })).optional()
 });
 
 // Team schemas
 export const teamMemberSchema = z.object({
   id: z.string().optional(),
-  name: sanitizedStringSchema.min(2).max(100),
-  role: sanitizedStringSchema.min(2).max(100),
+  name: z.string().min(2).max(100).transform(sanitizeString),
+  role: z.string().min(2).max(100).transform(sanitizeString),
   email: sanitizedEmailSchema,
   phone: sanitizedPhoneSchema.optional(),
   hourlyRate: z.number().min(0).max(1000).optional()
 });
 
 // Tags schema
-export const tagsSchema = z.array(sanitizedStringSchema
+export const tagsSchema = z.array(z.string()
   .min(2, 'Tag must be at least 2 characters')
   .max(50, 'Tag must be less than 50 characters')
+  .transform(sanitizeString)
 ).max(20, 'Maximum 20 tags allowed');
 
 // Main project schema
@@ -167,7 +176,7 @@ export const projectSchema = z.object({
   timeline: timelineSchema.optional(),
   team: z.array(teamMemberSchema).optional(),
   tags: tagsSchema.optional(),
-  notes: sanitizedStringSchema.max(5000).optional()
+  notes: z.string().max(5000).transform(sanitizeString).optional()
 });
 
 // Update project schema (all fields optional)
@@ -175,12 +184,12 @@ export const projectUpdateSchema = projectSchema.partial();
 
 // Search and filter schemas
 export const projectSearchSchema = z.object({
-  query: sanitizedStringSchema.max(200).optional(),
+  query: z.string().max(200).transform(sanitizeString).optional(),
   status: projectStatusSchema.optional(),
   type: projectTypeSchema.optional(),
   priority: projectPrioritySchema.optional(),
-  client: sanitizedStringSchema.max(200).optional(),
-  tags: z.array(sanitizedStringSchema).optional(),
+  client: z.string().max(200).transform(sanitizeString).optional(),
+  tags: z.array(z.string().transform(sanitizeString)).optional(),
   dateRange: z.object({
     start: z.preprocess((arg) => {
       if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);

@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { Project } from '@/types/project';
+import { Project } from '@/types/types';
 import { ProjectSyncService } from '@/lib/sync/projectSync';
 
 export function useOfflineProjects() {

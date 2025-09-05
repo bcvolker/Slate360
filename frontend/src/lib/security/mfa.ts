@@ -3,6 +3,7 @@ import { authenticator } from 'otplib';
 
 export interface MFAMethod {
   id: string;
+  userId: string;
   type: 'totp' | 'sms' | 'email';
   name: string;
   secret?: string;
@@ -121,6 +122,7 @@ export class MFAManager {
   ): MFAMethod {
     const method: MFAMethod = {
       id: `mfa_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      userId,
       type,
       name,
       secret,

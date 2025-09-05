@@ -20,7 +20,7 @@ export interface LogEntry {
 }
 
 export interface SecurityEvent {
-  type: 'authentication' | 'authorization' | 'data_access' | 'system' | 'security';
+  type: 'authentication' | 'authorization' | 'data_access' | 'system' | 'security' | 'validation';
   severity: 'low' | 'medium' | 'high' | 'critical';
   event: string;
   description: string;

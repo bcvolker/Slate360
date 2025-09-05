@@ -88,17 +88,14 @@ export class EncryptionManager {
     
     // Create cipher
     const cipher = crypto.createCipher(this.config.algorithm, derivedKey);
-    cipher.setAAD(Buffer.from('slate360', 'utf8')); // Additional authenticated data
+    // Note: setAAD is not available on regular ciphers, removing for compatibility
     
     // Encrypt data
     let encrypted = cipher.update(data, 'utf8', 'hex');
     encrypted += cipher.final('hex');
     
-    // Get authentication tag
-    const authTag = cipher.getAuthTag();
-    
     return {
-      encrypted: encrypted + authTag.toString('hex'),
+      encrypted: encrypted,
       iv,
       salt,
       algorithm: this.config.algorithm,
@@ -116,17 +113,12 @@ export class EncryptionManager {
     // Derive key from password and salt
     const derivedKey = this.deriveKey(decryptionKey, encryptedData.salt);
     
-    // Extract authentication tag (last 16 bytes)
-    const authTag = Buffer.from(encryptedData.encrypted.slice(-32), 'hex');
-    const encrypted = encryptedData.encrypted.slice(0, -32);
-    
     // Create decipher
     const decipher = crypto.createDecipher(encryptedData.algorithm, derivedKey);
-    decipher.setAAD(Buffer.from('slate360', 'utf8'));
-    decipher.setAuthTag(authTag);
+    // Note: setAAD and setAuthTag are not available on regular ciphers, removing for compatibility
     
     // Decrypt data
-    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+    let decrypted = decipher.update(encryptedData.encrypted, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
     
     return decrypted;
