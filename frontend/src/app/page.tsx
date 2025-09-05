@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ArrowRight } from 'lucide-react';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
 export default function Homepage() {
@@ -14,45 +14,47 @@ export default function Homepage() {
       id: 'slate360',
       title: 'SLATE360',
       subtitle: 'The Future of Construction Technology',
-      description: 'Experience the next generation of construction workflows, 3D modeling, and immersive technologies in one unified platform.',
+      description: 'SLATE360 creates safe, efficient, and intelligent construction workflows with advanced 3D modeling, real-time collaboration, and immersive technologies.',
+      mission: 'The mission: solve construction complexity, enable rapid project delivery, and transform how we build.',
       viewer: (
-        <div className="w-full h-full bg-gray-800 rounded-lg border border-gray-700 flex items-center justify-center">
-          <div className="text-center text-gray-400">
-            <div className="text-6xl mb-4">🏗️</div>
-            <p className="text-lg">SLATE360 Platform</p>
-            <p className="text-sm">Construction Technology Platform</p>
+        <div className="w-full h-full bg-gradient-to-br from-gray-900 via-black to-gray-800 rounded-lg border border-gray-700/50 flex items-center justify-center relative overflow-hidden">
+          {/* Animated background elements */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-cyan-500/10 animate-pulse"></div>
+          <div className="text-center text-white relative z-10">
+            <div className="text-8xl mb-6 font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              🏗️
+            </div>
+            <p className="text-2xl font-bold mb-2">SLATE360 PLATFORM</p>
+            <p className="text-lg text-gray-300">Construction Technology Revolution</p>
+            <div className="mt-6 flex justify-center">
+              <div className="w-16 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
+            </div>
           </div>
         </div>
       ),
       content: (
-        <div className="space-y-6">
-          <p className="text-lg text-gray-300 leading-relaxed">
-            Welcome to SLATE360 - where innovation meets construction. Our platform combines cutting-edge 3D visualization, 
-            advanced project management, and immersive technologies to revolutionize how you build.
-          </p>
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-white">Key Features:</h3>
-            <ul className="space-y-3 text-gray-300">
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                <span>Advanced 3D modeling and visualization</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                <span>Real-time collaboration tools</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                <span>Immersive virtual experiences</span>
-              </li>
-            </ul>
+        <div className="space-y-8">
+          <div className="space-y-6">
+            <h3 className="text-3xl font-bold text-white leading-tight">
+              SLATE360 creates safe, efficient, and intelligent construction workflows
+            </h3>
+            <p className="text-xl text-gray-300 leading-relaxed">
+              Our platform combines cutting-edge 3D visualization, advanced project management, 
+              and immersive technologies to revolutionize how you build.
+            </p>
+            <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 p-6 rounded-lg border border-blue-500/30">
+              <p className="text-lg font-semibold text-blue-300">
+                The mission: solve construction complexity, enable rapid project delivery, and transform how we build.
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
-              Get Started
+          <div className="flex flex-col sm:flex-row gap-4 pt-6">
+            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+              GET STARTED
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold border border-white/20 transition-colors">
-              View Demo
+            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+              VIEW DEMO
             </button>
           </div>
         </div>
@@ -60,256 +62,274 @@ export default function Homepage() {
     },
     {
       id: 'project-hub',
-      title: 'Project Hub',
+      title: 'PROJECT HUB',
       subtitle: 'Centralized Project Management',
       description: 'Manage all your construction projects from one powerful dashboard with real-time collaboration and advanced tracking.',
       viewer: (
-        <div className="w-full h-full bg-gray-800 rounded-lg border border-gray-700 flex items-center justify-center">
-          <div className="text-center text-gray-400">
-            <div className="text-6xl mb-4">📊</div>
-            <p className="text-lg">Project Dashboard Viewer</p>
-            <p className="text-sm">Interactive project management interface</p>
+        <div className="w-full h-full bg-gradient-to-br from-gray-900 via-black to-gray-800 rounded-lg border border-gray-700/50 flex items-center justify-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 via-emerald-500/10 to-teal-500/10 animate-pulse"></div>
+          <div className="text-center text-white relative z-10">
+            <div className="text-8xl mb-6 font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+              📊
+            </div>
+            <p className="text-2xl font-bold mb-2">PROJECT DASHBOARD</p>
+            <p className="text-lg text-gray-300">Real-time Management Interface</p>
+            <div className="mt-6 flex justify-center">
+              <div className="w-16 h-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"></div>
+            </div>
           </div>
         </div>
       ),
       content: (
-        <div className="space-y-6">
-          <p className="text-lg text-gray-300 leading-relaxed">
-            Centralize all your construction projects in one powerful dashboard. Track progress, manage teams, 
-            and collaborate in real-time with advanced project management tools.
-          </p>
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-white">Project Management Features:</h3>
-            <ul className="space-y-3 text-gray-300">
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                <span>Real-time project tracking</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                <span>Team collaboration tools</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                <span>Document management</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                <span>Progress analytics</span>
-              </li>
-            </ul>
+        <div className="space-y-8">
+          <div className="space-y-6">
+            <h3 className="text-3xl font-bold text-white leading-tight">
+              Centralize all your construction projects in one powerful dashboard
+            </h3>
+            <p className="text-xl text-gray-300 leading-relaxed">
+              Track progress, manage teams, and collaborate in real-time with advanced project management tools 
+              designed for modern construction workflows.
+            </p>
+            <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 p-6 rounded-lg border border-green-500/30">
+              <p className="text-lg font-semibold text-green-300">
+                Real-time collaboration and advanced tracking for maximum efficiency.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 pt-6">
+            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+              EXPLORE PROJECTS
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+              VIEW ANALYTICS
+            </button>
           </div>
         </div>
       )
     },
     {
       id: 'bim-studio',
-      title: 'BIM Studio',
+      title: 'BIM STUDIO',
       subtitle: 'Advanced 3D Modeling',
       description: 'Create, edit, and collaborate on Building Information Models with precision and real-time updates.',
       viewer: (
-        <div className="w-full h-full bg-gray-800 rounded-lg border border-gray-700 flex items-center justify-center">
-          <div className="text-center text-gray-400">
-            <div className="text-6xl mb-4">🎥</div>
-            <p className="text-lg">BIM Studio Video</p>
-            <p className="text-sm">Watch BIM features in action</p>
+        <div className="w-full h-full bg-gradient-to-br from-gray-900 via-black to-gray-800 rounded-lg border border-gray-700/50 flex items-center justify-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-red-500/10 animate-pulse"></div>
+          <div className="text-center text-white relative z-10">
+            <div className="text-8xl mb-6 font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              🎥
+            </div>
+            <p className="text-2xl font-bold mb-2">BIM STUDIO</p>
+            <p className="text-lg text-gray-300">Advanced 3D Modeling Platform</p>
+            <div className="mt-6 flex justify-center">
+              <div className="w-16 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+            </div>
           </div>
         </div>
       ),
       content: (
-        <div className="space-y-6">
-          <p className="text-lg text-gray-300 leading-relaxed">
-            Create, edit, and collaborate on Building Information Models with precision and real-time updates. 
-            Our advanced 3D modeling tools bring your construction projects to life.
-          </p>
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-white">BIM Features:</h3>
-            <ul className="space-y-3 text-gray-300">
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                <span>3D model creation</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                <span>Real-time collaboration</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                <span>Version control</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                <span>Cloud rendering</span>
-              </li>
-            </ul>
+        <div className="space-y-8">
+          <div className="space-y-6">
+            <h3 className="text-3xl font-bold text-white leading-tight">
+              Create, edit, and collaborate on Building Information Models with precision
+            </h3>
+            <p className="text-xl text-gray-300 leading-relaxed">
+              Our advanced 3D modeling tools bring your construction projects to life with real-time updates, 
+              cloud rendering, and seamless collaboration.
+            </p>
+            <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 p-6 rounded-lg border border-purple-500/30">
+              <p className="text-lg font-semibold text-purple-300">
+                Precision modeling with real-time collaboration and cloud rendering.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 pt-6">
+            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+              START MODELING
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+              VIEW GALLERY
+            </button>
           </div>
         </div>
       )
     },
     {
       id: '360-tour-builder',
-      title: '360° Tour Builder',
+      title: '360° TOUR BUILDER',
       subtitle: 'Immersive Virtual Experiences',
       description: 'Create interactive 360° tours and virtual walkthroughs for your construction projects.',
       viewer: (
-        <div className="w-full h-full bg-gray-800 rounded-lg border border-gray-700 flex items-center justify-center">
-          <div className="text-center text-gray-400">
-            <div className="text-6xl mb-4">🔄</div>
-            <p className="text-lg">360° Tour Viewer</p>
-            <p className="text-sm">Interactive virtual tour experience</p>
+        <div className="w-full h-full bg-gradient-to-br from-gray-900 via-black to-gray-800 rounded-lg border border-gray-700/50 flex items-center justify-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-indigo-500/10 animate-pulse"></div>
+          <div className="text-center text-white relative z-10">
+            <div className="text-8xl mb-6 font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              🔄
+            </div>
+            <p className="text-2xl font-bold mb-2">360° TOUR BUILDER</p>
+            <p className="text-lg text-gray-300">Immersive Virtual Experiences</p>
+            <div className="mt-6 flex justify-center">
+              <div className="w-16 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"></div>
+            </div>
           </div>
         </div>
       ),
       content: (
-        <div className="space-y-6">
-          <p className="text-lg text-gray-300 leading-relaxed">
-            Create interactive 360° tours and virtual walkthroughs for your construction projects. 
-            Immerse clients and stakeholders in your vision with cutting-edge virtual reality technology.
-          </p>
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-white">360° Tour Features:</h3>
-            <ul className="space-y-3 text-gray-300">
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                <span>360° photo stitching</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                <span>Interactive hotspots</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                <span>VR headset support</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                <span>Client sharing</span>
-              </li>
-            </ul>
+        <div className="space-y-8">
+          <div className="space-y-6">
+            <h3 className="text-3xl font-bold text-white leading-tight">
+              Create interactive 360° tours and virtual walkthroughs
+            </h3>
+            <p className="text-xl text-gray-300 leading-relaxed">
+              Immerse clients and stakeholders in your vision with cutting-edge virtual reality technology 
+              and interactive hotspot experiences.
+            </p>
+            <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-6 rounded-lg border border-cyan-500/30">
+              <p className="text-lg font-semibold text-cyan-300">
+                VR headset support and interactive hotspots for maximum engagement.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 pt-6">
+            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+              CREATE TOUR
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+              VIEW EXAMPLES
+            </button>
           </div>
         </div>
       )
     },
     {
       id: 'content-creation',
-      title: 'Content Creation',
+      title: 'CONTENT CREATION',
       subtitle: 'Professional Media Production',
       description: 'Create high-quality images, videos, and interactive content for your construction projects.',
       viewer: (
-        <div className="w-full h-full bg-gray-800 rounded-lg border border-gray-700 flex items-center justify-center">
-          <div className="text-center text-gray-400">
-            <div className="text-6xl mb-4">🎬</div>
-            <p className="text-lg">Content Creation Video</p>
-            <p className="text-sm">See media production features</p>
+        <div className="w-full h-full bg-gradient-to-br from-gray-900 via-black to-gray-800 rounded-lg border border-gray-700/50 flex items-center justify-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 via-red-500/10 to-pink-500/10 animate-pulse"></div>
+          <div className="text-center text-white relative z-10">
+            <div className="text-8xl mb-6 font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+              🎬
+            </div>
+            <p className="text-2xl font-bold mb-2">CONTENT CREATION</p>
+            <p className="text-lg text-gray-300">Professional Media Production</p>
+            <div className="mt-6 flex justify-center">
+              <div className="w-16 h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></div>
+            </div>
           </div>
         </div>
       ),
       content: (
-        <div className="space-y-6">
-          <p className="text-lg text-gray-300 leading-relaxed">
-            Create high-quality images, videos, and interactive content for your construction projects. 
-            Professional media production tools to showcase your work and engage your audience.
-          </p>
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-white">Content Creation Features:</h3>
-            <ul className="space-y-3 text-gray-300">
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                <span>4K video editing</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                <span>Photo enhancement</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                <span>Interactive presentations</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                <span>Asset management</span>
-              </li>
-            </ul>
+        <div className="space-y-8">
+          <div className="space-y-6">
+            <h3 className="text-3xl font-bold text-white leading-tight">
+              Create high-quality images, videos, and interactive content
+            </h3>
+            <p className="text-xl text-gray-300 leading-relaxed">
+              Professional media production tools to showcase your work and engage your audience 
+              with stunning visual content and interactive presentations.
+            </p>
+            <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 p-6 rounded-lg border border-orange-500/30">
+              <p className="text-lg font-semibold text-orange-300">
+                4K video editing and photo enhancement for maximum impact.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 pt-6">
+            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+              START CREATING
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+              VIEW PORTFOLIO
+            </button>
           </div>
         </div>
       )
     },
     {
       id: 'geospatial-robotics',
-      title: 'Geospatial & Robotics',
+      title: 'GEOSPATIAL & ROBOTICS',
       subtitle: 'Advanced Automation & Mapping',
       description: 'Leverage drone technology, GPS mapping, and robotic automation for precise construction operations.',
       viewer: (
-        <div className="w-full h-full bg-gray-800 rounded-lg border border-gray-700 flex items-center justify-center">
-          <div className="text-center text-gray-400">
-            <div className="text-6xl mb-4">🤖</div>
-            <p className="text-lg">Robotics & Mapping Viewer</p>
-            <p className="text-sm">Drone and automation interface</p>
+        <div className="w-full h-full bg-gradient-to-br from-gray-900 via-black to-gray-800 rounded-lg border border-gray-700/50 flex items-center justify-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 via-pink-500/10 to-purple-500/10 animate-pulse"></div>
+          <div className="text-center text-white relative z-10">
+            <div className="text-8xl mb-6 font-bold bg-gradient-to-r from-red-400 to-pink-400 bg-clip-text text-transparent">
+              🤖
+            </div>
+            <p className="text-2xl font-bold mb-2">GEOSPATIAL & ROBOTICS</p>
+            <p className="text-lg text-gray-300">Advanced Automation Platform</p>
+            <div className="mt-6 flex justify-center">
+              <div className="w-16 h-1 bg-gradient-to-r from-red-500 to-pink-500 rounded-full"></div>
+            </div>
           </div>
         </div>
       ),
       content: (
-        <div className="space-y-6">
-          <p className="text-lg text-gray-300 leading-relaxed">
-            Leverage drone technology, GPS mapping, and robotic automation for precise construction operations. 
-            Advanced geospatial tools and robotics to optimize your construction workflow.
-          </p>
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-white">Automation Features:</h3>
-            <ul className="space-y-3 text-gray-300">
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                <span>Drone surveying</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                <span>GPS mapping</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                <span>Robotic automation</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                <span>Site monitoring</span>
-              </li>
-            </ul>
+        <div className="space-y-8">
+          <div className="space-y-6">
+            <h3 className="text-3xl font-bold text-white leading-tight">
+              Leverage drone technology, GPS mapping, and robotic automation
+            </h3>
+            <p className="text-xl text-gray-300 leading-relaxed">
+              Advanced geospatial tools and robotics to optimize your construction workflow 
+              with precise site monitoring and automated operations.
+            </p>
+            <div className="bg-gradient-to-r from-red-500/20 to-pink-500/20 p-6 rounded-lg border border-red-500/30">
+              <p className="text-lg font-semibold text-red-300">
+                Drone surveying and robotic automation for maximum precision.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 pt-6">
+            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+              EXPLORE AUTOMATION
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+              VIEW DEMOS
+            </button>
           </div>
         </div>
       )
     },
     {
       id: 'reports-analytics',
-      title: 'Reports & Analytics',
+      title: 'REPORTS & ANALYTICS',
       subtitle: 'Data-Driven Insights',
       description: 'Advanced analytics and reporting tools for informed decision-making and project optimization.',
       viewer: null, // No viewer for last tile
       content: (
-        <div className="space-y-6">
-          <p className="text-lg text-gray-300 leading-relaxed">
-            Advanced analytics and reporting tools for informed decision-making and project optimization. 
-            Transform your construction data into actionable insights.
-          </p>
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-white">Analytics Features:</h3>
-            <ul className="space-y-3 text-gray-300">
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-cyan-500 rounded-full"></span>
-                <span>Real-time metrics</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-cyan-500 rounded-full"></span>
-                <span>Custom reports</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-cyan-500 rounded-full"></span>
-                <span>Performance tracking</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <span className="w-2 h-2 bg-cyan-500 rounded-full"></span>
-                <span>Predictive analytics</span>
-              </li>
-            </ul>
+        <div className="space-y-8">
+          <div className="space-y-6">
+            <h3 className="text-3xl font-bold text-white leading-tight">
+              Advanced analytics and reporting tools for informed decision-making
+            </h3>
+            <p className="text-xl text-gray-300 leading-relaxed">
+              Transform your construction data into actionable insights with real-time metrics, 
+              custom reports, and predictive analytics for optimal project performance.
+            </p>
+            <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-6 rounded-lg border border-cyan-500/30">
+              <p className="text-lg font-semibold text-cyan-300">
+                Real-time metrics and predictive analytics for maximum efficiency.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 pt-6">
+            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+              VIEW ANALYTICS
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+              GENERATE REPORTS
+            </button>
           </div>
         </div>
       )
@@ -369,24 +389,63 @@ export default function Homepage() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* Floating Navigation - Redesigned */}
-      <div className="fixed right-12 top-40 z-50">
-        <div className="flex flex-col space-y-2">
+      {/* Boring Company Style Navigation Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center space-x-4">
+              <Link href="/" className="text-2xl font-bold text-white hover:text-gray-300 transition-colors">
+                SLATE360
+              </Link>
+            </div>
+            
+            {/* Navigation Links */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <Link href="/dashboard" className="text-white hover:text-gray-300 transition-colors font-medium">
+                DASHBOARD
+              </Link>
+              <Link href="/dashboard/project-hub" className="text-white hover:text-gray-300 transition-colors font-medium">
+                PROJECTS
+              </Link>
+              <Link href="/examples" className="text-white hover:text-gray-300 transition-colors font-medium">
+                BIM STUDIO
+              </Link>
+              <Link href="/examples" className="text-white hover:text-gray-300 transition-colors font-medium">
+                360° TOURS
+              </Link>
+              <Link href="/examples" className="text-white hover:text-gray-300 transition-colors font-medium">
+                ANALYTICS
+              </Link>
+              <Link href="/contact" className="text-white hover:text-gray-300 transition-colors font-medium">
+                CONTACT
+              </Link>
+            </nav>
+
+            {/* CTA Button */}
+            <div className="flex items-center space-x-4">
+              <Link href="/login" className="bg-white text-black px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition-colors">
+                GET STARTED
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Floating Navigation - Boring Company Style */}
+      <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-40">
+        <div className="flex flex-col space-y-3">
           {tiles.map((tile, index) => (
             <button
               key={index}
               onClick={() => scrollToTile(index)}
-              className={`text-right transition-all duration-300 group ${
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 index === currentTile 
-                  ? 'text-blue-400 font-semibold' 
-                  : 'text-gray-400 hover:text-gray-300'
+                  ? 'bg-white scale-125' 
+                  : 'bg-gray-600 hover:bg-gray-400'
               }`}
               aria-label={`Go to ${tile.title}`}
-            >
-              <div className="text-xs font-medium leading-tight">
-                {tile.title}
-              </div>
-            </button>
+            />
           ))}
         </div>
       </div>
@@ -395,52 +454,54 @@ export default function Homepage() {
       <div ref={tilesRef} className="tiles-container">
         {tiles.map((tile, index) => (
           <div key={tile.id} className="tile-item">
-            <section id={tile.id} className="w-full max-w-7xl mx-auto px-8">
+            <section id={tile.id} className="w-full max-w-7xl mx-auto px-6 py-20" style={{ minHeight: '100vh', paddingTop: '120px' }}>
               {/* Title Section */}
-              <div className="text-center mb-12">
-                <h1 className="text-5xl lg:text-7xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-4">
+              <div className="text-center mb-16">
+                <h1 className="text-6xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
                   {tile.title}
                 </h1>
                 {tile.subtitle && (
-                  <h2 className="text-2xl lg:text-3xl font-semibold text-white mb-4">
+                  <h2 className="text-2xl lg:text-3xl font-semibold text-gray-300 mb-6">
                     {tile.subtitle}
                   </h2>
                 )}
                 {tile.description && (
-                  <p className="text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
+                  <p className="text-xl text-gray-400 leading-relaxed max-w-4xl mx-auto">
                     {tile.description}
                   </p>
                 )}
               </div>
 
-              {/* Content Layout - Alternating Sides */}
-              <div className="flex flex-col lg:flex-row items-center gap-12">
+              {/* Content Layout - Full Width */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 {/* Viewer Side */}
                 {tile.viewer && (
-                  <div className={`w-full lg:w-1/2 ${index % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}`}>
-                    <div className="w-full h-96 bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+                  <div className={`${index % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}`}>
+                    <div className="w-full h-[500px] rounded-lg overflow-hidden">
                       {tile.viewer}
                     </div>
                   </div>
                 )}
                 
                 {/* Content Side */}
-                <div className={`w-full lg:w-1/2 ${index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}>
-                  <div className="h-96 flex items-center">
+                <div className={`${index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}>
+                  <div className="h-[500px] flex items-center">
                     {tile.content}
                   </div>
                 </div>
               </div>
 
-              {/* Chevron for next tile (except last) */}
+              {/* Scroll Indicator */}
               {index < tiles.length - 1 && (
-                <div className="text-center pt-8">
+                <div className="text-center pt-16">
                   <button
                     onClick={scrollToNext}
-                    className="group flex flex-col items-center space-y-2 text-gray-400 hover:text-white transition-colors mx-auto"
+                    className="group flex flex-col items-center space-y-4 text-gray-400 hover:text-white transition-colors mx-auto"
                   >
-                    <ChevronDown className="w-8 h-8 animate-bounce group-hover:scale-110 transition-transform" />
-                    <span className="text-sm">Next: {tiles[index + 1].title}</span>
+                    <div className="w-8 h-8 border-2 border-gray-400 rounded-full flex items-center justify-center group-hover:border-white transition-colors">
+                      <ChevronDown className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    </div>
+                    <span className="text-sm font-medium">NEXT: {tiles[index + 1].title}</span>
                   </button>
                 </div>
               )}
@@ -449,25 +510,54 @@ export default function Homepage() {
         ))}
       </div>
 
-      {/* Compact Footer - Only on last tile */}
-      <footer className="bg-black/90 backdrop-blur-md py-6 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center space-y-4">
-            {/* Links */}
-            <div className="flex justify-center space-x-6 text-sm footer-links">
-              <Link href="/about" className="text-gray-400 hover:text-white transition-colors">About</Link>
-              <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</Link>
-              <Link href="/pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</Link>
-              <Link href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms</Link>
-              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy</Link>
+      {/* Boring Company Style Footer */}
+      <footer className="bg-black py-16 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center space-y-8">
+            {/* Main Footer Content */}
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold text-white">SLATE360</h3>
+              <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+                The future of construction technology. Transform how you build with advanced 3D modeling, 
+                real-time collaboration, and immersive technologies.
+              </p>
+            </div>
+
+            {/* Navigation Links */}
+            <div className="flex flex-wrap justify-center gap-8 text-sm">
+              <Link href="/about" className="text-gray-400 hover:text-white transition-colors font-medium">
+                ABOUT
+              </Link>
+              <Link href="/contact" className="text-gray-400 hover:text-white transition-colors font-medium">
+                CONTACT
+              </Link>
+              <Link href="/pricing" className="text-gray-400 hover:text-white transition-colors font-medium">
+                PRICING
+              </Link>
+              <Link href="/examples" className="text-gray-400 hover:text-white transition-colors font-medium">
+                EXAMPLES
+              </Link>
+              <Link href="/terms" className="text-gray-400 hover:text-white transition-colors font-medium">
+                TERMS
+              </Link>
+              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors font-medium">
+                PRIVACY
+              </Link>
+            </div>
+
+            {/* CTA Section */}
+            <div className="pt-8">
+              <Link href="/login" className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors inline-flex items-center group">
+                GET STARTED TODAY
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
 
             {/* Copyright */}
-            <div className="text-xs text-gray-500">
-              © {new Date().getFullYear()} SLATE360. All rights reserved. | 
-              <Link href="/terms" className="text-blue-400 hover:text-blue-300 ml-1 underline">
-                Terms & Conditions
-              </Link>
+            <div className="pt-8 border-t border-gray-800">
+              <p className="text-sm text-gray-500">
+                © {new Date().getFullYear()} SLATE360. All rights reserved.
+              </p>
             </div>
           </div>
         </div>
