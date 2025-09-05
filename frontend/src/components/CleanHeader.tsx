@@ -19,35 +19,35 @@ export default function CleanHeader({ className = '' }: CleanHeaderProps) {
               <Image 
                 src="/slate360-logo.png" 
                 alt="Slate360 Logo" 
-                width={240} 
-                height={67} 
+                width={300} 
+                height={84} 
                 priority 
-                className="h-16 w-auto"
+                className="h-20 w-auto"
               />
             </Link>
           </div>
           
           {/* Navigation Links */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/contact" className="text-gray-900 hover:text-gray-600 transition-colors font-medium">
+            <Link href="/contact" className="text-black hover:text-gray-700 transition-colors font-semibold text-lg">
               CONTACT
             </Link>
-            <Link href="/about" className="text-gray-900 hover:text-gray-600 transition-colors font-medium">
+            <Link href="/about" className="text-black hover:text-gray-700 transition-colors font-semibold text-lg">
               ABOUT
             </Link>
-            <Link href="/pricing" className="text-gray-900 hover:text-gray-600 transition-colors font-medium">
+            <Link href="/pricing" className="text-black hover:text-gray-700 transition-colors font-semibold text-lg">
               SUBSCRIBE
             </Link>
-            <Link href="/login" className="flex items-center space-x-2 text-gray-900 hover:text-gray-600 transition-colors font-medium">
-              <LogIn className="w-4 h-4" />
+            <Link href="/login" className="flex items-center space-x-2 text-black hover:text-gray-700 transition-colors font-semibold text-lg">
+              <LogIn className="w-5 h-5" />
               <span>LOGIN</span>
             </Link>
           </nav>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <Link href="/login" className="flex items-center space-x-2 text-gray-900 hover:text-gray-600 transition-colors">
-              <LogIn className="w-4 h-4" />
+            <Link href="/login" className="flex items-center space-x-2 text-black hover:text-gray-700 transition-colors font-semibold">
+              <LogIn className="w-5 h-5" />
               <span>LOGIN</span>
             </Link>
           </div>
