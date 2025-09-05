@@ -33,27 +33,27 @@ export default function Homepage() {
         </div>
       ),
       content: (
-        <div className="space-y-8">
-          <div className="space-y-6">
-            <h3 className="text-3xl font-bold text-white leading-tight">
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="text-2xl font-bold text-white leading-tight">
               SLATE360 creates safe, efficient, and intelligent construction workflows
             </h3>
-            <p className="text-xl text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-300 leading-relaxed">
               Our platform combines cutting-edge 3D visualization, advanced project management, 
               and immersive technologies to revolutionize how you build.
             </p>
-            <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 p-6 rounded-lg border border-blue-500/30">
-              <p className="text-lg font-semibold text-blue-300">
+            <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 p-4 rounded-lg border border-blue-500/30">
+              <p className="text-base font-semibold text-blue-300">
                 The mission: solve construction complexity, enable rapid project delivery, and transform how we build.
               </p>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 pt-6">
-            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <button className="bg-white text-black px-6 py-3 rounded-lg font-bold text-base hover:bg-gray-200 transition-colors flex items-center justify-center group">
               GET STARTED
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+            <button className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-bold text-base hover:bg-white hover:text-black transition-colors">
               VIEW DEMO
             </button>
           </div>
@@ -81,27 +81,27 @@ export default function Homepage() {
         </div>
       ),
       content: (
-        <div className="space-y-8">
-          <div className="space-y-6">
-            <h3 className="text-3xl font-bold text-white leading-tight">
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="text-2xl font-bold text-white leading-tight">
               Centralize all your construction projects in one powerful dashboard
             </h3>
-            <p className="text-xl text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-300 leading-relaxed">
               Track progress, manage teams, and collaborate in real-time with advanced project management tools 
               designed for modern construction workflows.
             </p>
-            <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 p-6 rounded-lg border border-green-500/30">
-              <p className="text-lg font-semibold text-green-300">
+            <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 p-4 rounded-lg border border-green-500/30">
+              <p className="text-base font-semibold text-green-300">
                 Real-time collaboration and advanced tracking for maximum efficiency.
               </p>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 pt-6">
-            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <button className="bg-white text-black px-6 py-3 rounded-lg font-bold text-base hover:bg-gray-200 transition-colors flex items-center justify-center group">
               EXPLORE PROJECTS
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+            <button className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-bold text-base hover:bg-white hover:text-black transition-colors">
               VIEW ANALYTICS
             </button>
           </div>
@@ -129,27 +129,27 @@ export default function Homepage() {
         </div>
       ),
       content: (
-        <div className="space-y-8">
-          <div className="space-y-6">
-            <h3 className="text-3xl font-bold text-white leading-tight">
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="text-2xl font-bold text-white leading-tight">
               Create, edit, and collaborate on Building Information Models with precision
             </h3>
-            <p className="text-xl text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-300 leading-relaxed">
               Our advanced 3D modeling tools bring your construction projects to life with real-time updates, 
               cloud rendering, and seamless collaboration.
             </p>
-            <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 p-6 rounded-lg border border-purple-500/30">
-              <p className="text-lg font-semibold text-purple-300">
+            <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 p-4 rounded-lg border border-purple-500/30">
+              <p className="text-base font-semibold text-purple-300">
                 Precision modeling with real-time collaboration and cloud rendering.
               </p>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 pt-6">
-            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <button className="bg-white text-black px-6 py-3 rounded-lg font-bold text-base hover:bg-gray-200 transition-colors flex items-center justify-center group">
               START MODELING
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+            <button className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-bold text-base hover:bg-white hover:text-black transition-colors">
               VIEW GALLERY
             </button>
           </div>
@@ -177,27 +177,27 @@ export default function Homepage() {
         </div>
       ),
       content: (
-        <div className="space-y-8">
-          <div className="space-y-6">
-            <h3 className="text-3xl font-bold text-white leading-tight">
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="text-2xl font-bold text-white leading-tight">
               Create interactive 360° tours and virtual walkthroughs
             </h3>
-            <p className="text-xl text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-300 leading-relaxed">
               Immerse clients and stakeholders in your vision with cutting-edge virtual reality technology 
               and interactive hotspot experiences.
             </p>
-            <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-6 rounded-lg border border-cyan-500/30">
-              <p className="text-lg font-semibold text-cyan-300">
+            <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-4 rounded-lg border border-cyan-500/30">
+              <p className="text-base font-semibold text-cyan-300">
                 VR headset support and interactive hotspots for maximum engagement.
               </p>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 pt-6">
-            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <button className="bg-white text-black px-6 py-3 rounded-lg font-bold text-base hover:bg-gray-200 transition-colors flex items-center justify-center group">
               CREATE TOUR
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+            <button className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-bold text-base hover:bg-white hover:text-black transition-colors">
               VIEW EXAMPLES
             </button>
           </div>
@@ -225,27 +225,27 @@ export default function Homepage() {
         </div>
       ),
       content: (
-        <div className="space-y-8">
-          <div className="space-y-6">
-            <h3 className="text-3xl font-bold text-white leading-tight">
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="text-2xl font-bold text-white leading-tight">
               Create high-quality images, videos, and interactive content
             </h3>
-            <p className="text-xl text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-300 leading-relaxed">
               Professional media production tools to showcase your work and engage your audience 
               with stunning visual content and interactive presentations.
             </p>
-            <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 p-6 rounded-lg border border-orange-500/30">
-              <p className="text-lg font-semibold text-orange-300">
+            <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 p-4 rounded-lg border border-orange-500/30">
+              <p className="text-base font-semibold text-orange-300">
                 4K video editing and photo enhancement for maximum impact.
               </p>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 pt-6">
-            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <button className="bg-white text-black px-6 py-3 rounded-lg font-bold text-base hover:bg-gray-200 transition-colors flex items-center justify-center group">
               START CREATING
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+            <button className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-bold text-base hover:bg-white hover:text-black transition-colors">
               VIEW PORTFOLIO
             </button>
           </div>
@@ -273,27 +273,27 @@ export default function Homepage() {
         </div>
       ),
       content: (
-        <div className="space-y-8">
-          <div className="space-y-6">
-            <h3 className="text-3xl font-bold text-white leading-tight">
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="text-2xl font-bold text-white leading-tight">
               Leverage drone technology, GPS mapping, and robotic automation
             </h3>
-            <p className="text-xl text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-300 leading-relaxed">
               Advanced geospatial tools and robotics to optimize your construction workflow 
               with precise site monitoring and automated operations.
             </p>
-            <div className="bg-gradient-to-r from-red-500/20 to-pink-500/20 p-6 rounded-lg border border-red-500/30">
-              <p className="text-lg font-semibold text-red-300">
+            <div className="bg-gradient-to-r from-red-500/20 to-pink-500/20 p-4 rounded-lg border border-red-500/30">
+              <p className="text-base font-semibold text-red-300">
                 Drone surveying and robotic automation for maximum precision.
               </p>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 pt-6">
-            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <button className="bg-white text-black px-6 py-3 rounded-lg font-bold text-base hover:bg-gray-200 transition-colors flex items-center justify-center group">
               EXPLORE AUTOMATION
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+            <button className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-bold text-base hover:bg-white hover:text-black transition-colors">
               VIEW DEMOS
             </button>
           </div>
@@ -307,27 +307,27 @@ export default function Homepage() {
       description: 'Advanced analytics and reporting tools for informed decision-making and project optimization.',
       viewer: null, // No viewer for last tile
       content: (
-        <div className="space-y-8">
-          <div className="space-y-6">
-            <h3 className="text-3xl font-bold text-white leading-tight">
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="text-2xl font-bold text-white leading-tight">
               Advanced analytics and reporting tools for informed decision-making
             </h3>
-            <p className="text-xl text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-300 leading-relaxed">
               Transform your construction data into actionable insights with real-time metrics, 
               custom reports, and predictive analytics for optimal project performance.
             </p>
-            <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-6 rounded-lg border border-cyan-500/30">
-              <p className="text-lg font-semibold text-cyan-300">
+            <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-4 rounded-lg border border-cyan-500/30">
+              <p className="text-base font-semibold text-cyan-300">
                 Real-time metrics and predictive analytics for maximum efficiency.
               </p>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 pt-6">
-            <button className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center group">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <button className="bg-white text-black px-6 py-3 rounded-lg font-bold text-base hover:bg-gray-200 transition-colors flex items-center justify-center group">
               VIEW ANALYTICS
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-colors">
+            <button className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-bold text-base hover:bg-white hover:text-black transition-colors">
               GENERATE REPORTS
             </button>
           </div>
@@ -412,30 +412,30 @@ export default function Homepage() {
       <div ref={tilesRef} className="tiles-container">
         {tiles.map((tile, index) => (
           <div key={tile.id} className="tile-item">
-            <section id={tile.id} className="w-full max-w-7xl mx-auto px-6 py-20" style={{ minHeight: '100vh', paddingTop: '140px' }}>
+            <section id={tile.id} className="w-full max-w-7xl mx-auto px-6 py-12" style={{ minHeight: '100vh', paddingTop: '100px' }}>
               {/* Title Section */}
-              <div className="text-center mb-16">
-                <h1 className="text-6xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
+              <div className="text-center mb-12">
+                <h1 className="text-5xl lg:text-7xl font-bold text-white mb-4 tracking-tight">
                   {tile.title}
                 </h1>
                 {tile.subtitle && (
-                  <h2 className="text-2xl lg:text-3xl font-semibold text-gray-300 mb-6">
+                  <h2 className="text-xl lg:text-2xl font-semibold text-gray-300 mb-4">
                     {tile.subtitle}
                   </h2>
                 )}
                 {tile.description && (
-                  <p className="text-xl text-gray-400 leading-relaxed max-w-4xl mx-auto">
+                  <p className="text-lg text-gray-400 leading-relaxed max-w-3xl mx-auto">
                     {tile.description}
                   </p>
                 )}
               </div>
 
               {/* Content Layout - Full Width */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 {/* Viewer Side */}
                 {tile.viewer && (
                   <div className={`${index % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}`}>
-                    <div className="w-full h-[500px] rounded-lg overflow-hidden">
+                    <div className="w-full h-[400px] rounded-lg overflow-hidden">
                       {tile.viewer}
                     </div>
                   </div>
@@ -443,7 +443,7 @@ export default function Homepage() {
                 
                 {/* Content Side */}
                 <div className={`${index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}>
-                  <div className="h-[500px] flex items-center">
+                  <div className="h-[400px] flex items-center">
                     {tile.content}
                   </div>
                 </div>

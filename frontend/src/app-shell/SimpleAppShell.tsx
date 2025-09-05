@@ -18,7 +18,7 @@ const SimpleAppShell: React.FC<SimpleAppShellProps> = ({ children }) => {
       <CleanHeader />
       
       {/* Main content */}
-      <main className={isHomepage ? '' : 'pt-20'}>
+      <main>
         {children}
       </main>
     </div>
