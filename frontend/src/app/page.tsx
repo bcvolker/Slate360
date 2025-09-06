@@ -405,18 +405,27 @@ export default function Homepage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white overflow-x-hidden">
 
-      {/* Floating Navigation - Sophisticated Design */}
-      <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-40">
-        <div className="flex flex-col space-y-4">
+      {/* Vertical Line Navigation - Boring Company Style */}
+      <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-40">
+        <div className="flex flex-col items-center space-y-2">
+          {/* Vertical line connecting all sections */}
+          <div className="absolute top-0 bottom-0 w-px bg-gray-600"></div>
+          
           {tiles.map((tile, index) => (
             <button
               key={index}
               onClick={() => scrollToTile(index)}
-              className={`w-4 h-4 rounded-full transition-all duration-500 border-2 ${
+              className={`relative z-10 transition-all duration-500 ${
                 index === currentTile 
-                  ? 'bg-white border-white scale-125 shadow-lg shadow-white/20' 
-                  : 'bg-transparent border-gray-500 hover:border-gray-300 hover:scale-110'
+                  ? 'bg-white scale-110' 
+                  : 'bg-gray-600 hover:bg-gray-400'
               }`}
+              style={{
+                width: '4px',
+                height: index === currentTile ? '32px' : '16px',
+                borderRadius: '2px',
+                marginTop: index === 0 ? '0' : '8px'
+              }}
               aria-label={`Go to ${tile.title}`}
             />
           ))}
@@ -478,17 +487,17 @@ export default function Homepage() {
                 </div>
               </div>
 
-              {/* Scroll Indicator */}
+              {/* Scroll Indicator - Bottom positioned like Boring Company */}
               {index < tiles.length - 1 && (
-                <div className="text-center pt-8">
+                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
                   <button
                     onClick={scrollToNext}
-                    className="group flex flex-col items-center space-y-4 text-gray-400 hover:text-white transition-colors mx-auto"
+                    className="group flex flex-col items-center space-y-2 text-gray-400 hover:text-white transition-colors mx-auto"
                   >
-                    <div className="w-8 h-8 border-2 border-gray-400 rounded-full flex items-center justify-center group-hover:border-white transition-colors">
-                      <ChevronDown className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    <div className="w-6 h-6 border border-gray-400 rounded-full flex items-center justify-center group-hover:border-white group-hover:bg-white/10 transition-all duration-300">
+                      <ChevronDown className="w-3 h-3 group-hover:scale-110 transition-transform" />
                     </div>
-                    <span className="text-sm font-medium">NEXT: {tiles[index + 1].title}</span>
+                    <span className="text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">NEXT: {tiles[index + 1].title}</span>
                   </button>
                 </div>
               )}
