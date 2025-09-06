@@ -405,26 +405,22 @@ export default function Homepage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white overflow-x-hidden">
 
-      {/* Vertical Line Navigation - Boring Company Style */}
+      {/* Horizontal Line Navigation - Boring Company Style */}
       <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-40">
-        <div className="flex flex-col items-center">
-          {/* Vertical line connecting all sections */}
-          <div className="absolute top-0 bottom-0 w-px bg-gray-600"></div>
-          
+        <div className="flex flex-col items-center space-y-3">
           {tiles.map((tile, index) => (
             <button
               key={index}
               onClick={() => scrollToTile(index)}
-              className={`relative z-10 transition-all duration-500 ${
+              className={`transition-all duration-500 ${
                 index === currentTile 
                   ? 'bg-white' 
                   : 'bg-gray-600 hover:bg-gray-400'
               }`}
               style={{
-                width: '4px',
-                height: index === currentTile ? '40px' : '20px',
-                borderRadius: '2px',
-                marginTop: index === 0 ? '0' : '12px'
+                width: index === currentTile ? '24px' : '16px',
+                height: '2px',
+                borderRadius: '1px'
               }}
               aria-label={`Go to ${tile.title}`}
             />
@@ -487,7 +483,22 @@ export default function Homepage() {
                 </div>
               </div>
 
-              {/* Scroll Indicator - Bottom positioned like Boring Company */}
+              {/* Top Chevron - Only show if not first tile */}
+              {index > 0 && (
+                <div className="absolute top-4 left-1/2 transform -translate-x-1/2">
+                  <button
+                    onClick={() => scrollToTile(index - 1)}
+                    className="group flex flex-col items-center space-y-2 text-gray-400 hover:text-white transition-colors mx-auto"
+                  >
+                    <div className="w-12 h-12 border border-gray-400 rounded-full flex items-center justify-center group-hover:border-white group-hover:bg-white/10 transition-all duration-300">
+                      <ChevronDown className="w-6 h-6 rotate-180 group-hover:scale-110 transition-transform" />
+                    </div>
+                    <span className="text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">PREV: {tiles[index - 1].title}</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Bottom Chevron - Only show if not last tile */}
               {index < tiles.length - 1 && (
                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
                   <button
@@ -501,91 +512,49 @@ export default function Homepage() {
                   </button>
                 </div>
               )}
+
+              {/* Footer - Only show on last tile */}
+              {index === tiles.length - 1 && (
+                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4">
+                  <div className="bg-gradient-to-t from-black/80 via-gray-900/60 to-transparent backdrop-blur-sm rounded-t-lg border-t border-gray-700/50 p-6">
+                    <div className="text-center space-y-4">
+                      {/* Company Info */}
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-bold text-white">SLATE360</h3>
+                        <p className="text-sm text-gray-400">
+                          The future of construction technology. Transform how you build with advanced 3D modeling, 
+                          real-time collaboration, and immersive technologies.
+                        </p>
+                      </div>
+
+                      {/* Legal Links */}
+                      <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-500">
+                        <Link href="/terms" className="hover:text-gray-300 transition-colors">Terms of Service</Link>
+                        <Link href="/privacy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
+                        <Link href="/about" className="hover:text-gray-300 transition-colors">About</Link>
+                        <Link href="/contact" className="hover:text-gray-300 transition-colors">Contact</Link>
+                        <Link href="/cookies" className="hover:text-gray-300 transition-colors">Cookie Policy</Link>
+                        <Link href="/accessibility" className="hover:text-gray-300 transition-colors">Accessibility</Link>
+                        <Link href="/security" className="hover:text-gray-300 transition-colors">Security</Link>
+                        <Link href="/compliance" className="hover:text-gray-300 transition-colors">Compliance</Link>
+                      </div>
+
+                      {/* Copyright */}
+                      <div className="pt-2 border-t border-gray-700/50">
+                        <p className="text-xs text-gray-500">
+                          © {new Date().getFullYear()} SLATE360. All rights reserved. | Built with innovation for the construction industry.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </section>
           </div>
           );
         })}
       </div>
 
-      {/* Sophisticated Footer */}
-      <footer className="bg-gradient-to-t from-black via-gray-900 to-slate-900 py-16 px-6 border-t border-gray-800/50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center space-y-8">
-            {/* Main Footer Content */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-white">SLATE360</h3>
-              <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-                The future of construction technology. Transform how you build with advanced 3D modeling, 
-                real-time collaboration, and immersive technologies.
-              </p>
-            </div>
-
-            {/* Social Media Section */}
-            <div className="flex justify-center space-x-6">
-              <a href="https://linkedin.com/company/slate360" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-              </a>
-              <a href="https://twitter.com/slate360" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                </svg>
-              </a>
-              <a href="https://youtube.com/@slate360" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-              </a>
-            </div>
-
-            {/* Navigation Links */}
-            <div className="flex flex-wrap justify-center gap-8 text-sm">
-              <Link href="/about" className="text-gray-400 hover:text-white transition-colors font-medium">
-                ABOUT
-              </Link>
-              <Link href="/contact" className="text-gray-400 hover:text-white transition-colors font-medium">
-                CONTACT
-              </Link>
-              <Link href="/pricing" className="text-gray-400 hover:text-white transition-colors font-medium">
-                PRICING
-              </Link>
-              <Link href="/examples" className="text-gray-400 hover:text-white transition-colors font-medium">
-                EXAMPLES
-              </Link>
-              <Link href="/terms" className="text-gray-400 hover:text-white transition-colors font-medium">
-                TERMS
-              </Link>
-              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors font-medium">
-                PRIVACY
-              </Link>
-            </div>
-
-            {/* CTA Section */}
-            <div className="pt-8">
-              <Link href="/login" className="bg-white text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition-colors inline-flex items-center group">
-                GET STARTED TODAY
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-
-            {/* Legal and Copyright */}
-            <div className="pt-8 border-t border-gray-800 space-y-4">
-              <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-500">
-                <Link href="/terms" className="hover:text-gray-400 transition-colors">Terms of Service</Link>
-                <Link href="/privacy" className="hover:text-gray-400 transition-colors">Privacy Policy</Link>
-                <Link href="/cookies" className="hover:text-gray-400 transition-colors">Cookie Policy</Link>
-                <Link href="/accessibility" className="hover:text-gray-400 transition-colors">Accessibility</Link>
-                <Link href="/security" className="hover:text-gray-400 transition-colors">Security</Link>
-                <Link href="/compliance" className="hover:text-gray-400 transition-colors">Compliance</Link>
-              </div>
-              <p className="text-sm text-gray-500">
-                © {new Date().getFullYear()} SLATE360. All rights reserved. | Built with innovation for the construction industry.
-              </p>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
