@@ -407,7 +407,7 @@ export default function Homepage() {
 
       {/* Vertical Line Navigation - Boring Company Style */}
       <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-40">
-        <div className="flex flex-col items-center space-y-2">
+        <div className="flex flex-col items-center">
           {/* Vertical line connecting all sections */}
           <div className="absolute top-0 bottom-0 w-px bg-gray-600"></div>
           
@@ -417,14 +417,14 @@ export default function Homepage() {
               onClick={() => scrollToTile(index)}
               className={`relative z-10 transition-all duration-500 ${
                 index === currentTile 
-                  ? 'bg-white scale-110' 
+                  ? 'bg-white' 
                   : 'bg-gray-600 hover:bg-gray-400'
               }`}
               style={{
                 width: '4px',
-                height: index === currentTile ? '32px' : '16px',
+                height: index === currentTile ? '40px' : '20px',
                 borderRadius: '2px',
-                marginTop: index === 0 ? '0' : '8px'
+                marginTop: index === 0 ? '0' : '12px'
               }}
               aria-label={`Go to ${tile.title}`}
             />
@@ -489,13 +489,13 @@ export default function Homepage() {
 
               {/* Scroll Indicator - Bottom positioned like Boring Company */}
               {index < tiles.length - 1 && (
-                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
                   <button
-                    onClick={scrollToNext}
+                    onClick={() => scrollToTile(index + 1)}
                     className="group flex flex-col items-center space-y-2 text-gray-400 hover:text-white transition-colors mx-auto"
                   >
-                    <div className="w-6 h-6 border border-gray-400 rounded-full flex items-center justify-center group-hover:border-white group-hover:bg-white/10 transition-all duration-300">
-                      <ChevronDown className="w-3 h-3 group-hover:scale-110 transition-transform" />
+                    <div className="w-12 h-12 border border-gray-400 rounded-full flex items-center justify-center group-hover:border-white group-hover:bg-white/10 transition-all duration-300">
+                      <ChevronDown className="w-6 h-6 group-hover:scale-110 transition-transform" />
                     </div>
                     <span className="text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">NEXT: {tiles[index + 1].title}</span>
                   </button>
