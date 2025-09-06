@@ -406,7 +406,7 @@ export default function Homepage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white overflow-x-hidden">
 
       {/* Horizontal Line Navigation - Boring Company Style */}
-      <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-40">
+      <div className="fixed right-8 top-1/2 transform -translate-y-1/2 -translate-y-9 z-40">
         <div className="flex flex-col items-center space-y-3">
           {tiles.map((tile, index) => (
             <button
@@ -485,7 +485,7 @@ export default function Homepage() {
 
               {/* Top Chevron - Only show if not first tile */}
               {index > 0 && (
-                <div className="absolute top-4 left-1/2 transform -translate-x-1/2">
+                <div className="absolute top-2 left-1/2 transform -translate-x-1/2">
                   <button
                     onClick={() => scrollToTile(index - 1)}
                     className="group flex flex-col items-center space-y-2 text-gray-400 hover:text-white transition-colors mx-auto"
@@ -500,7 +500,7 @@ export default function Homepage() {
 
               {/* Bottom Chevron - Only show if not last tile */}
               {index < tiles.length - 1 && (
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
                   <button
                     onClick={() => scrollToTile(index + 1)}
                     className="group flex flex-col items-center space-y-2 text-gray-400 hover:text-white transition-colors mx-auto"
