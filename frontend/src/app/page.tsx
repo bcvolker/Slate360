@@ -427,7 +427,7 @@ export default function Homepage() {
       <div ref={tilesRef} className="tiles-container">
         {tiles.map((tile, index) => (
           <div key={tile.id} className="tile-item">
-            <section id={tile.id} className="w-full max-w-7xl mx-auto px-6 py-12" style={{ minHeight: '100vh', paddingTop: '100px' }}>
+            <section id={tile.id} className="w-full max-w-7xl mx-auto px-6 py-12" style={{ minHeight: '100vh', paddingTop: '120px' }}>
               {/* Title Section */}
               <div className="text-center mb-12">
                 <h1 className="text-5xl lg:text-7xl font-bold text-white mb-4 tracking-tight">
@@ -565,5 +565,3 @@ export default function Homepage() {
     </div>
   );
 }
-// TEST CHANGE - DELETE THIS
-// OBVIOUS VISUAL TEST - DELETE THIS
