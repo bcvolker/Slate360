@@ -403,19 +403,19 @@ export default function Homepage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white overflow-x-hidden">
 
-      {/* Floating Navigation - Boring Company Style */}
+      {/* Floating Navigation - Sophisticated Design */}
       <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-40">
-        <div className="flex flex-col space-y-3">
+        <div className="flex flex-col space-y-4">
           {tiles.map((tile, index) => (
             <button
               key={index}
               onClick={() => scrollToTile(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-4 h-4 rounded-full transition-all duration-500 border-2 ${
                 index === currentTile 
-                  ? 'bg-white scale-125' 
-                  : 'bg-gray-600 hover:bg-gray-400'
+                  ? 'bg-white border-white scale-125 shadow-lg shadow-white/20' 
+                  : 'bg-transparent border-gray-500 hover:border-gray-300 hover:scale-110'
               }`}
               aria-label={`Go to ${tile.title}`}
             />
@@ -425,9 +425,23 @@ export default function Homepage() {
 
       {/* Main Content */}
       <div ref={tilesRef} className="tiles-container">
-        {tiles.map((tile, index) => (
-          <div key={tile.id} className="tile-item">
-            <section id={tile.id} className="w-full max-w-7xl mx-auto px-6 py-12" style={{ minHeight: '100vh', paddingTop: '120px' }}>
+        {tiles.map((tile, index) => {
+          // Define sophisticated background gradients for each tile
+          const tileBackgrounds = [
+            'bg-gradient-to-br from-blue-900/20 via-indigo-900/30 to-purple-900/20', // SLATE360 - Blue/Indigo
+            'bg-gradient-to-br from-emerald-900/20 via-green-900/30 to-teal-900/20', // PROJECT HUB - Green/Emerald
+            'bg-gradient-to-br from-purple-900/20 via-violet-900/30 to-pink-900/20', // BIM STUDIO - Purple/Violet
+            'bg-gradient-to-br from-cyan-900/20 via-blue-900/30 to-indigo-900/20', // 360° TOUR - Cyan/Blue
+            'bg-gradient-to-br from-orange-900/20 via-red-900/30 to-pink-900/20', // CONTENT CREATION - Orange/Red
+            'bg-gradient-to-br from-red-900/20 via-rose-900/30 to-purple-900/20', // GEOSPATIAL - Red/Rose
+            'bg-gradient-to-br from-slate-800/20 via-gray-800/30 to-zinc-800/20' // REPORTS - Slate/Gray
+          ];
+          
+          return (
+          <div key={tile.id} className={`tile-item ${tileBackgrounds[index]}`}>
+            <section id={tile.id} className="w-full max-w-7xl mx-auto px-6 py-12 relative" style={{ minHeight: '100vh', paddingTop: '120px' }}>
+              {/* Subtle overlay for depth */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-black/5 pointer-events-none"></div>
               {/* Title Section */}
               <div className="text-center mb-12">
                 <h1 className="text-5xl lg:text-7xl font-bold text-white mb-4 tracking-tight">
@@ -480,11 +494,12 @@ export default function Homepage() {
               )}
             </section>
           </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Boring Company Style Footer */}
-      <footer className="bg-black py-16 px-6">
+      {/* Sophisticated Footer */}
+      <footer className="bg-gradient-to-t from-black via-gray-900 to-slate-900 py-16 px-6 border-t border-gray-800/50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center space-y-8">
             {/* Main Footer Content */}
