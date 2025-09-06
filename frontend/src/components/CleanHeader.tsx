@@ -11,7 +11,7 @@ interface CleanHeaderProps {
 export default function CleanHeader({ className = '' }: CleanHeaderProps) {
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 bg-transparent ${className}`}>
-      <div className="max-w-7xl mx-auto px-6 py-4">
+      <div className="max-w-7xl mx-auto px-6 py-2">
         <div className="flex items-center justify-between">
           {/* Logo - Clickable to homepage */}
           <div className="flex items-center">
@@ -29,16 +29,16 @@ export default function CleanHeader({ className = '' }: CleanHeaderProps) {
           
           {/* Navigation Links */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/contact" className="text-black hover:text-gray-700 transition-colors font-semibold text-lg">
+            <Link href="/contact" className="text-white hover:text-gray-300 transition-colors font-semibold text-lg">
               CONTACT
             </Link>
-            <Link href="/about" className="text-black hover:text-gray-700 transition-colors font-semibold text-lg">
+            <Link href="/about" className="text-white hover:text-gray-300 transition-colors font-semibold text-lg">
               ABOUT
             </Link>
-            <Link href="/pricing" className="text-black hover:text-gray-700 transition-colors font-semibold text-lg">
+            <Link href="/pricing" className="text-white hover:text-gray-300 transition-colors font-semibold text-lg">
               SUBSCRIBE
             </Link>
-            <Link href="/login" className="flex items-center space-x-2 text-black hover:text-gray-700 transition-colors font-semibold text-lg">
+            <Link href="/login" className="flex items-center space-x-2 text-white hover:text-gray-300 transition-colors font-semibold text-lg">
               <LogIn className="w-5 h-5" />
               <span>LOGIN</span>
             </Link>
@@ -46,7 +46,7 @@ export default function CleanHeader({ className = '' }: CleanHeaderProps) {
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <Link href="/login" className="flex items-center space-x-2 text-black hover:text-gray-700 transition-colors font-semibold">
+            <Link href="/login" className="flex items-center space-x-2 text-white hover:text-gray-300 transition-colors font-semibold">
               <LogIn className="w-5 h-5" />
               <span>LOGIN</span>
             </Link>
