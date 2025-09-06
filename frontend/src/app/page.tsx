@@ -22,39 +22,39 @@ export default function Homepage() {
           {/* Animated background elements */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-cyan-500/10 animate-pulse"></div>
           <div className="text-center text-white relative z-10">
-            <div className="text-8xl mb-6 font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            <div className="text-5xl mb-3 font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
               🏗️
             </div>
-            <p className="text-2xl font-bold mb-2">SLATE360 PLATFORM</p>
-            <p className="text-lg text-gray-300">Construction Technology Revolution</p>
-            <div className="mt-6 flex justify-center">
-              <div className="w-16 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
+            <p className="text-lg font-bold mb-1">SLATE360 PLATFORM</p>
+            <p className="text-sm text-gray-300">Construction Technology Revolution</p>
+            <div className="mt-3 flex justify-center">
+              <div className="w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
             </div>
           </div>
         </div>
       ),
       content: (
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <h3 className="text-2xl font-bold text-white leading-tight">
+        <div className="space-y-4">
+          <div className="space-y-3">
+            <h3 className="text-xl font-bold text-white leading-tight">
               SLATE360 creates safe, efficient, and intelligent construction workflows
             </h3>
-            <p className="text-lg text-gray-300 leading-relaxed">
+            <p className="text-sm text-gray-300 leading-relaxed">
               Our platform combines cutting-edge 3D visualization, advanced project management, 
               and immersive technologies to revolutionize how you build.
             </p>
-            <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 p-4 rounded-lg border border-blue-500/30">
-              <p className="text-base font-semibold text-blue-300">
+            <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 p-3 rounded-lg border border-blue-500/30">
+              <p className="text-sm font-semibold text-blue-300">
                 The mission: solve construction complexity, enable rapid project delivery, and transform how we build.
               </p>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 pt-4">
-            <button className="bg-white text-black px-6 py-3 rounded-lg font-bold text-base hover:bg-gray-200 transition-colors flex items-center justify-center group">
+          <div className="flex flex-col sm:flex-row gap-2 pt-2">
+            <button className="bg-white text-black px-4 py-2 rounded-lg font-semibold text-sm hover:bg-gray-200 transition-colors flex items-center justify-center group">
               GET STARTED
-              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-3 h-3 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-bold text-base hover:bg-white hover:text-black transition-colors">
+            <button className="bg-transparent border-2 border-white text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-white hover:text-black transition-colors">
               VIEW DEMO
             </button>
           </div>
@@ -439,32 +439,32 @@ export default function Homepage() {
           
           return (
           <div key={tile.id} className={`tile-item ${tileBackgrounds[index]}`}>
-            <section id={tile.id} className="w-full max-w-7xl mx-auto px-6 py-12 relative" style={{ minHeight: '100vh', paddingTop: '120px' }}>
+            <section id={tile.id} className="w-full max-w-6xl mx-auto px-4 py-8 relative" style={{ minHeight: '100vh', paddingTop: '120px' }}>
               {/* Subtle overlay for depth */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-black/5 pointer-events-none"></div>
               {/* Title Section */}
-              <div className="text-center mb-12">
-                <h1 className="text-5xl lg:text-7xl font-bold text-white mb-4 tracking-tight">
+              <div className="text-center mb-8">
+                <h1 className="text-3xl lg:text-4xl font-bold text-white mb-3 tracking-tight">
                   {tile.title}
                 </h1>
                 {tile.subtitle && (
-                  <h2 className="text-xl lg:text-2xl font-semibold text-gray-300 mb-4">
+                  <h2 className="text-lg lg:text-xl font-semibold text-gray-300 mb-3">
                     {tile.subtitle}
                   </h2>
                 )}
                 {tile.description && (
-                  <p className="text-lg text-gray-400 leading-relaxed max-w-3xl mx-auto">
+                  <p className="text-base text-gray-400 leading-relaxed max-w-2xl mx-auto">
                     {tile.description}
                   </p>
                 )}
               </div>
 
-              {/* Content Layout - Full Width */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Content Layout - Optimized */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 {/* Viewer Side */}
                 {tile.viewer && (
                   <div className={`${index % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}`}>
-                    <div className="w-full h-[400px] rounded-lg overflow-hidden">
+                    <div className="w-full h-[300px] rounded-lg overflow-hidden">
                       {tile.viewer}
                     </div>
                   </div>
@@ -472,7 +472,7 @@ export default function Homepage() {
                 
                 {/* Content Side */}
                 <div className={`${index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}>
-                  <div className="h-[400px] flex items-center">
+                  <div className="h-[300px] flex items-center">
                     {tile.content}
                   </div>
                 </div>
@@ -480,7 +480,7 @@ export default function Homepage() {
 
               {/* Scroll Indicator */}
               {index < tiles.length - 1 && (
-                <div className="text-center pt-16">
+                <div className="text-center pt-8">
                   <button
                     onClick={scrollToNext}
                     className="group flex flex-col items-center space-y-4 text-gray-400 hover:text-white transition-colors mx-auto"
