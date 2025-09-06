@@ -19,10 +19,10 @@ export default function CleanHeader({ className = '' }: CleanHeaderProps) {
               <Image 
                 src="/slate360-logo.png" 
                 alt="Slate360 Logo" 
-                width={300} 
-                height={84} 
+                width={360} 
+                height={100} 
                 priority 
-                className="h-20 w-auto"
+                className="h-24 w-auto"
               />
             </Link>
           </div>
