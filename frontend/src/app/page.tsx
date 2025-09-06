@@ -349,7 +349,7 @@ export default function Homepage() {
         </div>
       )
     }
-  ];
+  };
 
   useEffect(() => {
     const handleScroll = () => {
