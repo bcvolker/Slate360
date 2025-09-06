@@ -551,12 +551,12 @@ export default function Homepage() {
               )}
             </section>
           </div>
-          );
         })}
       </div>
 
     </div>
   );
 }
-/ /   T E S T   C H A N G E   -   D E L E T E   T H I S  
+/ /   T E S T   C H A N G E   -   D E L E T E   T H I S 
+ 
  
