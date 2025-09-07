@@ -20,15 +20,12 @@
   },
   "include": [
     "next-env.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx",
+    "**/*.ts",
+    "**/*.tsx",
     ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "src/examples",
-    "src/**/__examples__/**",
-    "src/**/*.test.ts",
-    "src/**/*.spec.ts"
+    "src/examples"
   ]
 }

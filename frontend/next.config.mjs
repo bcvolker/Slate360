@@ -1,12 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  typescript: {
-    // TEMPORARY: This ensures the build passes.
-    // Remove this line once you are ready to fix the legacy files.
-    ignoreBuildErrors: true,
-  },
+  // The ignoreBuildErrors property has been removed.
   images: {
+    // Add any external image domains your site uses here.
     domains: ['localhost', 'images.unsplash.com'],
   },
   async rewrites() {
