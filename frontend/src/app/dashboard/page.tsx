@@ -1,7 +1,7 @@
 // frontend/src/app/dashboard/page.tsx
 'use client';
 import { useState, useEffect } from 'react';
-import { Project } from '@/types/project';
+import { Project } from '@/types/types';
 import { useOfflineProjects } from '@/hooks/useOfflineProjects';
 import VirtualProjectList from '@/components/VirtualProjectList';
 import ProjectAnalytics from '@/components/ProjectAnalytics';

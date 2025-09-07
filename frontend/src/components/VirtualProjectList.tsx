@@ -1,5 +1,5 @@
 // frontend/src/components/VirtualProjectList.tsx
-import { Project } from '@/types/project';
+import { Project } from '@/types/types';
 
 interface VirtualProjectListProps {
   projects: Project[];

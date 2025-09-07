@@ -1,5 +1,5 @@
 // frontend/src/lib/sync/projectSync.ts
-import { Project } from '@/types/project';
+import { Project } from '@/types/types';
 import { fromMongo, fromIndexedDB, toIndexedDB } from '@/lib/adapters/projectAdapters';
 import { getDB } from '@/lib/db/indexedDB';
 

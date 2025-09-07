@@ -42,3 +42,8 @@ coverage/
 # Temporary folders
 tmp/
 temp/
+
+# Diagnostic Reports
+DIAGNOSTIC_REPORTS/
+PROJECT_DIAGNOSTIC_*.zip
+PROJECT_DIAGNOSTIC_*.txt

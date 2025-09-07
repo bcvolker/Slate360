@@ -22,10 +22,10 @@ try {
     # Define temporary file paths for the components
     $summaryFilePath = Join-Path $outputDir "SUMMARY_$timestamp.md"
     $sourceZipPath = Join-Path $outputDir "SOURCE_$timestamp.zip"
-
+    
     # --- 1. Generate the Summary Report (Fast Operation) ---
     Write-Host "[+] Generating quick summary report..."
-
+    
     $summaryContent = [System.Text.StringBuilder]::new()
 
     $summaryContent.AppendLine("# SLATE360 Project Diagnostic Summary") | Out-Null
@@ -36,26 +36,39 @@ try {
     $summaryContent.AppendLine("## Environment Info") | Out-Null
     $summaryContent.AppendLine("```text") | Out-Null
     $summaryContent.AppendLine("PowerShell Version: $($PSVersionTable.PSVersion)") | Out-Null
-    $summaryContent.AppendLine("$(Get-ComputerInfo | Select-Object "OsName", "OsVersion" | Format-List | Out-String)") | Out-Null
+    try {
+        $computerInfo = Get-ComputerInfo | Select-Object "OsName", "OsVersion" | Format-List | Out-String
+        $summaryContent.AppendLine($computerInfo) | Out-Null
+    } catch {
+        $summaryContent.AppendLine("OS Info: Windows $(Get-WmiObject -Class Win32_OperatingSystem).Caption") | Out-Null
+    }
     $summaryContent.AppendLine("```") | Out-Null
 
     $summaryContent.AppendLine("## Git Status") | Out-Null
     $summaryContent.AppendLine("```text") | Out-Null
-    $summaryContent.AppendLine("$(git -C $projectRoot status)") | Out-Null
-    $summaryContent.AppendLine("### Recent Commits") | Out-Null
-    $summaryContent.AppendLine("$(git -C $projectRoot log -n 5 --pretty=format:'%h - %an, %ar : %s')") | Out-Null
+    try {
+        $gitStatus = git -C $projectRoot status 2>&1
+        $summaryContent.AppendLine($gitStatus) | Out-Null
+        $summaryContent.AppendLine("### Recent Commits") | Out-Null
+        $gitLog = git -C $projectRoot log -n 5 --pretty=format:'%h - %an, %ar : %s' 2>&1
+        $summaryContent.AppendLine($gitLog) | Out-Null
+    } catch {
+        $summaryContent.AppendLine("Git not available or not a git repository") | Out-Null
+    }
     $summaryContent.AppendLine("```") | Out-Null
 
     # -- Project Structure Tree --
     $summaryContent.AppendLine("## Project File Structure") | Out-Null
     $summaryContent.AppendLine("```text") | Out-Null
     if (Get-Command tree -ErrorAction SilentlyContinue) {
-        $summaryContent.AppendLine("$(tree $frontendDir /A /F | Out-String)") | Out-Null
+        $treeOutput = tree $frontendDir /A /F 2>&1 | Out-String
+        $summaryContent.AppendLine($treeOutput) | Out-Null
     } else {
-         $summaryContent.AppendLine("$(Get-ChildItem -Path $frontendDir -Recurse -Exclude "node_modules", ".next" | ForEach-Object { $_.FullName.Replace($frontendDir, "") } | Out-String)") | Out-Null
+        $fileList = Get-ChildItem -Path $frontendDir -Recurse -Exclude "node_modules", ".next" | ForEach-Object { $_.FullName.Replace($frontendDir, "") }
+        $summaryContent.AppendLine($fileList) | Out-Null
     }
     $summaryContent.AppendLine("```") | Out-Null
-
+    
     # -- Key Configuration Files --
     $summaryContent.AppendLine("## Key Configuration Files") | Out-Null
     $configFiles = @("package.json", "next.config.mjs", "tsconfig.json", "tailwind.config.js")
@@ -64,9 +77,10 @@ try {
         if (Test-Path $filePath) {
             $summaryContent.AppendLine("### $file") | Out-Null
             $language = if ($file.EndsWith(".json")) { "json" } else { "javascript" }
-            $summaryContent.AppendLine("``````$language") | Out-Null
-            $summaryContent.AppendLine("$(Get-Content $filePath -Raw)") | Out-Null
-            $summaryContent.AppendLine("``````") | Out-Null
+            $summaryContent.AppendLine("```$language") | Out-Null
+            $fileContent = Get-Content $filePath -Raw
+            $summaryContent.AppendLine($fileContent) | Out-Null
+            $summaryContent.AppendLine("```") | Out-Null
         }
     }
 
@@ -74,11 +88,13 @@ try {
     $summaryContent.AppendLine("## NPM Dependency Tree (Top 5 Levels)") | Out-Null
     $summaryContent.AppendLine("```text") | Out-Null
     try {
-        cd $frontendDir
-        $summaryContent.AppendLine("$(npm ls --depth=5 2>&1 | Out-String)") | Out-Null
-        cd $projectRoot
+        Push-Location $frontendDir
+        $npmOutput = npm ls --depth=5 2>&1 | Out-String
+        $summaryContent.AppendLine($npmOutput) | Out-Null
+        Pop-Location
     } catch {
         $summaryContent.AppendLine("Error running 'npm ls': $($_.Exception.Message)") | Out-Null
+        Pop-Location
     }
     $summaryContent.AppendLine("```") | Out-Null
 
@@ -100,7 +116,7 @@ try {
     # --- 4. Cleanup ---
     Remove-Item $summaryFilePath
     Remove-Item $sourceZipPath
-
+    
     Write-Host "----------------------------------------------------" -ForegroundColor Green
     Write-Host "[SUCCESS] Diagnostic report generated successfully!" -ForegroundColor Green
     Write-Host "Your complete report is located at: $finalZipPath"

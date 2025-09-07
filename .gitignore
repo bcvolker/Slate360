@@ -1,2 +1,13 @@
-
+﻿# Diagnostic Reports
 /DIAGNOSTIC_REPORTS/
+
+# Next.js build files
+frontend/.next/
+frontend/out/
+
+# Node dependencies
+frontend/node_modules/
+
+# Other
+.DS_Store
+*.log

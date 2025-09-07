@@ -1,4 +1,4 @@
-import { ProjectDatabase } from '../db/indexedDB';
+import { SlateDB } from '../db/indexedDB';
 import { Project } from '@/types/types';
 import { OfflineProject, SyncQueueItem } from '../db/indexedDB';
 import { logAudit } from '../audit';
@@ -41,12 +41,12 @@ export interface SyncMetadata {
 }
 
 export class EnhancedProjectSync {
-  private db: ProjectDatabase;
+  private db: SlateDB;
   private syncInProgress: boolean = false;
   private syncAbortController: AbortController | null = null;
 
   constructor() {
-    this.db = new (require('../db/indexedDB').SlateDB)();
+    this.db = new SlateDB();
   }
 
   /**
