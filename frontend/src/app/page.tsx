@@ -1,12 +1,9 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Dynamically import heavy components to prevent SSR issues
-const ThreeDModelViewer = dynamic(() => import('../components/viewers/ThreeDModelViewer'), { ssr: false });
-const PhotoSphereViewer = dynamic(() => import('../components/viewers/PhotoSphereViewer'), { ssr: false });
+// NOTE: The dynamic imports for the viewers have been removed to fix the build error.
 
 const TILES = [
     { id: 'slate360', title: 'Slate360', viewerType: '3d-model' },
@@ -22,7 +19,6 @@ const TILES = [
 const Homepage = () => {
     const [activeTileIndex, setActiveTileIndex] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
-    const isWheeling = useRef(false);
 
     const scrollToTile = (index: number) => {
         const tileElement = document.getElementById(TILES[index].id);
@@ -101,9 +97,8 @@ const Homepage = () => {
 
             {/* Scroll Container */}
             <div ref={containerRef} className="h-screen w-screen overflow-y-scroll snap-y snap-mandatory">
-                {TILES.map((tile, index) => (
+                {TILES.map((tile) => (
                     <section key={tile.id} id={tile.id} className="h-screen w-screen snap-start flex items-center justify-center">
-                        {/* This is a placeholder for the actual viewer component */}
                         <div className="text-center">
                             <h1 className="text-4xl font-bold">{tile.title}</h1>
                             <p className="mt-4 text-gray-400">Content Coming Soon</p>
