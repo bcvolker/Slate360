@@ -1,5 +1,0 @@
-[33m977a60c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m feat: Transform Slate360 homepage with Boring Company-inspired design
-[33m3984378[m feat: Add Vercel deployment patches and preview mode
-[33m5a3323a[m FIX: Exclude src/examples from TypeScript compilation to resolve AuditLogExamples error
-[33m4874b11[m FEAT: Implement comprehensive SLATE360 architectural refactor - Unified type system with Zod schema - Created data adapters for MongoDB/IndexedDB conversion - Refactored ProjectSyncService with clean interfaces - Updated all components to use unified Project type - Fixed all TypeScript compilation errors - Build now successful
-[33m0d93cd2[m fix: Complete refactoring implementation with all TypeScript errors resolved
