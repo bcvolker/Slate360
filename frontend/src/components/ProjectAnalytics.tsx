@@ -1,4 +1,4 @@
-import { Project } from '@/types/types';
+import { Project } from '@/types/project';
 
 interface ProjectAnalyticsProps {
   project: Project;

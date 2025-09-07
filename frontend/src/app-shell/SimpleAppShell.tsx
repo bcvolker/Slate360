@@ -6,16 +6,17 @@ import CleanHeader from '@/components/CleanHeader';
 
 interface SimpleAppShellProps {
   children: React.ReactNode;
+  header?: React.ReactNode;
 }
 
-const SimpleAppShell: React.FC<SimpleAppShellProps> = ({ children }) => {
+const SimpleAppShell: React.FC<SimpleAppShellProps> = ({ children, header }) => {
   const pathname = usePathname();
   const isHomepage = pathname === '/';
 
   return (
     <div className={`min-h-screen ${isHomepage ? 'bg-black' : 'bg-gray-50'}`}>
       {/* Clean Header */}
-      <CleanHeader />
+      {header || <CleanHeader />}
       
       {/* Main content */}
       <main>

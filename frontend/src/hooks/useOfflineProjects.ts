@@ -1,6 +1,7 @@
+// frontend/src/hooks/useOfflineProjects.ts
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { Project } from '@/types/types';
+import { Project } from '@/types/project';
 import { ProjectSyncService } from '@/lib/sync/projectSync';
 
 export function useOfflineProjects() {
