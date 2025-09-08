@@ -17,7 +17,7 @@ import {
   getDemoFilesByProject,
   getDemoNotifications
 } from '../lib/demo/demoData';
-import { Project } from '@/types/types';
+import { Project } from '@/types';
 
 interface DemoContextType {
   // Demo mode state
@@ -101,48 +101,13 @@ export function DemoProvider({ children }: DemoProviderProps) {
       
       if (result.success && result.projectId) {
         const newProject = {
-          _id: result.projectId,
+          id: result.projectId,
           name: projectData.name || 'New Demo Project',
           description: projectData.description || 'A demo project created for testing purposes.',
-          status: 'planning',
-          type: 'other',
-          location: {
-            address: 'Demo Address',
-            city: 'Demo City',
-            state: 'DS',
-            zipCode: '00000',
-            country: 'USA',
-            coordinates: { lat: 0, lng: 0 }
-          },
-          client: {
-            name: 'Demo Client',
-            company: 'Demo Company',
-            email: 'demo@example.com',
-            phone: '+1-555-0000'
-          },
-          timeline: {
-            startDate: new Date(),
-            endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
-            milestones: []
-          },
-          budget: {
-            estimated: 100000,
-            actual: 0,
-            currency: 'USD',
-            breakdown: {
-              materials: 50000,
-              labor: 30000,
-              equipment: 10000,
-              permits: 5000,
-              contingency: 5000
-            }
-          },
-          team: [],
-          tags: ['demo', 'new'],
-          createdBy: 'demo_user_001' as any,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        } as any as Project;
+          imageUrl: 'https://images.unsplash.com/photo-1542361389-03504433a94f',
+          status: 'In Progress',
+          bimModelUrl: undefined
+        } as Project;
 
         setProjects(prev => [newProject, ...prev]);
         
@@ -163,8 +128,8 @@ export function DemoProvider({ children }: DemoProviderProps) {
     try {
       setProjects(prev => 
         prev.map(project => 
-          project._id === id 
-            ? { ...project, ...updates, updatedAt: new Date() }
+          project.id === id 
+            ? { ...project, ...updates }
             : project
         )
       );
@@ -180,7 +145,7 @@ export function DemoProvider({ children }: DemoProviderProps) {
 
   const deleteDemoProject = async (id: string) => {
     try {
-      setProjects(prev => prev.filter(project => project._id !== id));
+      setProjects(prev => prev.filter(project => project.id !== id));
       toast.success('Demo project deleted successfully!');
       return { success: true };
     } catch (error) {
@@ -316,4 +281,5 @@ export function useDemo() {
   return context;
 }
 
-export default DemoProvider;
+const DemoProviderComponent = DemoProvider;
+export default DemoProviderComponent;
