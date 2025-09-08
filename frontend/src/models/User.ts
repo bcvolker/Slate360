@@ -1,7 +1,9 @@
 /**
- * User model for MongoDB
+ * User model - disabled for mock mode
+ * This file is kept for future use when real MongoDB integration is needed
  */
 
+/*
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IUser extends Document {
@@ -17,64 +19,58 @@ export interface IUser extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+*/
 
-const UserSchema = new Schema<IUser>({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
-  },
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    enum: ['user', 'viewer', 'member', 'manager', 'admin', 'ceo'],
-    default: 'user',
-  },
-  tier: {
-    type: String,
-    enum: ['free', 'basic', 'premium', 'enterprise'],
-    default: 'free',
-  },
-  stripeCustomerId: {
-    type: String,
-    sparse: true,
-  },
-  stripeSubscriptionId: {
-    type: String,
-    sparse: true,
-  },
-  stripePriceId: {
-    type: String,
-    sparse: true,
-  },
-  stripeCurrentPeriodEnd: {
-    type: Date,
-    sparse: true,
-  },
-}, {
-  timestamps: true,
-});
+// Mock interface for development
+export interface IUser {
+  _id?: string;
+  email: string;
+  name: string;
+  password: string;
+  role: 'user' | 'viewer' | 'member' | 'manager' | 'admin' | 'ceo';
+  tier: 'free' | 'basic' | 'premium' | 'enterprise';
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+  stripePriceId?: string;
+  stripeCurrentPeriodEnd?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-// Index for email lookups
-UserSchema.index({ email: 1 });
+// Mock implementations
+export const User = {
+  create: async (data: Partial<IUser>) => {
+    console.log('🔧 User.create - using mock implementation');
+    return { ...data, _id: Date.now().toString() };
+  },
+  find: async (query: any) => {
+    console.log('🔧 User.find - using mock implementation');
+    return [];
+  },
+  findOne: async (query: any) => {
+    console.log('🔧 User.findOne - using mock implementation');
+    return null;
+  },
+  findById: async (id: string) => {
+    console.log('🔧 User.findById - using mock implementation');
+    return null;
+  },
+  findByIdAndUpdate: async (id: string, update: any) => {
+    console.log('🔧 User.findByIdAndUpdate - using mock implementation');
+    return null;
+  },
+  findByIdAndDelete: async (id: string) => {
+    console.log('🔧 User.findByIdAndDelete - using mock implementation');
+    return null;
+  },
+  deleteMany: async (query: any) => {
+    console.log('🔧 User.deleteMany - using mock implementation');
+    return { deletedCount: 0 };
+  },
+  aggregate: async (pipeline: any[]) => {
+    console.log('🔧 User.aggregate - using mock implementation');
+    return [];
+  }
+};
 
-// Index for Stripe customer lookups
-UserSchema.index({ stripeCustomerId: 1 });
-
-// Index for role-based queries
-UserSchema.index({ role: 1 });
-
-// Index for tier-based queries
-UserSchema.index({ tier: 1 });
-
-export default mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
+export default User;

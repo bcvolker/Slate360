@@ -1,5 +1,6 @@
 // frontend/src/types/project.ts
-import { Document } from 'mongoose';
+// Legacy project types - kept for backward compatibility
+// New projects should use the simplified types from @/types
 
 // Sub-interfaces
 export interface ILocation {
@@ -52,7 +53,7 @@ export interface IBudget {
 }
 
 export interface ITeamMember {
-  userId: string | import('mongoose').Types.ObjectId;
+  userId: string;
   role: 'project_manager' | 'architect' | 'engineer' | 'designer' | 'contractor' | 'consultant';
   permissions: ('read' | 'write' | 'admin')[];
   joinedAt?: Date | string;
@@ -82,9 +83,6 @@ export interface UnifiedProject {
   budgetUtilization?: number;
   teamSize?: number;
 }
-
-// For Mongoose backend compatibility
-export type UnifiedProjectDocument = UnifiedProject & Document;
 
 // For API responses and filters
 export interface IProjectsResponse {

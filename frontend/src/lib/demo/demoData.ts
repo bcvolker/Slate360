@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-import { Project } from '@/types/types';
+import { Project } from '@/types';
 
 // Helper function to create valid ObjectId from a seed string
 const createObjectId = (seed: string) => {
@@ -11,7 +10,7 @@ const createObjectId = (seed: string) => {
   
   // Convert to a valid 24-character hex string
   const hexString = Math.abs(hash).toString(16).padStart(24, '0');
-  return new mongoose.Types.ObjectId(hexString);
+  return hexString;
 };
 
 // Demo project data - using Partial<Project> to allow for demo data flexibility

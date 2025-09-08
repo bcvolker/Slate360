@@ -1,3 +1,7 @@
+// MongoDB connection utilities - disabled for mock mode
+// This file is kept for future use when real MongoDB integration is needed
+
+/*
 import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI!;
@@ -16,113 +20,39 @@ let connectionState: ConnectionState = {
   isConnecting: false
 };
 
-/**
- * Connect to MongoDB
- */
-export async function connectToDatabase(): Promise<typeof mongoose> {
-  // If already connected, return existing connection
-  if (connectionState.isConnected) {
-    return mongoose;
-  }
-
-  // If already connecting, wait for connection
-  if (connectionState.isConnecting) {
-    while (connectionState.isConnecting) {
-      await new Promise(resolve => setTimeout(resolve, 100));
-    }
-    return mongoose;
-  }
-
-  try {
-    connectionState.isConnecting = true;
-
-    // Connect to MongoDB
-    await mongoose.connect(MONGODB_URI, {
-      bufferCommands: false,
-      maxPoolSize: 10,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-    });
-
-    connectionState.isConnected = true;
-    connectionState.isConnecting = false;
-
-    console.log('✅ Connected to MongoDB');
-    return mongoose;
-
-  } catch (error) {
-    connectionState.isConnecting = false;
-    console.error('❌ Failed to connect to MongoDB:', error);
-    throw error;
-  }
+// Mock implementations for development
+export async function connectToDatabase(): Promise<any> {
+  console.log('🔧 MongoDB connection disabled - using mock data');
+  return null;
 }
 
-/**
- * Disconnect from MongoDB
- */
 export async function disconnectFromDatabase(): Promise<void> {
-  try {
-    if (connectionState.isConnected) {
-      await mongoose.disconnect();
-      connectionState.isConnected = false;
-      console.log('✅ Disconnected from MongoDB');
-    }
-  } catch (error) {
-    console.error('❌ Failed to disconnect from MongoDB:', error);
-    throw error;
-  }
+  console.log('🔧 MongoDB disconnection disabled - using mock data');
 }
 
-/**
- * Get connection status
- */
 export function getConnectionStatus(): ConnectionState {
-  return { ...connectionState };
+  return { isConnected: false, isConnecting: false };
 }
 
-/**
- * Check if connected to MongoDB
- */
 export function isConnected(): boolean {
-  return connectionState.isConnected;
+  return false;
+}
+*/
+
+// Mock implementations for development
+export async function connectToDatabase(): Promise<any> {
+  console.log('🔧 MongoDB connection disabled - using mock data');
+  return null;
 }
 
-// Handle connection events
-mongoose.connection.on('connected', () => {
-  connectionState.isConnected = true;
-  connectionState.isConnecting = false;
-  console.log('✅ MongoDB connection established');
-});
+export async function disconnectFromDatabase(): Promise<void> {
+  console.log('🔧 MongoDB disconnection disabled - using mock data');
+}
 
-mongoose.connection.on('error', (error) => {
-  connectionState.isConnected = false;
-  connectionState.isConnecting = false;
-  console.error('❌ MongoDB connection error:', error);
-});
+export function getConnectionStatus(): { isConnected: boolean; isConnecting: boolean } {
+  return { isConnected: false, isConnecting: false };
+}
 
-mongoose.connection.on('disconnected', () => {
-  connectionState.isConnected = false;
-  connectionState.isConnecting = false;
-  console.log('⚠️ MongoDB connection disconnected');
-});
-
-// Graceful shutdown
-process.on('SIGINT', async () => {
-  try {
-    await disconnectFromDatabase();
-    process.exit(0);
-  } catch (error) {
-    console.error('Error during shutdown:', error);
-    process.exit(1);
-  }
-});
-
-process.on('SIGTERM', async () => {
-  try {
-    await disconnectFromDatabase();
-    process.exit(0);
-  } catch (error) {
-    console.error('Error during shutdown:', error);
-    process.exit(1);
-  }
-});
+export function isConnected(): boolean {
+  return false;
+}
