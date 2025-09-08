@@ -4,7 +4,7 @@ Write-Host "=====================================" -ForegroundColor Cyan
 Write-Host ""
 
 Write-Host "[1/4] Running diagnostic report..." -ForegroundColor Yellow
-& ".\RUN_DIAGNOSTIC.bat"
+node gather-report.js
 Write-Host "Diagnostic report completed!" -ForegroundColor Green
 Write-Host ""
 

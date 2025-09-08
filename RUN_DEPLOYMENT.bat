@@ -12,7 +12,7 @@ echo.
 pause
 
 echo [1/4] Running diagnostic report...
-call RUN_DIAGNOSTIC.bat
+node gather-report.js
 echo.
 
 echo [2/4] Checking Git status...
