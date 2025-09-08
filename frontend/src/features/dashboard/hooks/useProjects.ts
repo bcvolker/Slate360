@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Project } from '@/types/types';
+import { UnifiedProject } from '@/types/project';
 import { projectService } from '@/services/project.service';
 
 export function useProjects() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<UnifiedProject[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,7 +22,7 @@ export function useProjects() {
     }
   }, []);
 
-  const createProject = useCallback(async (projectData: Partial<Project>) => {
+  const createProject = useCallback(async (projectData: Partial<UnifiedProject>) => {
     try {
       const newProject = await projectService.create(projectData);
       setProjects(prev => [...prev, newProject]);
@@ -33,10 +33,10 @@ export function useProjects() {
     }
   }, []);
 
-  const updateProject = useCallback(async (id: string, updates: Partial<Project>) => {
+  const updateProject = useCallback(async (id: string, updates: Partial<UnifiedProject>) => {
     try {
       const updatedProject = await projectService.update(id, updates);
-      setProjects(prev => prev.map(p => p.id === id ? updatedProject : p));
+      setProjects(prev => prev.map(p => p._id === id ? updatedProject : p));
       return updatedProject;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update project');
@@ -47,7 +47,7 @@ export function useProjects() {
   const deleteProject = useCallback(async (id: string) => {
     try {
       await projectService.delete(id);
-      setProjects(prev => prev.filter(p => p.id !== id));
+      setProjects(prev => prev.filter(p => p._id !== id));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete project');
       throw err;

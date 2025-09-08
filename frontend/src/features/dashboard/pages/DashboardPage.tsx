@@ -1,14 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Project } from '@/types/types';
+import { UnifiedProject } from '@/types/project';
 import { useProjects } from '../hooks/useProjects';
 import VirtualProjectList from '../components/VirtualProjectList';
 import ProjectAnalytics from '../components/ProjectAnalytics';
 
 export default function DashboardPage() {
   const { projects, isLoading, error } = useProjects();
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<UnifiedProject | null>(null);
 
   // Automatically select the first project once data has loaded
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function DashboardPage() {
           <VirtualProjectList 
             projects={projects} 
             onSelectProject={setSelectedProject}
-            selectedProjectId={selectedProject?.id}
+            selectedProjectId={selectedProject?._id}
           />
         </div>
       </aside>

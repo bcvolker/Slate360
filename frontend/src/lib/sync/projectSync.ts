@@ -1,29 +1,60 @@
 // frontend/src/lib/sync/projectSync.ts
-import { Project } from '@/types/types';
-import { fromMongo, fromIndexedDB, toIndexedDB } from '@/lib/adapters/projectAdapters';
-import { getDB } from '@/lib/db/indexedDB';
+import { UnifiedProject } from '@/types/project';
+import { openDB } from 'idb';
 
-export class ProjectSyncService {
-  static async fetchAllFromServer(): Promise<Project[]> {
-    console.log("MOCK: Fetching projects from API...");
-    // This is where you will put your real API call next week.
-    const mockApiResponse = [{ _id: 'server123', name: 'Server-Side Project', status: 'active' }];
-    return mockApiResponse.map(fromMongo);
+const DB_NAME = 'slate360-offline';
+const STORE_NAME = 'projects';
+
+class ProjectSyncService {
+  private dbPromise: Promise<any>;
+
+  constructor() {
+    this.dbPromise = openDB(DB_NAME, 1, {
+      upgrade(db) {
+        db.createObjectStore(STORE_NAME, { keyPath: '_id' });
+      },
+    });
   }
 
-  static async getAllLocal(): Promise<Project[]> {
-    const db = await getDB();
-    const records = await db.projects.toArray();
-    return records.map(fromIndexedDB);
+  async getOfflineProjects(): Promise<UnifiedProject[]> {
+    const db = await this.dbPromise;
+    return await db.getAll(STORE_NAME);
   }
 
-  static async upsertLocal(project: Project): Promise<void> {
-    const db = await getDB();
-    await db.projects.put(toIndexedDB(project));
+  async saveToOffline(projects: UnifiedProject[]): Promise<void> {
+    const db = await this.dbPromise;
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    for (const project of projects) {
+      if (project._id) {
+        await tx.store.put(project);
+      }
+    }
+    await tx.done;
+  }
+
+  async syncProjects(): Promise<UnifiedProject[]> {
+    try {
+      const offlineProjects = await this.getOfflineProjects();
+      // This is where you would fetch from your real API endpoint
+      const response = await fetch('/api/projects/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projects: offlineProjects }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok during sync');
+      }
+
+      const syncedProjects: UnifiedProject[] = await response.json();
+      await this.saveToOffline(syncedProjects);
+      return syncedProjects;
+    } catch (error) {
+      console.error('Sync failed, returning offline projects:', error);
+      // In case of network failure, return what's available offline
+      return this.getOfflineProjects();
+    }
   }
 }
 
-// Export the missing networkManager to satisfy any legacy imports
-export const networkManager = {
-  fetchProjects: ProjectSyncService.fetchAllFromServer,
-};
+export const projectSyncService = new ProjectSyncService();

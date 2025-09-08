@@ -21,6 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <div className="bg-red-600 text-white text-center p-2">
+          TEST BUILD – if you see this, Vercel deployed correctly
+        </div>
         <Providers>
           <SimpleAppShell header={<CleanHeader />}>
             {children}

@@ -1,13 +1,12 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
-import { Project, ProjectSchema, validateProject } from '@/types/types';
-import { fromMongo, fromIndexedDB, toIndexedDB } from '@/lib/adapters/projectAdapters';
-import { ProjectSyncService } from '@/lib/sync/projectSync';
+import { UnifiedProject } from '@/types/project';
+import { projectSyncService } from '@/lib/sync/projectSync';
 
 // Database schema
 interface ProjectDB extends DBSchema {
   projects: {
     key: string;
-    value: Project;
+    value: UnifiedProject;
     indexes: {
       'by-name': string;
       'by-status': string;
@@ -22,7 +21,7 @@ interface ProjectDB extends DBSchema {
     value: {
       id: string;
       action: 'create' | 'update' | 'delete';
-      project: Project;
+      project: UnifiedProject;
       timestamp: number;
       retryCount: number;
     };
@@ -47,7 +46,7 @@ class ProjectService {
       this.db = await openDB<ProjectDB>(DB_NAME, DB_VERSION, {
         upgrade(db) {
           // Create projects store
-          const projectStore = db.createObjectStore('projects', { keyPath: 'id' });
+          const projectStore = db.createObjectStore('projects', { keyPath: '_id' });
           
           // Create indexes
           projectStore.createIndex('by-name', 'name');
@@ -80,14 +79,13 @@ class ProjectService {
   /**
    * Get all local projects
    */
-  async getAllLocal(): Promise<Project[]> {
+  async getAllLocal(): Promise<UnifiedProject[]> {
     await this.ensureInitialized();
     
     if (!this.db) throw new Error('Database not initialized');
 
     try {
-      const rawProjects = await this.db.getAll('projects');
-      return rawProjects.map(project => fromIndexedDB(project));
+      return await this.db.getAll('projects');
     } catch (error) {
       throw new Error(`Failed to get local projects: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -96,14 +94,14 @@ class ProjectService {
   /**
    * Get project by ID
    */
-  async getById(id: string): Promise<Project | null> {
+  async getById(id: string): Promise<UnifiedProject | null> {
     await this.ensureInitialized();
     
     if (!this.db) throw new Error('Database not initialized');
 
     try {
       const project = await this.db.get('projects', id);
-      return project ? fromIndexedDB(project) : null;
+      return project || null;
     } catch (error) {
       throw new Error(`Failed to get project: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -112,30 +110,45 @@ class ProjectService {
   /**
    * Create a new project
    */
-  async create(projectData: Partial<Project>): Promise<Project> {
+  async create(projectData: Partial<UnifiedProject>): Promise<UnifiedProject> {
     await this.ensureInitialized();
     
     if (!this.db) throw new Error('Database not initialized');
 
     try {
       // Generate a new ID if not provided
-      const projectWithId = {
-        ...projectData,
-        id: projectData.id || `project_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      const projectWithId: UnifiedProject = {
+        _id: projectData._id || `project_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        name: projectData.name || 'Untitled Project',
+        description: projectData.description || '',
+        type: projectData.type || 'other',
+        status: projectData.status || 'draft',
+        location: projectData.location || {
+          address: '',
+          city: '',
+          state: '',
+          zipCode: '',
+          country: 'USA'
+        },
+        client: projectData.client || {
+          name: '',
+          email: ''
+        },
+        timeline: projectData.timeline || {},
+        budget: projectData.budget || { currency: 'USD' },
+        team: projectData.team || [],
+        tags: projectData.tags || [],
+        metadata: projectData.metadata || {},
+        createdBy: projectData.createdBy || 'unknown',
         createdAt: projectData.createdAt || new Date(),
         updatedAt: new Date(),
+        ...projectData
       };
 
-      // Validate the project data
-      const validatedProject = validateProject(projectWithId);
-
       // Store in IndexedDB
-      await this.db.add('projects', toIndexedDB(validatedProject));
+      await this.db.add('projects', projectWithId);
 
-      // Add to sync queue for online sync
-      await this.addToSyncQueue('create', validatedProject);
-
-      return validatedProject;
+      return projectWithId;
     } catch (error) {
       throw new Error(`Failed to create project: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -144,7 +157,7 @@ class ProjectService {
   /**
    * Update an existing project
    */
-  async update(id: string, updates: Partial<Project>): Promise<Project> {
+  async update(id: string, updates: Partial<UnifiedProject>): Promise<UnifiedProject> {
     await this.ensureInitialized();
     
     if (!this.db) throw new Error('Database not initialized');
@@ -160,20 +173,14 @@ class ProjectService {
       const updatedProject = {
         ...existingProject,
         ...updates,
-        id, // Ensure ID doesn't change
+        _id: id, // Ensure ID doesn't change
         updatedAt: new Date(),
       };
 
-      // Validate the updated project
-      const validatedProject = validateProject(updatedProject);
-
       // Update in IndexedDB
-      await this.db.put('projects', toIndexedDB(validatedProject));
+      await this.db.put('projects', updatedProject);
 
-      // Add to sync queue for online sync
-      await this.addToSyncQueue('update', validatedProject);
-
-      return validatedProject;
+      return updatedProject;
     } catch (error) {
       throw new Error(`Failed to update project: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -188,16 +195,8 @@ class ProjectService {
     if (!this.db) throw new Error('Database not initialized');
 
     try {
-      // Get project before deletion for sync queue
-      const project = await this.getById(id);
-      
       // Delete from IndexedDB
       await this.db.delete('projects', id);
-
-      // Add to sync queue for online sync
-      if (project) {
-        await this.addToSyncQueue('delete', project);
-      }
     } catch (error) {
       throw new Error(`Failed to delete project: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -206,7 +205,7 @@ class ProjectService {
   /**
    * Search projects by name or description
    */
-  async search(query: string): Promise<Project[]> {
+  async search(query: string): Promise<UnifiedProject[]> {
     await this.ensureInitialized();
     
     if (!this.db) throw new Error('Database not initialized');
@@ -220,7 +219,7 @@ class ProjectService {
         (project.description && project.description.toLowerCase().includes(lowerQuery))
       );
 
-      return filteredProjects.map(project => fromIndexedDB(project));
+      return filteredProjects;
     } catch (error) {
       throw new Error(`Failed to search projects: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -233,7 +232,7 @@ class ProjectService {
     status?: string;
     type?: string;
     createdBy?: string;
-  }): Promise<Project[]> {
+  }): Promise<UnifiedProject[]> {
     await this.ensureInitialized();
     
     if (!this.db) throw new Error('Database not initialized');
@@ -253,7 +252,7 @@ class ProjectService {
         projects = projects.filter(project => project.createdBy === filters.createdBy);
       }
 
-      return projects.map(project => fromIndexedDB(project));
+      return projects;
     } catch (error) {
       throw new Error(`Failed to filter projects: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -269,64 +268,10 @@ class ProjectService {
       // Get all local projects
       const localProjects = await this.getAllLocal();
       
-      // Get online projects (if available)
-      const onlineProjects = await ProjectSyncService.getAllOnline();
-      
-      // Merge and sync
-      await ProjectSyncService.syncProjects(localProjects, onlineProjects);
+      // Sync with online data using the new service
+      await projectSyncService.syncProjects();
     } catch (error) {
       throw new Error(`Failed to sync with online data: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
-
-  /**
-   * Add item to sync queue
-   */
-  private async addToSyncQueue(action: 'create' | 'update' | 'delete', project: Project): Promise<void> {
-    if (!this.db) throw new Error('Database not initialized');
-
-    try {
-      const queueItem = {
-        id: `${action}_${project.id}_${Date.now()}`,
-        action,
-        project,
-        timestamp: Date.now(),
-        retryCount: 0,
-      };
-
-      await this.db.add('syncQueue', queueItem);
-    } catch (error) {
-      throw new Error(`Failed to add to sync queue: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
-
-  /**
-   * Get sync queue items
-   */
-  async getSyncQueue(): Promise<any[]> {
-    await this.ensureInitialized();
-    
-    if (!this.db) throw new Error('Database not initialized');
-
-    try {
-      return await this.db.getAll('syncQueue');
-    } catch (error) {
-      throw new Error(`Failed to get sync queue: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
-
-  /**
-   * Remove item from sync queue
-   */
-  async removeFromSyncQueue(queueId: string): Promise<void> {
-    await this.ensureInitialized();
-    
-    if (!this.db) throw new Error('Database not initialized');
-
-    try {
-      await this.db.delete('syncQueue', queueId);
-    } catch (error) {
-      throw new Error(`Failed to remove from sync queue: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -340,11 +285,10 @@ class ProjectService {
 
     try {
       const projectCount = await this.db.count('projects');
-      const queueCount = await this.db.count('syncQueue');
       
       return {
         projects: projectCount,
-        syncQueue: queueCount,
+        syncQueue: 0, // Simplified - no sync queue
       };
     } catch (error) {
       throw new Error(`Failed to get database stats: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -354,18 +298,17 @@ class ProjectService {
   /**
    * Export all data
    */
-  async exportData(): Promise<{ projects: Project[]; syncQueue: any[] }> {
+  async exportData(): Promise<{ projects: UnifiedProject[]; syncQueue: any[] }> {
     await this.ensureInitialized();
     
     if (!this.db) throw new Error('Database not initialized');
 
     try {
       const rawProjects = await this.db.getAll('projects');
-      const syncQueue = await this.db.getAll('syncQueue');
       
       return {
-        projects: rawProjects.map(project => fromIndexedDB(project)),
-        syncQueue,
+        projects: rawProjects,
+        syncQueue: [], // Simplified - no sync queue
       };
     } catch (error) {
       throw new Error(`Failed to export data: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -375,7 +318,7 @@ class ProjectService {
   /**
    * Import data
    */
-  async importData(data: { projects: Project[]; syncQueue: any[] }): Promise<void> {
+  async importData(data: { projects: UnifiedProject[]; syncQueue: any[] }): Promise<void> {
     await this.ensureInitialized();
     
     if (!this.db) throw new Error('Database not initialized');
@@ -383,17 +326,10 @@ class ProjectService {
     try {
       // Clear existing data
       await this.db.clear('projects');
-      await this.db.clear('syncQueue');
 
       // Import projects
       for (const project of data.projects) {
-        const validatedProject = validateProject(project);
-        await this.db.add('projects', toIndexedDB(validatedProject));
-      }
-
-      // Import sync queue
-      for (const queueItem of data.syncQueue) {
-        await this.db.add('syncQueue', queueItem);
+        await this.db.add('projects', project);
       }
     } catch (error) {
       throw new Error(`Failed to import data: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -410,7 +346,6 @@ class ProjectService {
 
     try {
       await this.db.clear('projects');
-      await this.db.clear('syncQueue');
     } catch (error) {
       throw new Error(`Failed to clear database: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }

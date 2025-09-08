@@ -1,6 +1,6 @@
 import React from 'react';
 import { useOfflineProjects } from '../hooks/useOfflineProjects';
-import { ProjectSyncService } from '../lib/sync/projectSync';
+import { projectSyncService } from '../lib/sync/projectSync';
 import { toast } from 'react-hot-toast';
 
 interface SyncStatusProps {

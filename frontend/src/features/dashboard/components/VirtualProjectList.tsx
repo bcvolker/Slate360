@@ -1,8 +1,8 @@
-import { Project } from '@/types/types';
+import { UnifiedProject } from '@/types/project';
 
 interface VirtualProjectListProps {
-  projects: Project[];
-  onSelectProject: (project: Project) => void;
+  projects: UnifiedProject[];
+  onSelectProject: (project: UnifiedProject) => void;
   selectedProjectId?: string;
 }
 
@@ -24,11 +24,11 @@ export default function VirtualProjectList({
     <div className="space-y-2">
       {projects.map((project) => (
         <div
-          key={project.id}
+          key={project._id}
           onClick={() => onSelectProject(project)}
           className={`
             p-3 rounded-md cursor-pointer transition-all duration-200
-            ${selectedProjectId === project.id
+            ${selectedProjectId === project._id
               ? 'bg-blue-100 border-l-4 border-blue-500 text-blue-900'
               : 'bg-gray-800 hover:bg-gray-700 text-white'
             }
@@ -40,7 +40,7 @@ export default function VirtualProjectList({
               <p className="text-sm text-gray-400 capitalize">{project.status}</p>
             </div>
             <div className="ml-2 text-xs text-gray-500">
-              {project.tasks?.length || 0} tasks
+              {project.team?.length || 0} members
             </div>
           </div>
           {project.description && (

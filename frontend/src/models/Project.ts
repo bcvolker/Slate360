@@ -1,19 +1,16 @@
 // frontend/src/models/Project.ts
 import mongoose, { Document, Model, Schema } from 'mongoose';
-import type { Project } from '@/types/types';
+import type { UnifiedProject } from '@/types/project';
 
 // Use the unified Project type as the base interface
-export interface IProject extends Omit<Project, 'id'>, Document {
+export interface IProject extends Omit<UnifiedProject, '_id'>, Document {
   // Mongoose-specific fields are inherited from Document
   // All Project fields are inherited from the unified Project type
-  // We omit 'id' from Project since Document already has '_id'
+  // We omit '_id' from UnifiedProject since Document already has '_id'
 }
 
 // Create a Mongoose schema that matches the Zod schema structure
 const projectSchema = new Schema<IProject>({
-  // Primary identifier
-  id: { type: String, required: true, unique: true },
-  
   // Basic project information
   name: { type: String, required: true, maxlength: 100 },
   description: { type: String, required: true, maxlength: 500 },
@@ -105,28 +102,7 @@ const projectSchema = new Schema<IProject>({
   // Ownership and timestamps
   createdBy: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-  
-  // Simple task management
-  tasks: [{
-    id: { type: String, required: true },
-    title: { type: String, required: true },
-    done: { type: Boolean, default: false },
-    description: String,
-    assignedTo: String,
-    dueDate: Date,
-    priority: { type: String, enum: ['low', 'medium', 'high'], default: 'medium' }
-  }],
-  
-  // Sync and offline status
-  isOffline: { type: Boolean, default: false },
-  lastSynced: Date,
-  syncStatus: { 
-    type: String, 
-    enum: ['synced', 'pending', 'conflict', 'error'],
-    default: 'synced'
-  },
-  version: { type: Number, default: 1 }
+  updatedAt: { type: Date, default: Date.now }
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
@@ -135,9 +111,9 @@ const projectSchema = new Schema<IProject>({
 
 // Virtual fields for computed properties
 projectSchema.virtual('progress').get(function(this: IProject): number {
-  if (!this.tasks || this.tasks.length === 0) return 0;
-  const completedTasks = this.tasks.filter(task => task.done).length;
-  return Math.round((completedTasks / this.tasks.length) * 100);
+  if (!this.team || this.team.length === 0) return 0;
+  const activeMembers = this.team.filter(member => member.isActive).length;
+  return Math.round((activeMembers / this.team.length) * 100);
 });
 
 projectSchema.virtual('daysRemaining').get(function(this: IProject): number {

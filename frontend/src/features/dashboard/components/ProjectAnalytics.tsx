@@ -1,12 +1,12 @@
-import { Project } from '@/types/types';
+import { UnifiedProject } from '@/types/project';
 
 interface ProjectAnalyticsProps {
-  project: Project;
+  project: UnifiedProject;
 }
 
 export default function ProjectAnalytics({ project }: ProjectAnalyticsProps) {
-  const completedTasks = project.tasks?.filter(task => task.done).length || 0;
-  const totalTasks = project.tasks?.length || 0;
+  const completedTasks = project.team?.filter(member => member.isActive).length || 0;
+  const totalTasks = project.team?.length || 0;
   const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   return (
@@ -33,14 +33,14 @@ export default function ProjectAnalytics({ project }: ProjectAnalyticsProps) {
         <div className="bg-gray-800 p-4 rounded-lg">
           <div className="text-sm text-gray-400 mb-1">Created</div>
           <div className="font-semibold text-white">
-            {new Date(project.createdAt).toLocaleDateString()}
+            {project.createdAt ? new Date(project.createdAt).toLocaleDateString() : 'N/A'}
           </div>
         </div>
         
         <div className="bg-gray-800 p-4 rounded-lg">
           <div className="text-sm text-gray-400 mb-1">Last Updated</div>
           <div className="font-semibold text-white">
-            {new Date(project.updatedAt).toLocaleDateString()}
+            {project.updatedAt ? new Date(project.updatedAt).toLocaleDateString() : 'N/A'}
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@ export default function ProjectAnalytics({ project }: ProjectAnalyticsProps) {
       <div className="bg-gray-800 p-4 rounded-lg mb-6">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-semibold text-white">Task Progress</h3>
-          <span className="text-sm text-gray-400">{completedTasks}/{totalTasks} completed</span>
+          <span className="text-sm text-gray-400">{completedTasks}/{totalTasks} active</span>
         </div>
         <div className="w-full bg-gray-700 rounded-full h-2">
           <div 
@@ -57,7 +57,7 @@ export default function ProjectAnalytics({ project }: ProjectAnalyticsProps) {
             style={{ width: `${completionRate}%` }}
           ></div>
         </div>
-        <div className="text-sm text-gray-400 mt-1">{completionRate}% complete</div>
+        <div className="text-sm text-gray-400 mt-1">{completionRate}% active</div>
       </div>
 
       {/* Project Details */}
@@ -103,7 +103,7 @@ export default function ProjectAnalytics({ project }: ProjectAnalyticsProps) {
             {project.team.map((member, index) => (
               <div key={index} className="flex items-center justify-between">
                 <div>
-                  <span className="text-white">User {member.userId}</span>
+                  <span className="text-white">User {String(member.userId)}</span>
                   <span className="text-sm text-gray-400 ml-2 capitalize">({member.role})</span>
                 </div>
                 <div className="text-sm text-gray-400">

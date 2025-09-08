@@ -1,4 +1,4 @@
-import { Project } from '@/types/types';
+import { Project } from '@/types';
 
 interface ProjectAnalyticsProps {
   project: Project;
@@ -19,17 +19,25 @@ export default function ProjectAnalytics({ project }: ProjectAnalyticsProps) {
             <div className="font-semibold">{project.status}</div>
           </div>
           <div className="bg-gray-800 p-3 rounded">
-            <div className="text-sm text-gray-400">Created</div>
-            <div className="font-semibold">
-              {new Date(project.createdAt).toLocaleDateString()}
-            </div>
+            <div className="text-sm text-gray-400">ID</div>
+            <div className="font-semibold text-xs">{project.id}</div>
           </div>
           <div className="bg-gray-800 p-3 rounded">
-            <div className="text-sm text-gray-400">Tasks</div>
-            <div className="font-semibold">{project.tasks?.length || 0}</div>
+            <div className="text-sm text-gray-400">BIM Model</div>
+            <div className="font-semibold">{project.bimModelUrl ? 'Available' : 'Not Available'}</div>
           </div>
         </div>
+        {project.imageUrl && (
+          <div className="mt-4">
+            <img 
+              src={project.imageUrl} 
+              alt={project.name}
+              className="w-full h-48 object-cover rounded-lg"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
 }
+

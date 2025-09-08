@@ -4,6 +4,22 @@
     "react/no-unescaped-entities": "off",
     "jsx-a11y/alt-text": "off",
     "@next/next/no-img-element": "off",
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": [
+              "mongoose",
+              "*/lib/db/*",
+              "*/models/*",
+              "*/types/projectTypes*"
+            ],
+            "message": "Direct DB or legacy type imports not allowed. Use src/lib/api/* and src/types."
+          }
+        ]
+      }
+    ]
   }
 }

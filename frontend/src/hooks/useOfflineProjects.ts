@@ -1,16 +1,16 @@
 // frontend/src/hooks/useOfflineProjects.ts
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { Project } from '@/types/types';
-import { ProjectSyncService } from '@/lib/sync/projectSync';
+import { UnifiedProject } from '@/types/project';
+import { projectSyncService } from '@/lib/sync/projectSync';
 
 export function useOfflineProjects() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<UnifiedProject[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const refreshProjects = useCallback(async () => {
     setIsLoading(true);
-    const localProjects = await ProjectSyncService.getAllLocal();
+    const localProjects = await projectSyncService.getOfflineProjects();
     setProjects(localProjects);
     setIsLoading(false);
   }, []);

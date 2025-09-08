@@ -1,11 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Temporarily disable TypeScript checking during development
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  // The ignoreBuildErrors property has been removed.
+  // TypeScript checking is now enabled
   images: {
     // Add any external image domains your site uses here.
     domains: ['localhost', 'images.unsplash.com'],

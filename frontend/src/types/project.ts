@@ -1,24 +1,106 @@
 // frontend/src/types/project.ts
-import { z } from 'zod';
+import { Document } from 'mongoose';
 
-// This Zod schema is the single, canonical definition for a project's structure.
-// It provides runtime validation, making the application far more robust.
-export const ProjectSchema = z.object({
-  // The 'id' will be the standardized identifier. Adapters will handle conversion.
-  id: z.string(),
-  name: z.string().min(1, { message: "Project name cannot be empty" }),
-  description: z.string().optional(),
-  status: z.enum(['draft', 'active', 'archived']).default('draft'),
-  createdAt: z.date().or(z.string()),
-  updatedAt: z.date().or(z.string()),
-  tasks: z.array(
-    z.object({
-      id: z.string(),
-      title: z.string(),
-      done: z.boolean().default(false),
-    })
-  ).optional(),
-});
+// Sub-interfaces
+export interface ILocation {
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  coordinates?: { lat: number; lng: number };
+}
 
-// This is the only Project type that should be imported across the entire application.
-export type Project = z.infer<typeof ProjectSchema>;
+export interface IClient {
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+  contactPerson?: string;
+  billingAddress?: string;
+}
+
+export interface ITimeline {
+  startDate?: Date | string;
+  endDate?: Date | string;
+  estimatedDuration?: number;
+  milestones?: Array<{
+    name: string;
+    date: Date | string;
+    description?: string;
+    completed: boolean;
+  }>;
+}
+
+export interface IBudget {
+  estimated?: number;
+  actual?: number;
+  currency: string;
+  breakdown?: {
+    materials: number;
+    labor: number;
+    equipment: number;
+    permits: number;
+    contingency: number;
+  };
+  invoices?: Array<{
+    number: string;
+    amount: number;
+    date: Date | string;
+    status: 'pending' | 'paid' | 'overdue';
+  }>;
+}
+
+export interface ITeamMember {
+  userId: string | import('mongoose').Types.ObjectId;
+  role: 'project_manager' | 'architect' | 'engineer' | 'designer' | 'contractor' | 'consultant';
+  permissions: ('read' | 'write' | 'admin')[];
+  joinedAt?: Date | string;
+  isActive: boolean;
+}
+
+// The single source of truth for all project data
+export interface UnifiedProject {
+  _id?: string; // Always a string for frontend consistency
+  name: string;
+  description: string;
+  type: 'residential' | 'commercial' | 'industrial' | 'infrastructure' | 'renovation' | 'other';
+  status: 'planning' | 'active' | 'on-hold' | 'completed' | 'cancelled' | 'draft';
+  location: ILocation;
+  client: IClient;
+  timeline: ITimeline;
+  budget: IBudget;
+  team: ITeamMember[];
+  tags: string[];
+  metadata?: Record<string, any>;
+  data?: any; // For IndexedDB-specific offline data
+  createdBy?: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  progress?: number;
+  daysRemaining?: number;
+  budgetUtilization?: number;
+  teamSize?: number;
+}
+
+// For Mongoose backend compatibility
+export type UnifiedProjectDocument = UnifiedProject & Document;
+
+// For API responses and filters
+export interface IProjectsResponse {
+  projects: UnifiedProject[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface IProjectFilters {
+  page?: number;
+  limit?: number;
+  status?: string;
+  type?: string;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
