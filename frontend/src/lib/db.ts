@@ -1,3 +1,7 @@
+// Database connection utilities - disabled for mock mode
+// This file is kept for future use when real MongoDB integration is needed
+
+/*
 import mongoose from 'mongoose';
 
 declare global {
@@ -25,4 +29,11 @@ export default async function connectToDatabase() {
   
   cached.conn = await cached.promise;
   return cached.conn;
+}
+*/
+
+// Mock implementation for development
+export default async function connectToDatabase() {
+  console.log('🔧 connectToDatabase - using mock implementation');
+  return null;
 }

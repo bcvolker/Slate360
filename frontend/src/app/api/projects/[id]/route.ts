@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isValidObjectId } from 'mongoose';
+
+// Mock ObjectId validation function
+const isValidObjectId = (id: string): boolean => {
+  return /^[0-9a-fA-F]{24}$/.test(id) || /^[a-zA-Z0-9_-]+$/.test(id);
+};
 
 // GET /api/projects/[id] - Get single project
 export async function GET(

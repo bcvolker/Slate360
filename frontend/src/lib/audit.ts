@@ -1,11 +1,16 @@
+// Audit logging utilities - disabled for mock mode
+// This file is kept for future use when real MongoDB integration is needed
+
+/*
 import mongoose from 'mongoose';
 import { IAuditLog } from '@/types/audit'; // Import our new unified type
 import { fromMongoToAuditLog } from './adapters/auditAdapters'; // Import the new adapter
+*/
 
-// Legacy interface for Mongoose schema (internal use only)
-interface IMongooseAuditLog {
-  _id: mongoose.Types.ObjectId;
-  userId: mongoose.Types.ObjectId;
+// Mock interface for development
+export interface IAuditLog {
+  _id?: string;
+  userId: string;
   action: string;
   resource: string;
   resourceId: string;
@@ -19,149 +24,47 @@ interface IMongooseAuditLog {
   metadata: Record<string, any>;
 }
 
-// Audit log schema
-const auditLogSchema = new mongoose.Schema<IMongooseAuditLog>({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-    index: true,
-  },
-  action: {
-    type: String,
-    required: true,
-    trim: true,
-    index: true,
-  },
-  resource: {
-    type: String,
-    required: true,
-    trim: true,
-    index: true,
-  },
-  resourceId: {
-    type: String,
-    required: true,
-    trim: true,
-    index: true,
-  },
-  details: {
-    type: mongoose.Schema.Types.Mixed,
-    default: {},
-  },
-  ipAddress: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  userAgent: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-    index: true,
-  },
-  severity: {
-    type: String,
-    enum: ['low', 'medium', 'high', 'critical'],
-    default: 'low',
-    index: true,
-  },
-  category: {
-    type: String,
-    enum: ['authentication', 'authorization', 'data_access', 'data_modification', 'system', 'other'],
-    default: 'other',
-    index: true,
-  },
-  outcome: {
-    type: String,
-    enum: ['success', 'failure', 'partial'],
-    default: 'success',
-    index: true,
-  },
-  metadata: {
-    type: mongoose.Schema.Types.Mixed,
-    default: {},
-  },
-});
-
-// Indexes for better query performance
-auditLogSchema.index({ timestamp: -1 });
-auditLogSchema.index({ userId: 1, timestamp: -1 });
-auditLogSchema.index({ action: 1, timestamp: -1 });
-auditLogSchema.index({ resource: 1, timestamp: -1 });
-auditLogSchema.index({ severity: 1, timestamp: -1 });
-auditLogSchema.index({ category: 1, timestamp: -1 });
-auditLogSchema.index({ outcome: 1, timestamp: -1 });
-
-// Create and export the model
-const AuditLog = mongoose.models.AuditLog || mongoose.model<IMongooseAuditLog>('AuditLog', auditLogSchema);
-
-// Audit logging functions
+// Mock audit logging functions
 export const logAudit = async (
   userId: string, 
   action: string, 
-  details: any
+  resource: string,
+  resourceId: string,
+  details: any,
+  ipAddress: string,
+  userAgent: string,
+  severity: 'low' | 'medium' | 'high' | 'critical' = 'low',
+  category: 'authentication' | 'authorization' | 'data_access' | 'data_modification' | 'system' | 'other' = 'other',
+  outcome: 'success' | 'failure' | 'partial' = 'success',
+  metadata: Record<string, any> = {}
 ): Promise<void> => {
   try {
-    // In a real implementation, this would log to a database or external service
-    console.log(`[AUDIT] ${userId} - ${action}:`, details);
-    
-    // For now, just log to console
-    // TODO: Implement proper audit logging
+    console.log(`[AUDIT MOCK] ${userId} - ${action}:`, {
+      resource,
+      resourceId,
+      details,
+      ipAddress,
+      userAgent,
+      severity,
+      category,
+      outcome,
+      metadata,
+      timestamp: new Date().toISOString()
+    });
   } catch (error) {
-    console.error('Audit logging failed:', error);
+    console.error('Mock audit logging failed:', error);
   }
 };
 
 // Get audit logs with filtering
 export const getAuditLogs = async (
-  filter: {
-    userId?: mongoose.Types.ObjectId;
-    action?: string;
-    resource?: string;
-    resourceId?: string;
-    severity?: IMongooseAuditLog['severity'];
-    category?: IMongooseAuditLog['category'];
-    outcome?: IMongooseAuditLog['outcome'];
-    startDate?: Date;
-    endDate?: Date;
-  } = {},
+  filter: any = {},
   limit: number = 100,
   skip: number = 0
 ): Promise<IAuditLog[]> => {
   try {
-    const query: any = {};
-
-    if (filter.userId) query.userId = filter.userId;
-    if (filter.action) query.action = filter.action;
-    if (filter.resource) query.resource = filter.resource;
-    if (filter.resourceId) query.resourceId = filter.resourceId;
-    if (filter.severity) query.severity = filter.severity;
-    if (filter.category) query.category = filter.category;
-    if (filter.outcome) query.outcome = filter.outcome;
-
-    if (filter.startDate || filter.endDate) {
-      query.timestamp = {};
-      if (filter.startDate) query.timestamp.$gte = filter.startDate;
-      if (filter.endDate) query.timestamp.$lte = filter.endDate;
-    }
-
-    const rawLogs = await AuditLog.find(query)
-      .sort({ timestamp: -1 })
-      .limit(limit)
-      .skip(skip)
-      .populate('userId', 'name email')
-      .lean();
-
-    // Use the adapter to safely convert each raw log into our IAuditLog type.
-    // This replaces the unsafe "as IAuditLog[]" cast.
-    const logs = rawLogs.map(fromMongoToAuditLog);
-
-    return logs;
+    console.log('🔧 getAuditLogs - using mock implementation');
+    return [];
   } catch (error) {
     console.error('Failed to get audit logs:', error);
     throw new Error('Failed to retrieve audit logs');
@@ -180,62 +83,13 @@ export const getAuditStats = async (
   logsByAction: Record<string, number>;
 }> => {
   try {
-    const dateFilter: any = {};
-    if (startDate || endDate) {
-      if (startDate) dateFilter.$gte = startDate;
-      if (endDate) dateFilter.$lte = endDate;
-    }
-
-    const matchStage = dateFilter.$gte || dateFilter.$lte ? { timestamp: dateFilter } : {};
-
-    const stats = await AuditLog.aggregate([
-      { $match: matchStage },
-      {
-        $group: {
-          _id: null,
-          totalLogs: { $sum: 1 },
-          logsBySeverity: {
-            $push: '$severity'
-          },
-          logsByCategory: {
-            $push: '$category'
-          },
-          logsByOutcome: {
-            $push: '$outcome'
-          },
-          logsByAction: {
-            $push: '$action'
-          }
-        }
-      }
-    ]);
-
-    if (stats.length === 0) {
-      return {
-        totalLogs: 0,
-        logsBySeverity: {},
-        logsByCategory: {},
-        logsByOutcome: {},
-        logsByAction: {},
-      };
-    }
-
-    const result = stats[0];
-    
-    // Count occurrences
-    const countOccurrences = (arr: string[]) => {
-      return arr.reduce((acc: Record<string, number>, val: string) => {
-        acc[val] = (acc[val] || 0) + 1;
-        return acc;
-      }, {});
-    };
-
+    console.log('🔧 getAuditStats - using mock implementation');
     return {
-      totalLogs: result.totalLogs,
-      logsBySeverity: countOccurrences(result.logsBySeverity),
-      logsByCategory: countOccurrences(result.logsByCategory),
-      logsByOutcome: countOccurrences(result.logsByOutcome),
-      logsByAction: countOccurrences(result.logsByAction),
+      totalLogs: 0,
+      logsBySeverity: {},
+      logsByCategory: {},
+      logsByOutcome: {},
+      logsByAction: {},
     };
   } catch (error) {
     console.error('Failed to get audit stats:', error);
@@ -246,19 +100,30 @@ export const getAuditStats = async (
 // Clean old audit logs
 export const cleanOldAuditLogs = async (daysToKeep: number = 90): Promise<number> => {
   try {
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
-
-    const result = await AuditLog.deleteMany({
-      timestamp: { $lt: cutoffDate }
-    });
-
-    return result.deletedCount || 0;
+    console.log('🔧 cleanOldAuditLogs - using mock implementation');
+    return 0;
   } catch (error) {
     console.error('Failed to clean old audit logs:', error);
     throw new Error('Failed to clean old audit logs');
   }
 };
 
-// Export the model and functions
-export default AuditLog;
+// Export mock model
+export default {
+  create: async (data: Partial<IAuditLog>) => {
+    console.log('🔧 AuditLog.create - using mock implementation');
+    return { ...data, _id: Date.now().toString() };
+  },
+  find: async (query: any) => {
+    console.log('🔧 AuditLog.find - using mock implementation');
+    return [];
+  },
+  aggregate: async (pipeline: any[]) => {
+    console.log('🔧 AuditLog.aggregate - using mock implementation');
+    return [];
+  },
+  deleteMany: async (query: any) => {
+    console.log('🔧 AuditLog.deleteMany - using mock implementation');
+    return { deletedCount: 0 };
+  }
+};

@@ -4,18 +4,21 @@ import { OrbitControls, useGLTF } from '@react-three/drei';
 import { Suspense } from 'react';
 
 function Model({ url }: { url: string }) {
-  try {
-    const { scene } = useGLTF(url);
+  // Always call the hook unconditionally
+  const { scene } = useGLTF(url);
+  
+  // Return the scene if it exists, otherwise return fallback
+  if (scene) {
     return <primitive object={scene} />;
-  } catch (error) {
-    // Fallback for mock URLs or missing models
-    return (
-      <mesh>
-        <boxGeometry args={[2, 2, 2]} />
-        <meshStandardMaterial color="orange" />
-      </mesh>
-    );
   }
+  
+  // Fallback for mock URLs or missing models
+  return (
+    <mesh>
+      <boxGeometry args={[2, 2, 2]} />
+      <meshStandardMaterial color="orange" />
+    </mesh>
+  );
 }
 
 export default function ModelViewer({ url }: { url: string }) {

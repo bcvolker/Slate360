@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import mongoose from 'mongoose';
 import {
   logAudit,
   getAuditLogs,
@@ -7,6 +6,15 @@ import {
   cleanOldAuditLogs
 } from '../lib/audit';
 import { toast } from 'react-hot-toast';
+
+// Mock ObjectId for development
+const createMockObjectId = (seed: string) => {
+  const hash = seed.split('').reduce((a, b) => {
+    a = ((a << 5) - a) + b.charCodeAt(0);
+    return a & a;
+  }, 0);
+  return Math.abs(hash).toString(16).padStart(24, '0');
+};
 
 // Example 1: Basic Audit Logging
 export function BasicAuditLogExample() {
@@ -16,7 +24,7 @@ export function BasicAuditLogExample() {
     setLoading(true);
     try {
       await logAudit(
-        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        createMockObjectId('507f1f77bcf86cd799439011'), // userId
         'user.login', // action
         'user', // resource
         'user123', // resourceId
@@ -76,7 +84,7 @@ export function ConvenienceFunctionsExample() {
     setLoading(true);
     try {
       await logAudit(
-        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        createMockObjectId('507f1f77bcf86cd799439011'), // userId
         'user.update', // action
         'user', // resource
         'user123', // resourceId
@@ -105,7 +113,7 @@ export function ConvenienceFunctionsExample() {
     setLoading(true);
     try {
       await logAudit(
-        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        createMockObjectId('507f1f77bcf86cd799439011'), // userId
         'security.permission_denied', // action
         'security', // resource
         'permission_denied', // resourceId
@@ -134,7 +142,7 @@ export function ConvenienceFunctionsExample() {
     setLoading(true);
     try {
       await logAudit(
-        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        createMockObjectId('507f1f77bcf86cd799439011'), // userId
         'project.create', // action
         'project', // resource
         'proj_456', // resourceId
@@ -163,7 +171,7 @@ export function ConvenienceFunctionsExample() {
     setLoading(true);
     try {
       await logAudit(
-        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        createMockObjectId('507f1f77bcf86cd799439011'), // userId
         'billing.subscription_created', // action
         'billing', // resource
         'sub_123456', // resourceId
@@ -193,7 +201,7 @@ export function ConvenienceFunctionsExample() {
     setLoading(true);
     try {
       await logAudit(
-        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        createMockObjectId('507f1f77bcf86cd799439011'), // userId
         'system.maintenance', // action
         'system', // resource
         'maintenance_001', // resourceId
@@ -309,7 +317,7 @@ export function BatchLoggingExample() {
       const results = await Promise.all(auditEvents.map(async (event) => {
         try {
           await logAudit(
-            new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+            createMockObjectId('507f1f77bcf86cd799439011'), // userId
             event.action, // action
             'user', // resource
             'batch_event', // resourceId
@@ -542,7 +550,7 @@ export function AdvancedAuditExample() {
       };
 
       await logAudit(
-        new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // userId
+        createMockObjectId('507f1f77bcf86cd799439011'), // userId
         'admin.user_management', // action
         'user_management', // resource
         'bulk_update_001', // resourceId
