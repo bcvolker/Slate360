@@ -72,8 +72,8 @@ const TILES = [
         icon: '🤖',
         color: 'pink',
         layout: 'left',
-        viewerType: 'image',
-        viewerUrl: 'https://images.unsplash.com/photo-1509391366360-2e959784a276'
+        viewerType: 'model',
+        viewerUrl: '/mock/drone-mapping.glb'
     },
     { 
         id: 'reports', 
@@ -84,8 +84,8 @@ const TILES = [
         icon: '📈',
         color: 'blue',
         layout: 'right',
-        viewerType: 'image',
-        viewerUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64'
+        viewerType: 'model',
+        viewerUrl: '/mock/analytics-dashboard.glb'
     },
     { 
         id: 'vr-ar', 
