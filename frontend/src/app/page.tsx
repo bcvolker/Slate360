@@ -17,10 +17,10 @@ const TILES = [
     },
     { 
         id: 'project-hub', 
-        title: 'PROJECT HUB', 
-        subtitle: 'Centralized Project Management',
-        description: 'Manage all your construction projects from one powerful dashboard with real-time collaboration and advanced tracking. Streamline workflows, track progress, and ensure every team member stays aligned with project goals and deadlines.',
-        features: ['Project Tracking', 'Team Collaboration', 'Progress Monitoring', 'Deadline Management'],
+        title: 'Project Hub', 
+        subtitle: 'Plan, track, and coordinate every stakeholder.',
+        description: 'Centralize RFIs, submittals, and progress reports. Keep your entire team aligned and your project on schedule, from groundbreaking to handover.',
+        features: ['RFI Management', 'Submittal Tracking', 'Progress Reports', 'Team Coordination'],
         icon: '📊',
         color: 'green',
         layout: 'left',
@@ -29,10 +29,10 @@ const TILES = [
     },
     { 
         id: 'bim-studio', 
-        title: 'BIM STUDIO', 
-        subtitle: 'Advanced 3D Modeling',
-        description: 'Create, edit, and collaborate on Building Information Models with precision and real-time updates. Our BIM tools enable architects, engineers, and contractors to work seamlessly together on complex construction projects.',
-        features: ['3D Modeling', 'Real-time Updates', 'Multi-user Collaboration', 'Precision Tools'],
+        title: 'BIM Studio', 
+        subtitle: 'Import IFC/GLTF, annotate models, and collaborate.',
+        description: 'Experience a high-performance BIM viewer right in your browser. Conduct clash detection, add annotations, and share model states in real-time.',
+        features: ['IFC/GLTF Support', 'Clash Detection', 'Real-time Annotations', 'Model Sharing'],
         icon: '🏗️',
         color: 'purple',
         layout: 'right',
@@ -41,9 +41,9 @@ const TILES = [
     },
     { 
         id: '360-tour-builder', 
-        title: '360 TOUR BUILDER', 
-        subtitle: 'Immersive Virtual Tours',
-        description: 'Create stunning 360-degree virtual tours and interactive walkthroughs of your construction projects. Showcase your work to clients and stakeholders with immersive experiences that bring your projects to life.',
+        title: '360 Tour Builder', 
+        subtitle: 'Create immersive virtual walkthroughs.',
+        description: 'Build stunning 360-degree virtual tours and interactive walkthroughs of your construction projects. Showcase your work to clients and stakeholders with immersive experiences.',
         features: ['360° Photography', 'Virtual Walkthroughs', 'Interactive Tours', 'Client Presentations'],
         icon: '🌐',
         color: 'cyan',
@@ -53,8 +53,8 @@ const TILES = [
     },
     { 
         id: 'content-studio', 
-        title: 'CONTENT STUDIO', 
-        subtitle: 'Professional Media Production',
+        title: 'Content Creation Studio', 
+        subtitle: 'Professional media production from site data.',
         description: 'Create high-quality images, videos, and interactive content for your construction projects. Our content studio provides all the tools you need to document, showcase, and market your construction work professionally.',
         features: ['Video Production', 'Image Editing', 'Content Management', 'Marketing Tools'],
         icon: '🎬',
@@ -65,8 +65,8 @@ const TILES = [
     },
     { 
         id: 'geospatial', 
-        title: 'GEOSPATIAL & ROBOTICS', 
-        subtitle: 'Advanced Automation & Mapping',
+        title: 'Geospatial & Robotics', 
+        subtitle: 'Advanced automation and mapping.',
         description: 'Leverage drone technology, GPS mapping, and robotic automation for precise construction operations. Our geospatial tools provide accurate site mapping, progress monitoring, and automated data collection.',
         features: ['Drone Mapping', 'GPS Integration', 'Robotic Automation', 'Site Analysis'],
         icon: '🤖',
@@ -77,8 +77,8 @@ const TILES = [
     },
     { 
         id: 'reports', 
-        title: 'REPORTS & ANALYTICS', 
-        subtitle: 'Data-Driven Insights',
+        title: 'Reports & Analytics', 
+        subtitle: 'Data-driven insights for better decisions.',
         description: 'Advanced analytics and reporting tools for informed decision-making and project optimization. Transform raw construction data into actionable insights that drive efficiency and improve project outcomes.',
         features: ['Performance Analytics', 'Custom Reports', 'Data Visualization', 'Predictive Insights'],
         icon: '📈',
@@ -89,8 +89,8 @@ const TILES = [
     },
     { 
         id: 'vr-ar', 
-        title: 'VR/AR STUDIO', 
-        subtitle: 'Immersive Technologies',
+        title: 'VR/AR Studio', 
+        subtitle: 'Immersive technologies for visualization.',
         description: 'Experience your projects in virtual and augmented reality for enhanced visualization and collaboration. Our VR/AR tools enable immersive project walkthroughs, design reviews, and client presentations.',
         features: ['Virtual Reality', 'Augmented Reality', 'Immersive Walkthroughs', 'Design Reviews'],
         icon: '🥽',
@@ -182,7 +182,7 @@ const UnifiedViewer = ({ tile }: { tile: any }) => {
     };
 
     return (
-        <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700 flex items-center justify-center relative">
+        <div className="w-full h-full relative flex items-center justify-center">
             {getViewerContent()}
             
             {/* Fallback placeholder - hidden by default */}
@@ -371,7 +371,7 @@ const Homepage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-black text-white overflow-hidden relative">
+        <div className="min-h-screen overflow-hidden relative">
             
             {/* Horizontal Line Navigation */}
             <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-40 flex flex-col items-center">
@@ -382,20 +382,20 @@ const Homepage = () => {
                             animate={{ opacity: 1 }} 
                             exit={{ opacity: 0 }} 
                             onClick={handleScrollToPrev} 
-                            className="mb-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                            className="mb-4 p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 transition-colors"
                         >
-                            <ChevronUp size={20} />
+                            <ChevronUp size={20} className="text-zinc-700" />
                         </motion.button>
                     )}
                 </AnimatePresence>
                 <div className="relative flex flex-col items-center">
-                    <div className="absolute top-0 left-1/2 w-px bg-gray-600" style={{ height: '100%' }}></div>
+                    <div className="absolute top-0 left-1/2 w-px bg-zinc-300" style={{ height: '100%' }}></div>
                     {TILES.map((tile, index) => (
                         <a key={tile.id} href={`#${tile.id}`}
                            className="relative my-2 w-full flex items-center"
                            onClick={(e) => { e.preventDefault(); scrollToTile(index); }}>
-                            <span className={`absolute right-6 w-2.5 h-0.5 transition-all duration-300 ${activeTileIndex === index ? 'bg-white w-8' : 'bg-gray-600'}`}></span>
-                            <span className={`ml-12 text-xs transition-colors duration-300 ${activeTileIndex === index ? 'text-white' : 'text-gray-600'}`}>{tile.title}</span>
+                            <span className={`absolute right-6 w-2.5 h-0.5 transition-all duration-300 ${activeTileIndex === index ? 'bg-zinc-900 w-8' : 'bg-zinc-300'}`}></span>
+                            <span className={`ml-12 text-xs transition-colors duration-300 ${activeTileIndex === index ? 'text-zinc-900' : 'text-zinc-500'}`}>{tile.title}</span>
                         </a>
                     ))}
                 </div>
@@ -406,9 +406,9 @@ const Homepage = () => {
                             animate={{ opacity: 1 }} 
                             exit={{ opacity: 0 }} 
                             onClick={handleScrollToNext} 
-                            className="mt-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                            className="mt-4 p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 transition-colors"
                         >
-                            <ChevronDown size={20} />
+                            <ChevronDown size={20} className="text-zinc-700" />
                         </motion.button>
                     )}
                 </AnimatePresence>
@@ -427,169 +427,105 @@ const Homepage = () => {
                 }}
             >
                 {TILES.map((tile, index) => (
-                    <section key={tile.id} id={tile.id} className="h-screen w-screen snap-start snap-always flex flex-col relative">
-                        {/* Background Gradient */}
-                        <div className={`absolute inset-0 bg-gradient-to-br ${getColorClasses(tile.color)} opacity-30`}></div>
-                        
-                        {/* Main Content */}
-                        <div className="relative z-10 flex-1 flex items-center justify-center">
-                            <div className="max-w-7xl mx-auto px-8 w-full">
-                            {tile.layout === 'hero' ? (
-                                // Hero Layout - Centered with proper spacing
-                                <div className="text-center pt-20">
-                                    <h1 className="text-4xl lg:text-6xl font-bold mb-4 leading-tight">
-                                        {tile.title}
+                    <section key={tile.id} id={tile.id} className="tile-item relative min-h-[100dvh] flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
+                        {tile.layout === 'hero' && (
+                            <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 items-center gap-12">
+                                <div className="absolute inset-0 -z-10 bg-noise" />
+                                <div className="p-4">
+                                    <div className="surface overflow-hidden shadow-2xl">
+                                        <div className="w-full h-96">
+                                            <UnifiedViewer tile={tile} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="p-4 text-center lg:text-left">
+                                    <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-zinc-900">
+                                        Build Smarter with Slate360
                                     </h1>
-                                    <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
-                                        {tile.subtitle}
-                                    </h2>
-                                    <p className="text-base lg:text-lg text-gray-400 mb-6 leading-relaxed max-w-3xl mx-auto">
-                                        {tile.description}
+                                    <p className="mt-4 text-lg text-zinc-600 max-w-prose mx-auto lg:mx-0">
+                                        Photogrammetry, LiDAR, GNSS, and BIM in one modern workspace. Upload data, process in the cloud, and deliver interactive models.
                                     </p>
-                                    {/* Features Grid */}
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 max-w-3xl mx-auto">
-                                        {tile.features.map((feature, idx) => (
-                                            <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                                                <p className="text-xs font-medium text-white">{feature}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="flex justify-center gap-4 mb-8">
-                                        <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
-                                            GET STARTED →
-                                        </button>
-                                        <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
-                                            LEARN MORE
-                                        </button>
-                                    </div>
-                                    {/* Hero Viewer */}
-                                    <div className="max-w-md mx-auto">
-                                        <div className="w-full h-80">
-                                            <UnifiedViewer tile={tile} />
-                                        </div>
+                                    <div className="mt-8 flex gap-4 justify-center lg:justify-start">
+                                        <a href="/dashboard" className="inline-flex items-center justify-center rounded-lg px-5 py-3 font-medium text-white transition-colors" style={{ backgroundColor: 'var(--brand-accent)' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--brand-accent-hover)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--brand-accent)'}>Open Dashboard</a>
+                                        <a href="/bim" className="inline-flex items-center justify-center rounded-lg px-5 py-3 font-medium ring-1 ring-zinc-300 text-zinc-900 hover:bg-zinc-100/50 transition-colors">Try BIM Studio</a>
                                     </div>
                                 </div>
-                            ) : tile.layout === 'left' ? (
-                                // Left Layout - Content Left, Viewer Right
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                                    <div className="text-left">
-                                        <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-                                            {tile.title}
-                                        </h1>
-                                        <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
-                                            {tile.subtitle}
-                                        </h2>
-                                        <p className="text-base lg:text-lg text-gray-400 mb-6 leading-relaxed">
-                                            {tile.description}
-                                        </p>
-                                        {/* Features */}
-                                        <div className="grid grid-cols-2 gap-3 mb-8">
-                                            {tile.features.map((feature, idx) => (
-                                                <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                                                    <p className="text-xs font-medium text-white">{feature}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div className="flex gap-4">
-                                            <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
-                                                GET STARTED →
-                                            </button>
-                                            <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
-                                                LEARN MORE
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className="flex justify-center lg:justify-end">
-                                        <div className="w-full max-w-lg h-96">
-                                            <UnifiedViewer tile={tile} />
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                // Right Layout - Viewer Left, Content Right
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                                    <div className="flex justify-center lg:justify-start order-2 lg:order-1">
-                                        <div className="w-full max-w-lg h-96">
-                                            <UnifiedViewer tile={tile} />
-                                        </div>
-                                    </div>
-                                    <div className="text-left order-1 lg:order-2">
-                                        <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-                                            {tile.title}
-                                        </h1>
-                                        <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
-                                            {tile.subtitle}
-                                        </h2>
-                                        <p className="text-base lg:text-lg text-gray-400 mb-6 leading-relaxed">
-                                            {tile.description}
-                                        </p>
-                                        {/* Features */}
-                                        <div className="grid grid-cols-2 gap-3 mb-8">
-                                            {tile.features.map((feature, idx) => (
-                                                <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                                                    <p className="text-xs font-medium text-white">{feature}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div className="flex gap-4">
-                                            <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
-                                                GET STARTED →
-                                            </button>
-                                            <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
-                                                LEARN MORE
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
                             </div>
-                        </div>
+                        )}
+
+                        {tile.layout !== 'hero' && (
+                            <div className={`w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center`}>
+                                {/* Copy Column */}
+                                <div className={`p-2 ${tile.layout === 'right' ? 'lg:order-2' : 'lg:order-1'}`}>
+                                    <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-zinc-900">{tile.title}</h2>
+                                    <h3 className="mt-2 text-xl text-zinc-700">{tile.subtitle}</h3>
+                                    <p className="mt-4 text-base text-zinc-600">{tile.description}</p>
+                                    <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {tile.features?.map((f, i) => (
+                                            <li key={i} className="flex items-center gap-3 text-sm text-zinc-800">
+                                                <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--brand-accent)' }} />
+                                                <span>{f}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                
+                                {/* Media Column */}
+                                <div className={`p-2 ${tile.layout === 'right' ? 'lg:order-1' : 'lg:order-2'}`}>
+                                    <div className="surface overflow-hidden shadow-xl">
+                                        <div className="w-full h-96">
+                                            <UnifiedViewer tile={tile} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                         
                         {/* Footer - Only on last tile */}
                         {index === TILES.length - 1 && (
-                            <footer className="absolute bottom-0 left-0 right-0 z-10 bg-black/80 backdrop-blur-sm border-t border-gray-700">
+                            <footer className="absolute bottom-0 left-0 right-0 z-10 bg-white/95 backdrop-blur-sm border-t border-zinc-200">
                                 <div className="max-w-6xl mx-auto px-8 py-6">
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-4">
                                         <div>
-                                            <h3 className="font-semibold mb-2 text-sm">Product</h3>
-                                            <ul className="space-y-1 text-xs text-gray-400">
-                                                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-                                                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-                                                <li><a href="#" className="hover:text-white transition-colors">Demo</a></li>
-                                                <li><a href="#" className="hover:text-white transition-colors">API</a></li>
+                                            <h3 className="font-semibold mb-2 text-sm text-zinc-900">Product</h3>
+                                            <ul className="space-y-1 text-xs text-zinc-600">
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Features</a></li>
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Pricing</a></li>
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Demo</a></li>
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">API</a></li>
                                             </ul>
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold mb-2 text-sm">Company</h3>
-                                            <ul className="space-y-1 text-xs text-gray-400">
-                                                <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-                                                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                                                <li><a href="#" className="hover:text-white transition-colors">Press</a></li>
-                                                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
+                                            <h3 className="font-semibold mb-2 text-sm text-zinc-900">Company</h3>
+                                            <ul className="space-y-1 text-xs text-zinc-600">
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">About</a></li>
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Careers</a></li>
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Press</a></li>
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Blog</a></li>
                                             </ul>
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold mb-2 text-sm">Support</h3>
-                                            <ul className="space-y-1 text-xs text-gray-400">
-                                                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                                                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-                                                <li><a href="#" className="hover:text-white transition-colors">Status</a></li>
-                                                <li><a href="#" className="hover:text-white transition-colors">Community</a></li>
+                                            <h3 className="font-semibold mb-2 text-sm text-zinc-900">Support</h3>
+                                            <ul className="space-y-1 text-xs text-zinc-600">
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Help Center</a></li>
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Contact</a></li>
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Status</a></li>
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Community</a></li>
                                             </ul>
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold mb-2 text-sm">Legal</h3>
-                                            <ul className="space-y-1 text-xs text-gray-400">
-                                                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                                                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-                                                <li><a href="#" className="hover:text-white transition-colors">Cookie Policy</a></li>
-                                                <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
+                                            <h3 className="font-semibold mb-2 text-sm text-zinc-900">Legal</h3>
+                                            <ul className="space-y-1 text-xs text-zinc-600">
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Privacy Policy</a></li>
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Terms of Service</a></li>
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Cookie Policy</a></li>
+                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Security</a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     
-                                    <div className="border-t border-gray-700 pt-3 text-center">
-                                        <p className="text-xs text-gray-500">
+                                    <div className="border-t border-zinc-200 pt-3 text-center">
+                                        <p className="text-xs text-zinc-500">
                                             © 2025 SLATE360. All rights reserved. | Built with innovation for the construction industry.
                                         </p>
                                     </div>

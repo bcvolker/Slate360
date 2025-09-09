@@ -1,57 +1,39 @@
 'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { LogIn } from 'lucide-react';
 
-interface CleanHeaderProps {
-  className?: string;
-}
+export default function CleanHeader() {
+  const [scrolled, setScrolled] = useState(false);
 
-export default function CleanHeader({ className = '' }: CleanHeaderProps) {
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 bg-transparent ${className}`}>
-      <div className="max-w-7xl mx-auto px-8 py-3">
-        <div className="flex items-center justify-between">
-          {/* Logo - Clickable to homepage */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
-              <Image 
-                src="/slate360-logo.png" 
-                alt="Slate360 Logo" 
-                width={480} 
-                height={120} 
-                priority 
-                className="h-24 w-auto"
-              />
-            </Link>
-          </div>
-          
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/contact" className="text-white hover:text-gray-300 transition-colors font-normal text-sm tracking-wide">
-              CONTACT
-            </Link>
-            <Link href="/about" className="text-white hover:text-gray-300 transition-colors font-normal text-sm tracking-wide">
-              ABOUT
-            </Link>
-            <Link href="/pricing" className="text-white hover:text-gray-300 transition-colors font-normal text-sm tracking-wide">
-              SUBSCRIBE
-            </Link>
-            <Link href="/login" className="flex items-center space-x-2 text-white hover:text-gray-300 transition-colors font-normal text-sm tracking-wide">
-              <LogIn className="w-4 h-4" />
-              <span>LOGIN</span>
-            </Link>
-          </nav>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <Link href="/login" className="flex items-center space-x-2 text-white hover:text-gray-300 transition-colors font-normal text-sm">
-              <LogIn className="w-4 h-4" />
-              <span>LOGIN</span>
-            </Link>
-          </div>
-        </div>
+    <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+      scrolled
+        ? 'backdrop-blur-lg bg-white/80 border-b border-zinc-200 shadow-sm'
+        : 'backdrop-blur-sm bg-white/40 border-b border-transparent'
+    }`}>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2">
+          {/* Ensure your logo is at this path */}
+          <Image src="/slate360-logo.png" alt="Slate360" width={150} height={36} priority />
+        </Link>
+        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+          <Link href="/dashboard" className="text-zinc-700 hover:text-zinc-900 transition-colors">Dashboard</Link>
+          <Link href="/bim" className="text-zinc-700 hover:text-zinc-900 transition-colors">BIM Studio</Link>
+          <Link href="/reports" className="text-zinc-700 hover:text-zinc-900 transition-colors">Reports</Link>
+          <Link href="/ceo" className="text-zinc-700 hover:text-zinc-900 transition-colors">CEO</Link>
+          <Link href="/login" className="inline-flex items-center gap-1.5 text-zinc-700 hover:text-zinc-900 transition-colors">
+            <LogIn className="w-4 h-4" />
+            <span>Login</span>
+          </Link>
+        </nav>
       </div>
     </header>
   );
