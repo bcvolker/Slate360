@@ -7,7 +7,6 @@ import {
   demoNotifications,
   demoAnalytics,
   simulateFileUpload,
-  simulateProjectCreation,
   simulateDataSync,
   getDemoProject,
   getDemoProjectsByStatus,
@@ -17,6 +16,7 @@ import {
   getDemoFilesByProject,
   getDemoNotifications
 } from '../lib/demo/demoData';
+import { createDemoProjectCompat } from '../lib/demo/shims';
 import { Project } from '@/types';
 
 interface DemoContextType {
@@ -97,7 +97,7 @@ export function DemoProvider({ children }: DemoProviderProps) {
     try {
       toast.loading('Creating demo project...', { id: 'demo-project-create' });
       
-      const result = await simulateProjectCreation(projectData);
+      const result = await createDemoProjectCompat(projectData);
       
       if (result.success && result.projectId) {
         const newProject = {
