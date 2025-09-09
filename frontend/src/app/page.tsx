@@ -101,56 +101,100 @@ const TILES = [
     }
 ];
 
-// Standardized Viewer Components
-const ImageViewer = ({ url }: { url: string }) => (
-    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
-        <img src={url} alt="Content" className="w-full h-full object-cover" />
-    </div>
-);
+// Unified Viewer Component
+const UnifiedViewer = ({ tile }: { tile: any }) => {
+    const getFileExtension = (url: string) => {
+        return url.split('.').pop()?.toLowerCase() || '';
+    };
 
-const VideoViewer = ({ url }: { url: string }) => (
-    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
-        <video src={url} controls className="w-full h-full object-cover" />
-    </div>
-);
+    const getViewerContent = () => {
+        const extension = getFileExtension(tile.viewerUrl || '');
+        
+        // Handle different file types
+        if (tile.viewerType === 'hero') {
+            return (
+                <div className="text-center">
+                    <div className="text-4xl mb-2">🚀</div>
+                    <h3 className="text-xl font-bold mb-1">SLATE360</h3>
+                    <p className="text-sm text-gray-300">The Future of Construction</p>
+                </div>
+            );
+        }
+        
+        if (tile.viewerType === 'image' || ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(extension)) {
+            return (
+                <img 
+                    src={tile.viewerUrl} 
+                    alt="Content" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                        // Fallback to placeholder if image fails to load
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                    }}
+                />
+            );
+        }
+        
+        if (tile.viewerType === 'video' || ['mp4', 'webm', 'ogg', 'mov', 'avi'].includes(extension)) {
+            return (
+                <video 
+                    src={tile.viewerUrl} 
+                    controls 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                        // Fallback to placeholder if video fails to load
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                    }}
+                />
+            );
+        }
+        
+        if (tile.viewerType === 'model' || ['glb', 'gltf', 'obj', 'fbx', 'dae', 'ifc'].includes(extension)) {
+            return (
+                <div className="text-center">
+                    <div className="text-4xl mb-2">🏗️</div>
+                    <p className="text-sm text-gray-400">3D Model Viewer</p>
+                    <p className="text-xs text-gray-500 mt-1">{extension.toUpperCase()}</p>
+                </div>
+            );
+        }
+        
+        if (tile.viewerType === 'tour' || ['html', 'htm'].includes(extension)) {
+            return (
+                <div className="text-center">
+                    <div className="text-4xl mb-2">🌐</div>
+                    <p className="text-sm text-gray-400">360° Tour</p>
+                    <p className="text-xs text-gray-500 mt-1">Interactive</p>
+                </div>
+            );
+        }
+        
+        // Default fallback for unknown types
+        return (
+            <div className="text-center">
+                <div className="text-4xl mb-2">📄</div>
+                <p className="text-sm text-gray-400">File Viewer</p>
+                <p className="text-xs text-gray-500 mt-1">{extension.toUpperCase() || 'Unknown'}</p>
+            </div>
+        );
+    };
 
-const ModelViewer = ({ url }: { url: string }) => (
-    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700 flex items-center justify-center">
-        <div className="text-center">
-            <div className="text-4xl mb-2">🏗️</div>
-            <p className="text-sm text-gray-400">3D Model Viewer</p>
+    return (
+        <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700 flex items-center justify-center relative">
+            {getViewerContent()}
+            
+            {/* Fallback placeholder - hidden by default */}
+            <div className="hidden absolute inset-0 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="text-4xl mb-2">📁</div>
+                    <p className="text-sm text-gray-400">Content Preview</p>
+                    <p className="text-xs text-gray-500 mt-1">Loading...</p>
+                </div>
+            </div>
         </div>
-    </div>
-);
-
-const TourViewer = ({ url }: { url: string }) => (
-    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700 flex items-center justify-center">
-        <div className="text-center">
-            <div className="text-4xl mb-2">🌐</div>
-            <p className="text-sm text-gray-400">360° Tour</p>
-        </div>
-    </div>
-);
-
-const HeroViewer = () => (
-    <div className="w-full h-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-lg border border-gray-700 flex items-center justify-center">
-        <div className="text-center">
-            <div className="text-4xl mb-2">🚀</div>
-            <h3 className="text-xl font-bold mb-1">SLATE360</h3>
-            <p className="text-sm text-gray-300">The Future of Construction</p>
-        </div>
-    </div>
-);
-
-const TileViewer = ({ tile }: { tile: any }) => {
-    switch (tile.viewerType) {
-        case 'image': return <ImageViewer url={tile.viewerUrl} />;
-        case 'video': return <VideoViewer url={tile.viewerUrl} />;
-        case 'model': return <ModelViewer url={tile.viewerUrl} />;
-        case 'tour': return <TourViewer url={tile.viewerUrl} />;
-        case 'hero': return <HeroViewer />;
-        default: return <HeroViewer />;
-    }
+    );
 };
 
 const Homepage = () => {
@@ -421,7 +465,7 @@ const Homepage = () => {
                                     {/* Hero Viewer */}
                                     <div className="max-w-lg mx-auto">
                                         <div className="w-full h-96">
-                                            <TileViewer tile={tile} />
+                                            <UnifiedViewer tile={tile} />
                                         </div>
                                     </div>
                                 </div>
@@ -457,7 +501,7 @@ const Homepage = () => {
                                     </div>
                                     <div className="flex justify-center lg:justify-end">
                                         <div className="w-full max-w-lg h-96">
-                                            <TileViewer tile={tile} />
+                                            <UnifiedViewer tile={tile} />
                                         </div>
                                     </div>
                                 </div>
@@ -466,7 +510,7 @@ const Homepage = () => {
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                                     <div className="flex justify-center lg:justify-start order-2 lg:order-1">
                                         <div className="w-full max-w-lg h-96">
-                                            <TileViewer tile={tile} />
+                                            <UnifiedViewer tile={tile} />
                                         </div>
                                     </div>
                                     <div className="text-left order-1 lg:order-2">
