@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import SimpleAppShell from '@/app-shell/SimpleAppShell';
 import CleanHeader from '@/components/CleanHeader';
+import DotNav from '@/components/DotNav';
 import Providers from '@/app-shell/Providers';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -20,12 +21,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      {/* These classes will ensure the dark gradient is the base layer */}
+      <body className={`${inter.className} bg-gradient-to-b from-zinc-900 to-zinc-950 text-zinc-300`}>
         <Providers>
           <SimpleAppShell header={<CleanHeader />}>
             {children}
           </SimpleAppShell>
         </Providers>
+        <DotNav />
       </body>
     </html>
   );

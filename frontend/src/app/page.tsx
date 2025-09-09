@@ -373,46 +373,6 @@ const Homepage = () => {
     return (
         <div className="min-h-screen overflow-hidden relative">
             
-            {/* Horizontal Line Navigation */}
-            <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-40 flex flex-col items-center">
-                <AnimatePresence>
-                    {activeTileIndex > 0 && (
-                        <motion.button 
-                            initial={{ opacity: 0 }} 
-                            animate={{ opacity: 1 }} 
-                            exit={{ opacity: 0 }} 
-                            onClick={handleScrollToPrev} 
-                            className="mb-4 p-2 rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors"
-                        >
-                            <ChevronUp size={20} className="text-zinc-300" />
-                        </motion.button>
-                    )}
-                </AnimatePresence>
-                <div className="relative flex flex-col items-center">
-                    <div className="absolute top-0 left-1/2 w-px bg-zinc-700" style={{ height: '100%' }}></div>
-                    {TILES.map((tile, index) => (
-                        <a key={tile.id} href={`#${tile.id}`}
-                           className="relative my-2 w-full flex items-center"
-                           onClick={(e) => { e.preventDefault(); scrollToTile(index); }}>
-                            <span className={`absolute right-6 w-2.5 h-0.5 transition-all duration-300 ${activeTileIndex === index ? 'bg-zinc-100 w-8' : 'bg-zinc-700'}`}></span>
-                            <span className={`ml-12 text-xs transition-colors duration-300 ${activeTileIndex === index ? 'text-zinc-100' : 'text-zinc-500'}`}>{tile.title}</span>
-                        </a>
-                    ))}
-                </div>
-                 <AnimatePresence>
-                    {activeTileIndex < TILES.length - 1 && (
-                        <motion.button 
-                            initial={{ opacity: 0 }} 
-                            animate={{ opacity: 1 }} 
-                            exit={{ opacity: 0 }} 
-                            onClick={handleScrollToNext} 
-                            className="mt-4 p-2 rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors"
-                        >
-                            <ChevronDown size={20} className="text-zinc-300" />
-                        </motion.button>
-                    )}
-                </AnimatePresence>
-            </div>
 
             {/* Scroll Container */}
             <div 
