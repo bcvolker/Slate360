@@ -346,19 +346,12 @@ const Homepage = () => {
                         
                         {/* Footer - Only on last tile */}
                         {index === TILES.length - 1 && (
-                            <footer className="relative z-10 bg-gray-900/95 backdrop-blur-sm border-t border-gray-800">
-                                <div className="max-w-6xl mx-auto px-8 py-12">
-                                    <div className="text-center mb-8">
-                                        <h2 className="text-3xl font-bold mb-4">SLATE360</h2>
-                                        <p className="text-gray-400 max-w-2xl mx-auto">
-                                            The future of construction technology. Transform how you build with advanced 3D modeling, real-time collaboration, and immersive technologies.
-                                        </p>
-                                    </div>
-                                    
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+                            <footer className="absolute bottom-0 left-0 right-0 z-10 bg-black/80 backdrop-blur-sm border-t border-gray-700">
+                                <div className="max-w-6xl mx-auto px-8 py-6">
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-4">
                                         <div>
-                                            <h3 className="font-semibold mb-4">Product</h3>
-                                            <ul className="space-y-2 text-sm text-gray-400">
+                                            <h3 className="font-semibold mb-2 text-sm">Product</h3>
+                                            <ul className="space-y-1 text-xs text-gray-400">
                                                 <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
                                                 <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
                                                 <li><a href="#" className="hover:text-white transition-colors">Demo</a></li>
@@ -366,8 +359,8 @@ const Homepage = () => {
                                             </ul>
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold mb-4">Company</h3>
-                                            <ul className="space-y-2 text-sm text-gray-400">
+                                            <h3 className="font-semibold mb-2 text-sm">Company</h3>
+                                            <ul className="space-y-1 text-xs text-gray-400">
                                                 <li><a href="#" className="hover:text-white transition-colors">About</a></li>
                                                 <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
                                                 <li><a href="#" className="hover:text-white transition-colors">Press</a></li>
@@ -375,8 +368,8 @@ const Homepage = () => {
                                             </ul>
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold mb-4">Support</h3>
-                                            <ul className="space-y-2 text-sm text-gray-400">
+                                            <h3 className="font-semibold mb-2 text-sm">Support</h3>
+                                            <ul className="space-y-1 text-xs text-gray-400">
                                                 <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
                                                 <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
                                                 <li><a href="#" className="hover:text-white transition-colors">Status</a></li>
@@ -384,8 +377,8 @@ const Homepage = () => {
                                             </ul>
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold mb-4">Legal</h3>
-                                            <ul className="space-y-2 text-sm text-gray-400">
+                                            <h3 className="font-semibold mb-2 text-sm">Legal</h3>
+                                            <ul className="space-y-1 text-xs text-gray-400">
                                                 <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
                                                 <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
                                                 <li><a href="#" className="hover:text-white transition-colors">Cookie Policy</a></li>
@@ -394,8 +387,8 @@ const Homepage = () => {
                                         </div>
                                     </div>
                                     
-                                    <div className="border-t border-gray-800 pt-6 text-center">
-                                        <p className="text-sm text-gray-500">
+                                    <div className="border-t border-gray-700 pt-3 text-center">
+                                        <p className="text-xs text-gray-500">
                                             © 2025 SLATE360. All rights reserved. | Built with innovation for the construction industry.
                                         </p>
                                     </div>

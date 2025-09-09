@@ -11,7 +11,7 @@ interface CleanHeaderProps {
 export default function CleanHeader({ className = '' }: CleanHeaderProps) {
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 bg-transparent ${className}`}>
-      <div className="max-w-7xl mx-auto px-8 py-4">
+      <div className="max-w-7xl mx-auto px-8 py-6">
         <div className="flex items-center justify-between">
           {/* Logo - Clickable to homepage */}
           <div className="flex items-center">
@@ -28,7 +28,7 @@ export default function CleanHeader({ className = '' }: CleanHeaderProps) {
           </div>
           
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-10">
+          <nav className="hidden md:flex items-center space-x-8">
             <Link href="/contact" className="text-white hover:text-gray-300 transition-colors font-normal text-sm tracking-wide">
               CONTACT
             </Link>
