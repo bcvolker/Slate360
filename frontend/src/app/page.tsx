@@ -371,7 +371,7 @@ const Homepage = () => {
     };
 
     return (
-        <div className="min-h-screen overflow-hidden relative">
+        <div className="min-h-screen overflow-hidden relative bg-gradient-to-b from-zinc-900 to-zinc-950">
             
 
             {/* Scroll Container */}
