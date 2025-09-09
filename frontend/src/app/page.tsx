@@ -10,7 +10,9 @@ const TILES = [
         subtitle: 'The Future of Construction Technology',
         description: 'SLATE360 creates safe, efficient, and intelligent construction workflows with advanced 3D modeling, real-time collaboration, and immersive technologies.',
         icon: '🚀',
-        color: 'blue'
+        color: 'blue',
+        layout: 'hero',
+        viewerType: 'hero'
     },
     { 
         id: 'project-hub', 
@@ -18,7 +20,10 @@ const TILES = [
         subtitle: 'Centralized Project Management',
         description: 'Manage all your construction projects from one powerful dashboard with real-time collaboration and advanced tracking.',
         icon: '📊',
-        color: 'green'
+        color: 'green',
+        layout: 'left',
+        viewerType: 'image',
+        viewerUrl: 'https://images.unsplash.com/photo-1529429617124-95b109e86f1c'
     },
     { 
         id: 'bim-studio', 
@@ -26,7 +31,10 @@ const TILES = [
         subtitle: 'Advanced 3D Modeling',
         description: 'Create, edit, and collaborate on Building Information Models with precision and real-time updates.',
         icon: '🏗️',
-        color: 'purple'
+        color: 'purple',
+        layout: 'right',
+        viewerType: 'model',
+        viewerUrl: '/mock/tower.ifc'
     },
     { 
         id: '360-tour-builder', 
@@ -34,7 +42,10 @@ const TILES = [
         subtitle: 'Immersive Virtual Tours',
         description: 'Create stunning 360-degree virtual tours and interactive walkthroughs of your construction projects.',
         icon: '🌐',
-        color: 'cyan'
+        color: 'cyan',
+        layout: 'left',
+        viewerType: 'tour',
+        viewerUrl: '/mock/tour.html'
     },
     { 
         id: 'content-studio', 
@@ -42,7 +53,10 @@ const TILES = [
         subtitle: 'Professional Media Production',
         description: 'Create high-quality images, videos, and interactive content for your construction projects.',
         icon: '🎬',
-        color: 'orange'
+        color: 'orange',
+        layout: 'right',
+        viewerType: 'video',
+        viewerUrl: '/mock/demo.mp4'
     },
     { 
         id: 'geospatial', 
@@ -50,7 +64,10 @@ const TILES = [
         subtitle: 'Advanced Automation & Mapping',
         description: 'Leverage drone technology, GPS mapping, and robotic automation for precise construction operations.',
         icon: '🤖',
-        color: 'pink'
+        color: 'pink',
+        layout: 'left',
+        viewerType: 'image',
+        viewerUrl: 'https://images.unsplash.com/photo-1509391366360-2e959784a276'
     },
     { 
         id: 'reports', 
@@ -58,7 +75,10 @@ const TILES = [
         subtitle: 'Data-Driven Insights',
         description: 'Advanced analytics and reporting tools for informed decision-making and project optimization.',
         icon: '📈',
-        color: 'blue'
+        color: 'blue',
+        layout: 'right',
+        viewerType: 'image',
+        viewerUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64'
     },
     { 
         id: 'vr-ar', 
@@ -66,9 +86,66 @@ const TILES = [
         subtitle: 'Immersive Technologies',
         description: 'Experience your projects in virtual and augmented reality for enhanced visualization and collaboration.',
         icon: '🥽',
-        color: 'purple'
+        color: 'purple',
+        layout: 'left',
+        viewerType: 'model',
+        viewerUrl: '/mock/complex.ifc'
     }
 ];
+
+// Viewer Components
+const ImageViewer = ({ url }: { url: string }) => (
+    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden">
+        <img src={url} alt="Content" className="w-full h-full object-cover" />
+    </div>
+);
+
+const VideoViewer = ({ url }: { url: string }) => (
+    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden">
+        <video src={url} controls className="w-full h-full object-cover" />
+    </div>
+);
+
+const ModelViewer = ({ url }: { url: string }) => (
+    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center">
+        <div className="text-center">
+            <div className="text-4xl mb-2">🏗️</div>
+            <p className="text-sm text-gray-400">3D Model Viewer</p>
+            <p className="text-xs text-gray-500">{url}</p>
+        </div>
+    </div>
+);
+
+const TourViewer = ({ url }: { url: string }) => (
+    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center">
+        <div className="text-center">
+            <div className="text-4xl mb-2">🌐</div>
+            <p className="text-sm text-gray-400">360° Tour</p>
+            <p className="text-xs text-gray-500">{url}</p>
+        </div>
+    </div>
+);
+
+const HeroViewer = () => (
+    <div className="w-full h-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-lg flex items-center justify-center">
+        <div className="text-center">
+            <div className="text-6xl mb-4">🚀</div>
+            <h3 className="text-2xl font-bold mb-2">SLATE360</h3>
+            <p className="text-gray-300">The Future of Construction</p>
+        </div>
+    </div>
+);
+
+const TileViewer = ({ tile }: { tile: any }) => {
+    switch (tile.viewerType) {
+        case 'image': return <ImageViewer url={tile.viewerUrl} />;
+        case 'video': return <VideoViewer url={tile.viewerUrl} />;
+        case 'model': return <ModelViewer url={tile.viewerUrl} />;
+        case 'tour': return <TourViewer url={tile.viewerUrl} />;
+        case 'hero': return <HeroViewer />;
+        default: return <HeroViewer />;
+    }
+};
 
 const Homepage = () => {
     const [activeTileIndex, setActiveTileIndex] = useState(0);
@@ -180,43 +257,97 @@ const Homepage = () => {
                         <div className={`absolute inset-0 bg-gradient-to-br ${getColorClasses(tile.color)} opacity-30`}></div>
                         
                         {/* Content */}
-                        <div className="relative z-10 max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                            {/* Left Content */}
-                            <div className="text-left">
-                                <h1 className="text-4xl lg:text-6xl font-bold mb-4 leading-tight">
-                                    {tile.title}
-                                </h1>
-                                <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
-                                    {tile.subtitle}
-                                </h2>
-                                <p className="text-base lg:text-lg text-gray-400 mb-8 leading-relaxed max-w-2xl">
-                                    {tile.description}
-                                </p>
-                                <div className="flex gap-4">
-                                    <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
-                                        GET STARTED →
-                                    </button>
-                                    <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
-                                        LEARN MORE
-                                    </button>
+                        <div className="relative z-10 max-w-7xl mx-auto px-8">
+                            {tile.layout === 'hero' ? (
+                                // Hero Layout - Centered
+                                <div className="text-center">
+                                    <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+                                        {tile.title}
+                                    </h1>
+                                    <h2 className="text-2xl lg:text-3xl font-normal mb-8 text-gray-300">
+                                        {tile.subtitle}
+                                    </h2>
+                                    <p className="text-lg lg:text-xl text-gray-400 mb-12 leading-relaxed max-w-4xl mx-auto">
+                                        {tile.description}
+                                    </p>
+                                    <div className="flex justify-center gap-6 mb-12">
+                                        <button className="px-8 py-4 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
+                                            GET STARTED →
+                                        </button>
+                                        <button className="px-8 py-4 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
+                                            LEARN MORE
+                                        </button>
+                                    </div>
+                                    {/* Hero Viewer */}
+                                    <div className="max-w-2xl mx-auto">
+                                        <div className="w-full h-80">
+                                            <TileViewer tile={tile} />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            {/* Right Tile */}
-                            <div className="flex justify-center lg:justify-end">
-                                <div className={`w-64 h-64 bg-gradient-to-br ${getColorClasses(tile.color)} border rounded-xl p-6 flex flex-col items-center justify-center text-center backdrop-blur-sm`}>
-                                    <div className="text-4xl mb-4">{tile.icon}</div>
-                                    <h3 className="text-lg font-semibold mb-2">{tile.title}</h3>
-                                    <p className="text-sm text-gray-300 mb-4">{tile.subtitle}</p>
-                                    <div className="w-12 h-0.5 bg-white rounded-full"></div>
+                            ) : tile.layout === 'left' ? (
+                                // Left Layout - Content Left, Viewer Right
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                                    <div className="text-left">
+                                        <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+                                            {tile.title}
+                                        </h1>
+                                        <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
+                                            {tile.subtitle}
+                                        </h2>
+                                        <p className="text-base lg:text-lg text-gray-400 mb-8 leading-relaxed">
+                                            {tile.description}
+                                        </p>
+                                        <div className="flex gap-4">
+                                            <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
+                                                GET STARTED →
+                                            </button>
+                                            <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
+                                                LEARN MORE
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-center lg:justify-end">
+                                        <div className="w-full max-w-lg h-96">
+                                            <TileViewer tile={tile} />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                // Right Layout - Viewer Left, Content Right
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                                    <div className="flex justify-center lg:justify-start order-2 lg:order-1">
+                                        <div className="w-full max-w-lg h-96">
+                                            <TileViewer tile={tile} />
+                                        </div>
+                                    </div>
+                                    <div className="text-left order-1 lg:order-2">
+                                        <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+                                            {tile.title}
+                                        </h1>
+                                        <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
+                                            {tile.subtitle}
+                                        </h2>
+                                        <p className="text-base lg:text-lg text-gray-400 mb-8 leading-relaxed">
+                                            {tile.description}
+                                        </p>
+                                        <div className="flex gap-4">
+                                            <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
+                                                GET STARTED →
+                                            </button>
+                                            <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
+                                                LEARN MORE
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </section>
                 ))}
                 
-                {/* Footer */}
-                <footer className="h-screen w-screen snap-start flex flex-col justify-center items-center bg-gray-900 relative">
+                {/* Footer - Positioned at bottom of last tile */}
+                <footer className="h-screen w-screen snap-start flex flex-col justify-end items-center bg-gray-900 relative pb-8">
                     <div className="max-w-6xl mx-auto px-8 text-center">
                         <h2 className="text-4xl font-bold mb-6">SLATE360</h2>
                         <p className="text-lg text-gray-400 mb-12 max-w-3xl">
