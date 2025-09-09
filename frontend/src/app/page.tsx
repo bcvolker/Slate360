@@ -371,7 +371,7 @@ const Homepage = () => {
     };
 
     return (
-        <div className="min-h-screen overflow-hidden relative">
+        <div className="min-h-screen overflow-hidden relative bg-gradient-to-b from-slate-50 to-white">
             
             {/* Horizontal Line Navigation */}
             <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-40 flex flex-col items-center">
