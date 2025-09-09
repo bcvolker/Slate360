@@ -8,7 +8,8 @@ const TILES = [
         id: 'slate360', 
         title: 'SLATE360', 
         subtitle: 'The Future of Construction Technology',
-        description: 'SLATE360 creates safe, efficient, and intelligent construction workflows with advanced 3D modeling, real-time collaboration, and immersive technologies.',
+        description: 'SLATE360 creates safe, efficient, and intelligent construction workflows with advanced 3D modeling, real-time collaboration, and immersive technologies. Our platform revolutionizes how construction teams plan, execute, and deliver projects with unprecedented precision and efficiency.',
+        features: ['Real-time Collaboration', 'Advanced 3D Modeling', 'Immersive Technologies', 'Smart Analytics'],
         icon: '🚀',
         color: 'blue',
         layout: 'hero',
@@ -18,7 +19,8 @@ const TILES = [
         id: 'project-hub', 
         title: 'PROJECT HUB', 
         subtitle: 'Centralized Project Management',
-        description: 'Manage all your construction projects from one powerful dashboard with real-time collaboration and advanced tracking.',
+        description: 'Manage all your construction projects from one powerful dashboard with real-time collaboration and advanced tracking. Streamline workflows, track progress, and ensure every team member stays aligned with project goals and deadlines.',
+        features: ['Project Tracking', 'Team Collaboration', 'Progress Monitoring', 'Deadline Management'],
         icon: '📊',
         color: 'green',
         layout: 'left',
@@ -29,7 +31,8 @@ const TILES = [
         id: 'bim-studio', 
         title: 'BIM STUDIO', 
         subtitle: 'Advanced 3D Modeling',
-        description: 'Create, edit, and collaborate on Building Information Models with precision and real-time updates.',
+        description: 'Create, edit, and collaborate on Building Information Models with precision and real-time updates. Our BIM tools enable architects, engineers, and contractors to work seamlessly together on complex construction projects.',
+        features: ['3D Modeling', 'Real-time Updates', 'Multi-user Collaboration', 'Precision Tools'],
         icon: '🏗️',
         color: 'purple',
         layout: 'right',
@@ -40,7 +43,8 @@ const TILES = [
         id: '360-tour-builder', 
         title: '360 TOUR BUILDER', 
         subtitle: 'Immersive Virtual Tours',
-        description: 'Create stunning 360-degree virtual tours and interactive walkthroughs of your construction projects.',
+        description: 'Create stunning 360-degree virtual tours and interactive walkthroughs of your construction projects. Showcase your work to clients and stakeholders with immersive experiences that bring your projects to life.',
+        features: ['360° Photography', 'Virtual Walkthroughs', 'Interactive Tours', 'Client Presentations'],
         icon: '🌐',
         color: 'cyan',
         layout: 'left',
@@ -51,7 +55,8 @@ const TILES = [
         id: 'content-studio', 
         title: 'CONTENT STUDIO', 
         subtitle: 'Professional Media Production',
-        description: 'Create high-quality images, videos, and interactive content for your construction projects.',
+        description: 'Create high-quality images, videos, and interactive content for your construction projects. Our content studio provides all the tools you need to document, showcase, and market your construction work professionally.',
+        features: ['Video Production', 'Image Editing', 'Content Management', 'Marketing Tools'],
         icon: '🎬',
         color: 'orange',
         layout: 'right',
@@ -62,7 +67,8 @@ const TILES = [
         id: 'geospatial', 
         title: 'GEOSPATIAL & ROBOTICS', 
         subtitle: 'Advanced Automation & Mapping',
-        description: 'Leverage drone technology, GPS mapping, and robotic automation for precise construction operations.',
+        description: 'Leverage drone technology, GPS mapping, and robotic automation for precise construction operations. Our geospatial tools provide accurate site mapping, progress monitoring, and automated data collection.',
+        features: ['Drone Mapping', 'GPS Integration', 'Robotic Automation', 'Site Analysis'],
         icon: '🤖',
         color: 'pink',
         layout: 'left',
@@ -73,7 +79,8 @@ const TILES = [
         id: 'reports', 
         title: 'REPORTS & ANALYTICS', 
         subtitle: 'Data-Driven Insights',
-        description: 'Advanced analytics and reporting tools for informed decision-making and project optimization.',
+        description: 'Advanced analytics and reporting tools for informed decision-making and project optimization. Transform raw construction data into actionable insights that drive efficiency and improve project outcomes.',
+        features: ['Performance Analytics', 'Custom Reports', 'Data Visualization', 'Predictive Insights'],
         icon: '📈',
         color: 'blue',
         layout: 'right',
@@ -84,7 +91,8 @@ const TILES = [
         id: 'vr-ar', 
         title: 'VR/AR STUDIO', 
         subtitle: 'Immersive Technologies',
-        description: 'Experience your projects in virtual and augmented reality for enhanced visualization and collaboration.',
+        description: 'Experience your projects in virtual and augmented reality for enhanced visualization and collaboration. Our VR/AR tools enable immersive project walkthroughs, design reviews, and client presentations.',
+        features: ['Virtual Reality', 'Augmented Reality', 'Immersive Walkthroughs', 'Design Reviews'],
         icon: '🥽',
         color: 'purple',
         layout: 'left',
@@ -257,90 +265,114 @@ const Homepage = () => {
                         {/* Main Content */}
                         <div className="relative z-10 flex-1 flex items-center justify-center">
                             <div className="max-w-7xl mx-auto px-8 w-full">
-                                {tile.layout === 'hero' ? (
-                                    // Hero Layout - Centered
-                                    <div className="text-center">
-                                        <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+                            {tile.layout === 'hero' ? (
+                                // Hero Layout - Centered
+                                <div className="text-center">
+                                    <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+                                        {tile.title}
+                                    </h1>
+                                    <h2 className="text-2xl lg:text-3xl font-normal mb-8 text-gray-300">
+                                        {tile.subtitle}
+                                    </h2>
+                                    <p className="text-lg lg:text-xl text-gray-400 mb-8 leading-relaxed max-w-4xl mx-auto">
+                                        {tile.description}
+                                    </p>
+                                    {/* Features Grid */}
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 max-w-4xl mx-auto">
+                                        {tile.features.map((feature, idx) => (
+                                            <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                                                <p className="text-sm font-medium text-white">{feature}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="flex justify-center gap-6 mb-12">
+                                        <button className="px-8 py-4 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
+                                            GET STARTED →
+                                        </button>
+                                        <button className="px-8 py-4 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
+                                            LEARN MORE
+                                        </button>
+                                    </div>
+                                    {/* Hero Viewer */}
+                                    <div className="max-w-lg mx-auto">
+                                        <div className="w-full h-96">
+                                            <TileViewer tile={tile} />
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : tile.layout === 'left' ? (
+                                // Left Layout - Content Left, Viewer Right
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                                    <div className="text-left">
+                                        <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
                                             {tile.title}
                                         </h1>
-                                        <h2 className="text-2xl lg:text-3xl font-normal mb-8 text-gray-300">
+                                        <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
                                             {tile.subtitle}
                                         </h2>
-                                        <p className="text-lg lg:text-xl text-gray-400 mb-12 leading-relaxed max-w-4xl mx-auto">
+                                        <p className="text-base lg:text-lg text-gray-400 mb-6 leading-relaxed">
                                             {tile.description}
                                         </p>
-                                        <div className="flex justify-center gap-6 mb-12">
-                                            <button className="px-8 py-4 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
+                                        {/* Features */}
+                                        <div className="grid grid-cols-2 gap-3 mb-8">
+                                            {tile.features.map((feature, idx) => (
+                                                <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
+                                                    <p className="text-xs font-medium text-white">{feature}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="flex gap-4">
+                                            <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
                                                 GET STARTED →
                                             </button>
-                                            <button className="px-8 py-4 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
+                                            <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
                                                 LEARN MORE
                                             </button>
                                         </div>
-                                        {/* Hero Viewer */}
-                                        <div className="max-w-lg mx-auto">
-                                            <div className="w-full h-96">
-                                                <TileViewer tile={tile} />
-                                            </div>
+                                    </div>
+                                    <div className="flex justify-center lg:justify-end">
+                                        <div className="w-full max-w-lg h-96">
+                                            <TileViewer tile={tile} />
                                         </div>
                                     </div>
-                                ) : tile.layout === 'left' ? (
-                                    // Left Layout - Content Left, Viewer Right
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                                        <div className="text-left">
-                                            <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-                                                {tile.title}
-                                            </h1>
-                                            <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
-                                                {tile.subtitle}
-                                            </h2>
-                                            <p className="text-base lg:text-lg text-gray-400 mb-8 leading-relaxed">
-                                                {tile.description}
-                                            </p>
-                                            <div className="flex gap-4">
-                                                <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
-                                                    GET STARTED →
-                                                </button>
-                                                <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
-                                                    LEARN MORE
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div className="flex justify-center lg:justify-end">
-                                            <div className="w-full max-w-lg h-96">
-                                                <TileViewer tile={tile} />
-                                            </div>
+                                </div>
+                            ) : (
+                                // Right Layout - Viewer Left, Content Right
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                                    <div className="flex justify-center lg:justify-start order-2 lg:order-1">
+                                        <div className="w-full max-w-lg h-96">
+                                            <TileViewer tile={tile} />
                                         </div>
                                     </div>
-                                ) : (
-                                    // Right Layout - Viewer Left, Content Right
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                                        <div className="flex justify-center lg:justify-start order-2 lg:order-1">
-                                            <div className="w-full max-w-lg h-96">
-                                                <TileViewer tile={tile} />
-                                            </div>
+                                    <div className="text-left order-1 lg:order-2">
+                                        <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+                                            {tile.title}
+                                        </h1>
+                                        <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
+                                            {tile.subtitle}
+                                        </h2>
+                                        <p className="text-base lg:text-lg text-gray-400 mb-6 leading-relaxed">
+                                            {tile.description}
+                                        </p>
+                                        {/* Features */}
+                                        <div className="grid grid-cols-2 gap-3 mb-8">
+                                            {tile.features.map((feature, idx) => (
+                                                <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
+                                                    <p className="text-xs font-medium text-white">{feature}</p>
+                                                </div>
+                                            ))}
                                         </div>
-                                        <div className="text-left order-1 lg:order-2">
-                                            <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-                                                {tile.title}
-                                            </h1>
-                                            <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
-                                                {tile.subtitle}
-                                            </h2>
-                                            <p className="text-base lg:text-lg text-gray-400 mb-8 leading-relaxed">
-                                                {tile.description}
-                                            </p>
-                                            <div className="flex gap-4">
-                                                <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
-                                                    GET STARTED →
-                                                </button>
-                                                <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
-                                                    LEARN MORE
-                                                </button>
-                                            </div>
+                                        <div className="flex gap-4">
+                                            <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
+                                                GET STARTED →
+                                            </button>
+                                            <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
+                                                LEARN MORE
+                                            </button>
                                         </div>
                                     </div>
-                                )}
+                                </div>
+                            )}
                             </div>
                         </div>
                         
