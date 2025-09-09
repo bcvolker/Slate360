@@ -10,7 +10,7 @@ interface SimpleAppShellProps {
 
 const SimpleAppShell: React.FC<SimpleAppShellProps> = ({ children, header }) => {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen">
       {/* Clean Header */}
       {header || <CleanHeader />}
       
