@@ -93,45 +93,43 @@ const TILES = [
     }
 ];
 
-// Viewer Components
+// Standardized Viewer Components
 const ImageViewer = ({ url }: { url: string }) => (
-    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden">
+    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
         <img src={url} alt="Content" className="w-full h-full object-cover" />
     </div>
 );
 
 const VideoViewer = ({ url }: { url: string }) => (
-    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden">
+    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
         <video src={url} controls className="w-full h-full object-cover" />
     </div>
 );
 
 const ModelViewer = ({ url }: { url: string }) => (
-    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center">
+    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700 flex items-center justify-center">
         <div className="text-center">
             <div className="text-4xl mb-2">🏗️</div>
             <p className="text-sm text-gray-400">3D Model Viewer</p>
-            <p className="text-xs text-gray-500">{url}</p>
         </div>
     </div>
 );
 
 const TourViewer = ({ url }: { url: string }) => (
-    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center">
+    <div className="w-full h-full bg-gray-900 rounded-lg overflow-hidden border border-gray-700 flex items-center justify-center">
         <div className="text-center">
             <div className="text-4xl mb-2">🌐</div>
             <p className="text-sm text-gray-400">360° Tour</p>
-            <p className="text-xs text-gray-500">{url}</p>
         </div>
     </div>
 );
 
 const HeroViewer = () => (
-    <div className="w-full h-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-lg flex items-center justify-center">
+    <div className="w-full h-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-lg border border-gray-700 flex items-center justify-center">
         <div className="text-center">
-            <div className="text-6xl mb-4">🚀</div>
-            <h3 className="text-2xl font-bold mb-2">SLATE360</h3>
-            <p className="text-gray-300">The Future of Construction</p>
+            <div className="text-4xl mb-2">🚀</div>
+            <h3 className="text-xl font-bold mb-1">SLATE360</h3>
+            <p className="text-sm text-gray-300">The Future of Construction</p>
         </div>
     </div>
 );
@@ -280,8 +278,8 @@ const Homepage = () => {
                                             </button>
                                         </div>
                                         {/* Hero Viewer */}
-                                        <div className="max-w-2xl mx-auto">
-                                            <div className="w-full h-80">
+                                        <div className="max-w-lg mx-auto">
+                                            <div className="w-full h-96">
                                                 <TileViewer tile={tile} />
                                             </div>
                                         </div>
