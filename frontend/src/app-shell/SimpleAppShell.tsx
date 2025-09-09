@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { usePathname } from 'next/navigation';
 import CleanHeader from '@/components/CleanHeader';
 
 interface SimpleAppShellProps {
@@ -10,11 +9,8 @@ interface SimpleAppShellProps {
 }
 
 const SimpleAppShell: React.FC<SimpleAppShellProps> = ({ children, header }) => {
-  const pathname = usePathname();
-  const isHomepage = pathname === '/';
-
   return (
-    <div className={`min-h-screen ${isHomepage ? 'bg-black' : 'bg-gray-50'}`}>
+    <div className="min-h-screen bg-black text-white">
       {/* Clean Header */}
       {header || <CleanHeader />}
       
