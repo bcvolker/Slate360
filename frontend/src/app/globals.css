@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: auto; }
 
 /* Boring Company Inspired Styles */
 body {
@@ -14,15 +14,19 @@ body {
   padding: 0;
 }
 
-/* Scroll-snapping for tiles */
+/* Enhanced scroll-snapping for tiles */
 .tiles-container { 
   height: 100vh; 
   overflow-y: auto; 
-  scroll-snap-type: y mandatory; 
+  scroll-snap-type: y mandatory;
+  scroll-behavior: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tile-item { 
   scroll-snap-align: start; 
+  scroll-snap-stop: always;
   height: 100vh; 
   display: flex; 
   flex-direction: column; 
@@ -31,7 +35,11 @@ body {
   padding-top: 120px; /* Increased for larger header */
 }
 
-section[id] { scroll-margin-top: 120px; }
+section[id] { 
+  scroll-margin-top: 0px; 
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
 
 /* Boring Company Style Header */
 .boring-header {

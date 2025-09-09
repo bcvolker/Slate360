@@ -166,13 +166,13 @@ const Homepage = () => {
         const tileElement = document.getElementById(TILES[index].id);
         if (tileElement) {
             tileElement.scrollIntoView({ 
-                behavior: 'smooth',
+                behavior: 'auto',
                 block: 'start'
             });
         }
         
-        // Reset scrolling state after animation
-        setTimeout(() => setIsScrolling(false), 1000);
+        // Reset scrolling state after snap animation
+        setTimeout(() => setIsScrolling(false), 300);
     };
 
     const handleScrollToNext = () => {
@@ -373,11 +373,13 @@ const Homepage = () => {
             {/* Scroll Container */}
             <div 
                 ref={containerRef} 
-                className="h-screen w-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth"
+                className="h-screen w-screen overflow-y-scroll snap-y snap-mandatory"
                 style={{
-                    scrollBehavior: 'smooth',
+                    scrollBehavior: 'auto',
                     overscrollBehavior: 'contain',
-                    WebkitOverflowScrolling: 'touch'
+                    WebkitOverflowScrolling: 'touch',
+                    scrollSnapType: 'y mandatory',
+                    scrollPaddingTop: '0px'
                 }}
             >
                 {TILES.map((tile, index) => (
