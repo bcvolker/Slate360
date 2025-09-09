@@ -435,36 +435,36 @@ const Homepage = () => {
                         <div className="relative z-10 flex-1 flex items-center justify-center">
                             <div className="max-w-7xl mx-auto px-8 w-full">
                             {tile.layout === 'hero' ? (
-                                // Hero Layout - Centered
-                        <div className="text-center">
-                                    <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+                                // Hero Layout - Centered with proper spacing
+                                <div className="text-center pt-20">
+                                    <h1 className="text-4xl lg:text-6xl font-bold mb-4 leading-tight">
                                         {tile.title}
                                     </h1>
-                                    <h2 className="text-2xl lg:text-3xl font-normal mb-8 text-gray-300">
+                                    <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
                                         {tile.subtitle}
                                     </h2>
-                                    <p className="text-lg lg:text-xl text-gray-400 mb-8 leading-relaxed max-w-4xl mx-auto">
+                                    <p className="text-base lg:text-lg text-gray-400 mb-6 leading-relaxed max-w-3xl mx-auto">
                                         {tile.description}
                                     </p>
                                     {/* Features Grid */}
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 max-w-4xl mx-auto">
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 max-w-3xl mx-auto">
                                         {tile.features.map((feature, idx) => (
-                                            <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                                                <p className="text-sm font-medium text-white">{feature}</p>
+                                            <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
+                                                <p className="text-xs font-medium text-white">{feature}</p>
                                             </div>
                                         ))}
                                     </div>
-                                    <div className="flex justify-center gap-6 mb-12">
-                                        <button className="px-8 py-4 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
+                                    <div className="flex justify-center gap-4 mb-8">
+                                        <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
                                             GET STARTED →
                                         </button>
-                                        <button className="px-8 py-4 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
+                                        <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
                                             LEARN MORE
                                         </button>
                                     </div>
                                     {/* Hero Viewer */}
-                                    <div className="max-w-lg mx-auto">
-                                        <div className="w-full h-96">
+                                    <div className="max-w-md mx-auto">
+                                        <div className="w-full h-80">
                                             <UnifiedViewer tile={tile} />
                                         </div>
                                     </div>
