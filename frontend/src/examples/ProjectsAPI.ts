@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { Project } from '@/types/types';
+import { UnifiedProject } from '@/types/project';
 
 // Define the API response types locally since they're specific to this example
 interface IProjectResponse {
   success: boolean;
-  project: Project;
+  project: UnifiedProject;
   message?: string;
 }
 
 interface IProjectsResponse {
   success: boolean;
-  projects: Project[];
+  projects: UnifiedProject[];
   pagination: {
     page: number;
     limit: number;

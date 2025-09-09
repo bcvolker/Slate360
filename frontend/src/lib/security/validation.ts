@@ -221,7 +221,7 @@ export type ProjectSearch = z.infer<typeof projectSearchSchema>;
 export type Pagination = z.infer<typeof paginationSchema>;
 
 // Validation helper functions
-export const validateProject = (data: unknown): Project => {
+export const validateProject = (data: unknown): UnifiedProject => {
   return projectSchema.parse(data);
 };
 
@@ -238,7 +238,7 @@ export const validatePagination = (data: unknown): Pagination => {
 };
 
 // Safe validation (returns null on error instead of throwing)
-export const safeValidateProject = (data: unknown): Project | null => {
+export const safeValidateProject = (data: unknown): UnifiedProject | null => {
   try {
     return projectSchema.parse(data);
   } catch {

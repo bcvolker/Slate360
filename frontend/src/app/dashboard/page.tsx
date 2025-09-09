@@ -1,15 +1,15 @@
 // frontend/src/app/dashboard/page.tsx
 'use client';
 import { useState, useEffect } from 'react';
-import { Project } from '@/types';
+import { UnifiedProject } from '@/types/project';
 import { getProjects } from '@/lib/api/projects';
 import VirtualProjectList from '@/components/VirtualProjectList';
 import ProjectAnalytics from '@/components/ProjectAnalytics';
 
 export default function DashboardPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<UnifiedProject[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<UnifiedProject | null>(null);
 
   useEffect(() => {
     const loadProjects = async () => {

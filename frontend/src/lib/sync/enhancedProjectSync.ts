@@ -1,5 +1,5 @@
 import { SlateDB } from '../db/indexedDB';
-import { Project } from '@/types/types';
+import { UnifiedProject } from '@/types/project';
 import { OfflineProject, SyncQueueItem } from '../db/indexedDB';
 import { logAudit } from '../audit';
 
@@ -379,7 +379,7 @@ export class EnhancedProjectSync {
    */
   private detectConflict(
     localProject: OfflineProject, 
-    serverProject: Project, 
+    serverProject: UnifiedProject, 
     updateData: any
   ): { type: string; details: any } | null {
     // Version conflict
@@ -438,7 +438,7 @@ export class EnhancedProjectSync {
   private async resolveConflict(
     conflict: any,
     localProject: OfflineProject,
-    serverProject: Project,
+    serverProject: UnifiedProject,
     strategy: string
   ): Promise<{ resolved: boolean; data: any; strategy: string }> {
     switch (strategy) {
@@ -497,7 +497,7 @@ export class EnhancedProjectSync {
    */
   private findConflictingFields(
     localProject: OfflineProject,
-    serverProject: Project,
+    serverProject: UnifiedProject,
     updateData: any
   ): string[] {
     const conflictingFields: string[] = [];

@@ -1,7 +1,7 @@
-import { Project } from '@/types';
+import { UnifiedProject } from '@/types/project';
 
 interface ProjectAnalyticsProps {
-  project: Project;
+  project: UnifiedProject;
 }
 
 export default function ProjectAnalytics({ project }: ProjectAnalyticsProps) {
@@ -20,20 +20,19 @@ export default function ProjectAnalytics({ project }: ProjectAnalyticsProps) {
           </div>
           <div className="bg-gray-800 p-3 rounded">
             <div className="text-sm text-gray-400">ID</div>
-            <div className="font-semibold text-xs">{project.id}</div>
+            <div className="font-semibold text-xs">{project._id}</div>
           </div>
           <div className="bg-gray-800 p-3 rounded">
-            <div className="text-sm text-gray-400">BIM Model</div>
-            <div className="font-semibold">{project.bimModelUrl ? 'Available' : 'Not Available'}</div>
+            <div className="text-sm text-gray-400">Type</div>
+            <div className="font-semibold">{project.type}</div>
           </div>
         </div>
-        {project.imageUrl && (
+        {project.location && (
           <div className="mt-4">
-            <img 
-              src={project.imageUrl} 
-              alt={project.name}
-              className="w-full h-48 object-cover rounded-lg"
-            />
+            <div className="bg-gray-800 p-3 rounded">
+              <div className="text-sm text-gray-400">Location</div>
+              <div className="font-semibold">{project.location.address}, {project.location.city}, {project.location.state}</div>
+            </div>
           </div>
         )}
       </div>

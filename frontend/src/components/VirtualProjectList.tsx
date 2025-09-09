@@ -1,9 +1,9 @@
 // frontend/src/components/VirtualProjectList.tsx
-import { Project } from '@/types';
+import { UnifiedProject } from '@/types/project';
 
 interface VirtualProjectListProps {
-  projects: Project[];
-  onSelectProject: (project: Project) => void;
+  projects: UnifiedProject[];
+  onSelectProject: (project: UnifiedProject) => void;
 }
 
 export default function VirtualProjectList({ projects, onSelectProject }: VirtualProjectListProps) {
@@ -14,7 +14,7 @@ export default function VirtualProjectList({ projects, onSelectProject }: Virtua
     <ul className="space-y-2">
       {projects.map((project) => (
         <li
-          key={project.id}
+          key={project._id}
           onClick={() => onSelectProject(project)}
           className="p-3 bg-gray-800 rounded-md cursor-pointer hover:bg-gray-700 transition-colors"
         >
