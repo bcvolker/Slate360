@@ -155,32 +155,144 @@ const TileViewer = ({ tile }: { tile: any }) => {
 
 const Homepage = () => {
     const [activeTileIndex, setActiveTileIndex] = useState(0);
+    const [isScrolling, setIsScrolling] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const scrollToTile = (index: number) => {
+        if (isScrolling) return; // Prevent multiple scrolls
+        
+        setIsScrolling(true);
         const tileElement = document.getElementById(TILES[index].id);
         if (tileElement) {
-            tileElement.scrollIntoView({ behavior: 'smooth' });
+            tileElement.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
         }
+        
+        // Reset scrolling state after animation
+        setTimeout(() => setIsScrolling(false), 1000);
     };
 
     const handleScrollToNext = () => {
-        if (activeTileIndex < TILES.length - 1) {
+        if (activeTileIndex < TILES.length - 1 && !isScrolling) {
             scrollToTile(activeTileIndex + 1);
         }
     };
 
     const handleScrollToPrev = () => {
-        if (activeTileIndex > 0) {
+        if (activeTileIndex > 0 && !isScrolling) {
             scrollToTile(activeTileIndex - 1);
         }
     };
+
+    // Handle keyboard navigation
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (isScrolling) return;
+            
+            switch (e.key) {
+                case 'ArrowDown':
+                case 'PageDown':
+                case ' ':
+                    e.preventDefault();
+                    handleScrollToNext();
+                    break;
+                case 'ArrowUp':
+                case 'PageUp':
+                    e.preventDefault();
+                    handleScrollToPrev();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    scrollToTile(0);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    scrollToTile(TILES.length - 1);
+                    break;
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [activeTileIndex, isScrolling]);
+
+    // Handle wheel/touch scrolling with debouncing
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        let scrollTimeout: NodeJS.Timeout;
+        let isScrollingWheel = false;
+
+        const handleWheel = (e: WheelEvent) => {
+            if (isScrollingWheel) return;
+            
+            isScrollingWheel = true;
+            clearTimeout(scrollTimeout);
+            
+            const delta = e.deltaY;
+            const threshold = 50; // Minimum scroll distance
+            
+            if (Math.abs(delta) > threshold) {
+                if (delta > 0 && activeTileIndex < TILES.length - 1) {
+                    // Scroll down
+                    scrollToTile(activeTileIndex + 1);
+                } else if (delta < 0 && activeTileIndex > 0) {
+                    // Scroll up
+                    scrollToTile(activeTileIndex - 1);
+                }
+            }
+            
+            scrollTimeout = setTimeout(() => {
+                isScrollingWheel = false;
+            }, 500);
+        };
+
+        const handleTouchStart = (e: TouchEvent) => {
+            const startY = e.touches[0].clientY;
+            let startTime = Date.now();
+            
+            const handleTouchEnd = (e: TouchEvent) => {
+                const endY = e.changedTouches[0].clientY;
+                const endTime = Date.now();
+                const deltaY = startY - endY;
+                const deltaTime = endTime - startTime;
+                
+                // Only trigger if it's a quick swipe (not a slow scroll)
+                if (deltaTime < 300 && Math.abs(deltaY) > 50) {
+                    if (deltaY > 0 && activeTileIndex < TILES.length - 1) {
+                        // Swipe up - go to next tile
+                        scrollToTile(activeTileIndex + 1);
+                    } else if (deltaY < 0 && activeTileIndex > 0) {
+                        // Swipe down - go to previous tile
+                        scrollToTile(activeTileIndex - 1);
+                    }
+                }
+                
+                document.removeEventListener('touchend', handleTouchEnd);
+            };
+            
+            document.addEventListener('touchend', handleTouchEnd);
+        };
+
+        container.addEventListener('wheel', handleWheel, { passive: false });
+        container.addEventListener('touchstart', handleTouchStart, { passive: true });
+
+        return () => {
+            container.removeEventListener('wheel', handleWheel);
+            container.removeEventListener('touchstart', handleTouchStart);
+            clearTimeout(scrollTimeout);
+        };
+    }, [activeTileIndex, isScrolling]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
+                    if (entry.isIntersecting && !isScrolling) {
                         const index = TILES.findIndex(tile => tile.id === entry.target.id);
                         if (index !== -1) {
                             setActiveTileIndex(index);
@@ -188,7 +300,10 @@ const Homepage = () => {
                     }
                 });
             },
-            { threshold: 0.7 }
+            { 
+                threshold: 0.6,
+                rootMargin: '0px'
+            }
         );
 
         TILES.forEach(tile => {
@@ -197,7 +312,7 @@ const Homepage = () => {
         });
 
         return () => observer.disconnect();
-    }, []);
+    }, [isScrolling]);
 
     const getColorClasses = (color: string) => {
         switch (color) {
@@ -240,7 +355,7 @@ const Homepage = () => {
                         </a>
                     ))}
                 </div>
-                <AnimatePresence>
+                 <AnimatePresence>
                     {activeTileIndex < TILES.length - 1 && (
                         <motion.button 
                             initial={{ opacity: 0 }} 
@@ -256,7 +371,15 @@ const Homepage = () => {
             </div>
 
             {/* Scroll Container */}
-            <div ref={containerRef} className="h-screen w-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
+            <div 
+                ref={containerRef} 
+                className="h-screen w-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth"
+                style={{
+                    scrollBehavior: 'smooth',
+                    overscrollBehavior: 'contain',
+                    WebkitOverflowScrolling: 'touch'
+                }}
+            >
                 {TILES.map((tile, index) => (
                     <section key={tile.id} id={tile.id} className="h-screen w-screen snap-start snap-always flex flex-col relative">
                         {/* Background Gradient */}
@@ -267,7 +390,7 @@ const Homepage = () => {
                             <div className="max-w-7xl mx-auto px-8 w-full">
                             {tile.layout === 'hero' ? (
                                 // Hero Layout - Centered
-                                <div className="text-center">
+                        <div className="text-center">
                                     <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
                                         {tile.title}
                                     </h1>
