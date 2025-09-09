@@ -19,9 +19,10 @@ body {
   height: 100vh; 
   overflow-y: auto; 
   scroll-snap-type: y mandatory;
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  scroll-padding-top: 0px;
 }
 
 .tile-item { 
@@ -39,6 +40,7 @@ section[id] {
   scroll-margin-top: 0px; 
   scroll-snap-align: start;
   scroll-snap-stop: always;
+  transition: transform 0.3s ease-out;
 }
 
 /* Boring Company Style Header */
