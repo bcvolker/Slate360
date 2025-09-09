@@ -250,156 +250,162 @@ const Homepage = () => {
             </div>
 
             {/* Scroll Container */}
-            <div ref={containerRef} className="h-screen w-screen overflow-y-scroll snap-y snap-mandatory">
+            <div ref={containerRef} className="h-screen w-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
                 {TILES.map((tile, index) => (
-                    <section key={tile.id} id={tile.id} className="h-screen w-screen snap-start flex items-center justify-center relative">
+                    <section key={tile.id} id={tile.id} className="h-screen w-screen snap-start snap-always flex flex-col relative">
                         {/* Background Gradient */}
                         <div className={`absolute inset-0 bg-gradient-to-br ${getColorClasses(tile.color)} opacity-30`}></div>
                         
-                        {/* Content */}
-                        <div className="relative z-10 max-w-7xl mx-auto px-8">
-                            {tile.layout === 'hero' ? (
-                                // Hero Layout - Centered
-                                <div className="text-center">
-                                    <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-                                        {tile.title}
-                                    </h1>
-                                    <h2 className="text-2xl lg:text-3xl font-normal mb-8 text-gray-300">
-                                        {tile.subtitle}
-                                    </h2>
-                                    <p className="text-lg lg:text-xl text-gray-400 mb-12 leading-relaxed max-w-4xl mx-auto">
-                                        {tile.description}
-                                    </p>
-                                    <div className="flex justify-center gap-6 mb-12">
-                                        <button className="px-8 py-4 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
-                                            GET STARTED →
-                                        </button>
-                                        <button className="px-8 py-4 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
-                                            LEARN MORE
-                                        </button>
-                                    </div>
-                                    {/* Hero Viewer */}
-                                    <div className="max-w-2xl mx-auto">
-                                        <div className="w-full h-80">
-                                            <TileViewer tile={tile} />
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : tile.layout === 'left' ? (
-                                // Left Layout - Content Left, Viewer Right
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                                    <div className="text-left">
-                                        <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+                        {/* Main Content */}
+                        <div className="relative z-10 flex-1 flex items-center justify-center">
+                            <div className="max-w-7xl mx-auto px-8 w-full">
+                                {tile.layout === 'hero' ? (
+                                    // Hero Layout - Centered
+                                    <div className="text-center">
+                                        <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
                                             {tile.title}
                                         </h1>
-                                        <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
+                                        <h2 className="text-2xl lg:text-3xl font-normal mb-8 text-gray-300">
                                             {tile.subtitle}
                                         </h2>
-                                        <p className="text-base lg:text-lg text-gray-400 mb-8 leading-relaxed">
+                                        <p className="text-lg lg:text-xl text-gray-400 mb-12 leading-relaxed max-w-4xl mx-auto">
                                             {tile.description}
                                         </p>
-                                        <div className="flex gap-4">
-                                            <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
+                                        <div className="flex justify-center gap-6 mb-12">
+                                            <button className="px-8 py-4 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
                                                 GET STARTED →
                                             </button>
-                                            <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
+                                            <button className="px-8 py-4 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
                                                 LEARN MORE
                                             </button>
                                         </div>
-                                    </div>
-                                    <div className="flex justify-center lg:justify-end">
-                                        <div className="w-full max-w-lg h-96">
-                                            <TileViewer tile={tile} />
+                                        {/* Hero Viewer */}
+                                        <div className="max-w-2xl mx-auto">
+                                            <div className="w-full h-80">
+                                                <TileViewer tile={tile} />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ) : (
-                                // Right Layout - Viewer Left, Content Right
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                                    <div className="flex justify-center lg:justify-start order-2 lg:order-1">
-                                        <div className="w-full max-w-lg h-96">
-                                            <TileViewer tile={tile} />
+                                ) : tile.layout === 'left' ? (
+                                    // Left Layout - Content Left, Viewer Right
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                                        <div className="text-left">
+                                            <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+                                                {tile.title}
+                                            </h1>
+                                            <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
+                                                {tile.subtitle}
+                                            </h2>
+                                            <p className="text-base lg:text-lg text-gray-400 mb-8 leading-relaxed">
+                                                {tile.description}
+                                            </p>
+                                            <div className="flex gap-4">
+                                                <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
+                                                    GET STARTED →
+                                                </button>
+                                                <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
+                                                    LEARN MORE
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-center lg:justify-end">
+                                            <div className="w-full max-w-lg h-96">
+                                                <TileViewer tile={tile} />
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="text-left order-1 lg:order-2">
-                                        <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-                                            {tile.title}
-                                        </h1>
-                                        <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
-                                            {tile.subtitle}
-                                        </h2>
-                                        <p className="text-base lg:text-lg text-gray-400 mb-8 leading-relaxed">
-                                            {tile.description}
-                                        </p>
-                                        <div className="flex gap-4">
-                                            <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
-                                                GET STARTED →
-                                            </button>
-                                            <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
-                                                LEARN MORE
-                                            </button>
+                                ) : (
+                                    // Right Layout - Viewer Left, Content Right
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                                        <div className="flex justify-center lg:justify-start order-2 lg:order-1">
+                                            <div className="w-full max-w-lg h-96">
+                                                <TileViewer tile={tile} />
+                                            </div>
+                                        </div>
+                                        <div className="text-left order-1 lg:order-2">
+                                            <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+                                                {tile.title}
+                                            </h1>
+                                            <h2 className="text-xl lg:text-2xl font-normal mb-6 text-gray-300">
+                                                {tile.subtitle}
+                                            </h2>
+                                            <p className="text-base lg:text-lg text-gray-400 mb-8 leading-relaxed">
+                                                {tile.description}
+                                            </p>
+                                            <div className="flex gap-4">
+                                                <button className="px-6 py-3 bg-white text-black font-medium rounded hover:bg-gray-200 transition-colors">
+                                                    GET STARTED →
+                                                </button>
+                                                <button className="px-6 py-3 border border-white text-white font-medium rounded hover:bg-white hover:text-black transition-colors">
+                                                    LEARN MORE
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
+                        
+                        {/* Footer - Only on last tile */}
+                        {index === TILES.length - 1 && (
+                            <footer className="relative z-10 bg-gray-900/95 backdrop-blur-sm border-t border-gray-800">
+                                <div className="max-w-6xl mx-auto px-8 py-12">
+                                    <div className="text-center mb-8">
+                                        <h2 className="text-3xl font-bold mb-4">SLATE360</h2>
+                                        <p className="text-gray-400 max-w-2xl mx-auto">
+                                            The future of construction technology. Transform how you build with advanced 3D modeling, real-time collaboration, and immersive technologies.
+                                        </p>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+                                        <div>
+                                            <h3 className="font-semibold mb-4">Product</h3>
+                                            <ul className="space-y-2 text-sm text-gray-400">
+                                                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
+                                                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
+                                                <li><a href="#" className="hover:text-white transition-colors">Demo</a></li>
+                                                <li><a href="#" className="hover:text-white transition-colors">API</a></li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold mb-4">Company</h3>
+                                            <ul className="space-y-2 text-sm text-gray-400">
+                                                <li><a href="#" className="hover:text-white transition-colors">About</a></li>
+                                                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
+                                                <li><a href="#" className="hover:text-white transition-colors">Press</a></li>
+                                                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold mb-4">Support</h3>
+                                            <ul className="space-y-2 text-sm text-gray-400">
+                                                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
+                                                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                                                <li><a href="#" className="hover:text-white transition-colors">Status</a></li>
+                                                <li><a href="#" className="hover:text-white transition-colors">Community</a></li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold mb-4">Legal</h3>
+                                            <ul className="space-y-2 text-sm text-gray-400">
+                                                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+                                                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+                                                <li><a href="#" className="hover:text-white transition-colors">Cookie Policy</a></li>
+                                                <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="border-t border-gray-800 pt-6 text-center">
+                                        <p className="text-sm text-gray-500">
+                                            © 2025 SLATE360. All rights reserved. | Built with innovation for the construction industry.
+                                        </p>
+                                    </div>
+                                </div>
+                            </footer>
+                        )}
                     </section>
                 ))}
-                
-                {/* Footer - Positioned at bottom of last tile */}
-                <footer className="h-screen w-screen snap-start flex flex-col justify-end items-center bg-gray-900 relative pb-8">
-                    <div className="max-w-6xl mx-auto px-8 text-center">
-                        <h2 className="text-4xl font-bold mb-6">SLATE360</h2>
-                        <p className="text-lg text-gray-400 mb-12 max-w-3xl">
-                            The future of construction technology. Transform how you build with advanced 3D modeling, real-time collaboration, and immersive technologies.
-                        </p>
-                        
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-                            <div>
-                                <h3 className="font-semibold mb-4">Product</h3>
-                                <ul className="space-y-2 text-sm text-gray-400">
-                                    <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-                                    <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-                                    <li><a href="#" className="hover:text-white transition-colors">Demo</a></li>
-                                    <li><a href="#" className="hover:text-white transition-colors">API</a></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h3 className="font-semibold mb-4">Company</h3>
-                                <ul className="space-y-2 text-sm text-gray-400">
-                                    <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-                                    <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                                    <li><a href="#" className="hover:text-white transition-colors">Press</a></li>
-                                    <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h3 className="font-semibold mb-4">Support</h3>
-                                <ul className="space-y-2 text-sm text-gray-400">
-                                    <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                                    <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-                                    <li><a href="#" className="hover:text-white transition-colors">Status</a></li>
-                                    <li><a href="#" className="hover:text-white transition-colors">Community</a></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h3 className="font-semibold mb-4">Legal</h3>
-                                <ul className="space-y-2 text-sm text-gray-400">
-                                    <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                                    <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-                                    <li><a href="#" className="hover:text-white transition-colors">Cookie Policy</a></li>
-                                    <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <div className="border-t border-gray-800 pt-8">
-                            <p className="text-sm text-gray-500">
-                                © 2025 SLATE360. All rights reserved. | Built with innovation for the construction industry.
-                            </p>
-                        </div>
-                    </div>
-                </footer>
             </div>
         </div>
     );
