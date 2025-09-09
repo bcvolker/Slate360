@@ -24,16 +24,29 @@ export default function CleanHeader() {
           {/* Ensure your logo is at this path */}
           <Image src="/slate360-logo.png" alt="Slate360" width={150} height={36} priority />
         </Link>
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <Link href="/dashboard" className="text-zinc-700 hover:text-zinc-900 transition-colors">Dashboard</Link>
-          <Link href="/bim" className="text-zinc-700 hover:text-zinc-900 transition-colors">BIM Studio</Link>
-          <Link href="/reports" className="text-zinc-700 hover:text-zinc-900 transition-colors">Reports</Link>
-          <Link href="/ceo" className="text-zinc-700 hover:text-zinc-900 transition-colors">CEO</Link>
-          <Link href="/login" className="inline-flex items-center gap-1.5 text-zinc-700 hover:text-zinc-900 transition-colors">
+        <nav className="hidden md:flex items-center gap-8 text-sm font-semibold">
+          <Link href="/contact" className="text-zinc-800 hover:text-zinc-900 transition-colors px-3 py-2 rounded-lg hover:bg-zinc-100/50">
+            Contact
+          </Link>
+          <Link href="/about" className="text-zinc-800 hover:text-zinc-900 transition-colors px-3 py-2 rounded-lg hover:bg-zinc-100/50">
+            About
+          </Link>
+          <Link href="/pricing" className="text-zinc-800 hover:text-zinc-900 transition-colors px-3 py-2 rounded-lg hover:bg-zinc-100/50">
+            Subscribe
+          </Link>
+          <Link href="/login" className="inline-flex items-center gap-1.5 text-white px-4 py-2 rounded-lg font-medium transition-colors" style={{ backgroundColor: 'var(--brand-accent)' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--brand-accent-hover)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--brand-accent)'}>
             <LogIn className="w-4 h-4" />
             <span>Login</span>
           </Link>
         </nav>
+
+        {/* Mobile menu button */}
+        <div className="md:hidden">
+          <Link href="/login" className="inline-flex items-center gap-1.5 text-white px-3 py-2 rounded-lg font-medium text-sm" style={{ backgroundColor: 'var(--brand-accent)' }}>
+            <LogIn className="w-4 h-4" />
+            <span>Login</span>
+          </Link>
+        </div>
       </div>
     </header>
   );
