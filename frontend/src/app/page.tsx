@@ -371,7 +371,7 @@ const Homepage = () => {
     };
 
     return (
-        <div className="min-h-screen overflow-hidden relative bg-gradient-to-b from-slate-50 to-white">
+        <div className="min-h-screen overflow-hidden relative">
             
             {/* Horizontal Line Navigation */}
             <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-40 flex flex-col items-center">
@@ -382,20 +382,20 @@ const Homepage = () => {
                             animate={{ opacity: 1 }} 
                             exit={{ opacity: 0 }} 
                             onClick={handleScrollToPrev} 
-                            className="mb-4 p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 transition-colors"
+                            className="mb-4 p-2 rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors"
                         >
-                            <ChevronUp size={20} className="text-zinc-700" />
+                            <ChevronUp size={20} className="text-zinc-300" />
                         </motion.button>
                     )}
                 </AnimatePresence>
                 <div className="relative flex flex-col items-center">
-                    <div className="absolute top-0 left-1/2 w-px bg-zinc-300" style={{ height: '100%' }}></div>
+                    <div className="absolute top-0 left-1/2 w-px bg-zinc-700" style={{ height: '100%' }}></div>
                     {TILES.map((tile, index) => (
                         <a key={tile.id} href={`#${tile.id}`}
                            className="relative my-2 w-full flex items-center"
                            onClick={(e) => { e.preventDefault(); scrollToTile(index); }}>
-                            <span className={`absolute right-6 w-2.5 h-0.5 transition-all duration-300 ${activeTileIndex === index ? 'bg-zinc-900 w-8' : 'bg-zinc-300'}`}></span>
-                            <span className={`ml-12 text-xs transition-colors duration-300 ${activeTileIndex === index ? 'text-zinc-900' : 'text-zinc-500'}`}>{tile.title}</span>
+                            <span className={`absolute right-6 w-2.5 h-0.5 transition-all duration-300 ${activeTileIndex === index ? 'bg-zinc-100 w-8' : 'bg-zinc-700'}`}></span>
+                            <span className={`ml-12 text-xs transition-colors duration-300 ${activeTileIndex === index ? 'text-zinc-100' : 'text-zinc-500'}`}>{tile.title}</span>
                         </a>
                     ))}
                 </div>
@@ -406,9 +406,9 @@ const Homepage = () => {
                             animate={{ opacity: 1 }} 
                             exit={{ opacity: 0 }} 
                             onClick={handleScrollToNext} 
-                            className="mt-4 p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 transition-colors"
+                            className="mt-4 p-2 rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors"
                         >
-                            <ChevronDown size={20} className="text-zinc-700" />
+                            <ChevronDown size={20} className="text-zinc-300" />
                         </motion.button>
                     )}
                 </AnimatePresence>
@@ -439,15 +439,15 @@ const Homepage = () => {
                                     </div>
                                 </div>
                                 <div className="p-4 text-center lg:text-left">
-                                    <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-zinc-900">
+                                    <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-zinc-50">
                                         Build Smarter with Slate360
                                     </h1>
-                                    <p className="mt-4 text-lg text-zinc-600 max-w-prose mx-auto lg:mx-0">
+                                    <p className="mt-4 text-lg text-zinc-400 max-w-prose mx-auto lg:mx-0">
                                         Photogrammetry, LiDAR, GNSS, and BIM in one modern workspace. Upload data, process in the cloud, and deliver interactive models.
                                     </p>
                                     <div className="mt-8 flex gap-4 justify-center lg:justify-start">
                                         <a href="/dashboard" className="inline-flex items-center justify-center rounded-lg px-5 py-3 font-medium text-white transition-colors" style={{ backgroundColor: 'var(--brand-accent)' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--brand-accent-hover)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--brand-accent)'}>Open Dashboard</a>
-                                        <a href="/bim" className="inline-flex items-center justify-center rounded-lg px-5 py-3 font-medium ring-1 ring-zinc-300 text-zinc-900 hover:bg-zinc-100/50 transition-colors">Try BIM Studio</a>
+                                        <a href="/bim" className="inline-flex items-center justify-center rounded-lg px-5 py-3 font-medium ring-1 ring-zinc-700 text-zinc-200 hover:bg-zinc-800 transition-colors">Try BIM Studio</a>
                                     </div>
                                 </div>
                             </div>
@@ -457,12 +457,12 @@ const Homepage = () => {
                             <div className={`w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center`}>
                                 {/* Copy Column */}
                                 <div className={`p-2 ${tile.layout === 'right' ? 'lg:order-2' : 'lg:order-1'}`}>
-                                    <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-zinc-900">{tile.title}</h2>
-                                    <h3 className="mt-2 text-xl text-zinc-700">{tile.subtitle}</h3>
-                                    <p className="mt-4 text-base text-zinc-600">{tile.description}</p>
+                                    <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-zinc-50">{tile.title}</h2>
+                                    <h3 className="mt-2 text-xl text-zinc-300">{tile.subtitle}</h3>
+                                    <p className="mt-4 text-base text-zinc-400">{tile.description}</p>
                                     <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         {tile.features?.map((f, i) => (
-                                            <li key={i} className="flex items-center gap-3 text-sm text-zinc-800">
+                                            <li key={i} className="flex items-center gap-3 text-sm text-zinc-200">
                                                 <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--brand-accent)' }} />
                                                 <span>{f}</span>
                                             </li>
@@ -483,48 +483,48 @@ const Homepage = () => {
                         
                         {/* Footer - Only on last tile */}
                         {index === TILES.length - 1 && (
-                            <footer className="absolute bottom-0 left-0 right-0 z-10 bg-white/95 backdrop-blur-sm border-t border-zinc-200">
+                            <footer className="absolute bottom-0 left-0 right-0 z-10 bg-zinc-950/95 backdrop-blur-sm border-t border-zinc-800">
                                 <div className="max-w-6xl mx-auto px-8 py-6">
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-4">
                                         <div>
-                                            <h3 className="font-semibold mb-2 text-sm text-zinc-900">Product</h3>
-                                            <ul className="space-y-1 text-xs text-zinc-600">
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Features</a></li>
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Pricing</a></li>
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Demo</a></li>
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">API</a></li>
+                                            <h3 className="font-semibold mb-2 text-sm text-zinc-50">Product</h3>
+                                            <ul className="space-y-1 text-xs text-zinc-400">
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Features</a></li>
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Pricing</a></li>
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Demo</a></li>
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">API</a></li>
                                             </ul>
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold mb-2 text-sm text-zinc-900">Company</h3>
-                                            <ul className="space-y-1 text-xs text-zinc-600">
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">About</a></li>
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Careers</a></li>
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Press</a></li>
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Blog</a></li>
+                                            <h3 className="font-semibold mb-2 text-sm text-zinc-50">Company</h3>
+                                            <ul className="space-y-1 text-xs text-zinc-400">
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">About</a></li>
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Careers</a></li>
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Press</a></li>
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Blog</a></li>
                                             </ul>
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold mb-2 text-sm text-zinc-900">Support</h3>
-                                            <ul className="space-y-1 text-xs text-zinc-600">
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Help Center</a></li>
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Contact</a></li>
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Status</a></li>
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Community</a></li>
+                                            <h3 className="font-semibold mb-2 text-sm text-zinc-50">Support</h3>
+                                            <ul className="space-y-1 text-xs text-zinc-400">
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Help Center</a></li>
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Contact</a></li>
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Status</a></li>
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Community</a></li>
                                             </ul>
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold mb-2 text-sm text-zinc-900">Legal</h3>
-                                            <ul className="space-y-1 text-xs text-zinc-600">
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Privacy Policy</a></li>
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Terms of Service</a></li>
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Cookie Policy</a></li>
-                                                <li><a href="#" className="hover:text-zinc-900 transition-colors">Security</a></li>
+                                            <h3 className="font-semibold mb-2 text-sm text-zinc-50">Legal</h3>
+                                            <ul className="space-y-1 text-xs text-zinc-400">
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Privacy Policy</a></li>
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Terms of Service</a></li>
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Cookie Policy</a></li>
+                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Security</a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     
-                                    <div className="border-t border-zinc-200 pt-3 text-center">
+                                    <div className="border-t border-zinc-800 pt-3 text-center">
                                         <p className="text-xs text-zinc-500">
                                             © 2025 SLATE360. All rights reserved. | Built with innovation for the construction industry.
                                         </p>

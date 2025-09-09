@@ -16,8 +16,8 @@ export default function CleanHeader() {
   return (
     <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
       scrolled
-        ? 'backdrop-blur-lg bg-white/80 border-b border-zinc-200 shadow-sm'
-        : 'backdrop-blur-sm bg-white/40 border-b border-transparent'
+        ? 'backdrop-blur-lg bg-zinc-950/80 border-b border-zinc-800 shadow-sm'
+        : 'backdrop-blur-sm bg-zinc-950/40 border-b border-transparent'
     }`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
@@ -25,13 +25,13 @@ export default function CleanHeader() {
           <Image src="/slate360-logo.png" alt="Slate360" width={150} height={36} priority />
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-sm font-semibold">
-          <Link href="/contact" className="text-zinc-800 hover:text-zinc-900 transition-colors px-3 py-2 rounded-lg hover:bg-zinc-100/50">
+          <Link href="/contact" className="text-zinc-300 hover:text-zinc-100 transition-colors px-3 py-2 rounded-lg hover:bg-zinc-800/50">
             Contact
           </Link>
-          <Link href="/about" className="text-zinc-800 hover:text-zinc-900 transition-colors px-3 py-2 rounded-lg hover:bg-zinc-100/50">
+          <Link href="/about" className="text-zinc-300 hover:text-zinc-100 transition-colors px-3 py-2 rounded-lg hover:bg-zinc-800/50">
             About
           </Link>
-          <Link href="/pricing" className="text-zinc-800 hover:text-zinc-900 transition-colors px-3 py-2 rounded-lg hover:bg-zinc-100/50">
+          <Link href="/pricing" className="text-zinc-300 hover:text-zinc-100 transition-colors px-3 py-2 rounded-lg hover:bg-zinc-800/50">
             Subscribe
           </Link>
           <Link href="/login" className="inline-flex items-center gap-1.5 text-white px-4 py-2 rounded-lg font-medium transition-colors" style={{ backgroundColor: 'var(--brand-accent)' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--brand-accent-hover)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--brand-accent)'}>
