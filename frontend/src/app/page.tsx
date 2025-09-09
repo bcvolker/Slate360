@@ -371,7 +371,7 @@ const Homepage = () => {
     };
 
     return (
-        <div className="min-h-screen overflow-hidden relative bg-gradient-to-b from-zinc-900 to-zinc-950">
+        <div className="min-h-screen overflow-hidden relative">
             
 
             {/* Scroll Container */}
@@ -386,8 +386,21 @@ const Homepage = () => {
                     scrollPaddingTop: '0px'
                 }}
             >
-                {TILES.map((tile, index) => (
-                    <section key={tile.id} id={tile.id} className="tile-item relative min-h-[100dvh] flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
+                {TILES.map((tile, index) => {
+                    // Map tile IDs to the correct section IDs for DotNav
+                    const sectionIdMap: { [key: string]: string } = {
+                        'slate360': 'hero',
+                        'project-hub': 'project-hub',
+                        'bim-studio': 'bim-studio',
+                        '360-tour-builder': '360-tour-builder',
+                        'content-studio': 'content-creation-studio',
+                        'geospatial': 'geospatial-robotics',
+                        'reports': 'reports-analytics',
+                        'vr-ar': 'vr-ar-studio'
+                    };
+                    
+                    return (
+                    <section key={tile.id} id={sectionIdMap[tile.id] || tile.id} className="tile-item relative min-h-[100dvh] flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
                         {tile.layout === 'hero' && (
                             <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 items-center gap-12">
                                 <div className="absolute inset-0 -z-10 bg-noise" />
@@ -493,7 +506,8 @@ const Homepage = () => {
                             </footer>
                         )}
                     </section>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );
