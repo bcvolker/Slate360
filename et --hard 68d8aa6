@@ -1,0 +1,10 @@
+[33m4b8085e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Update frontend page component
+[33m3bef74c[m fix: revert to clean page.tsx without HTML comment
+[33m936ee2e[m fix: remove HTML comment causing build error
+[33md155d72[m force: trigger manual deployment with obvious change
+[33m2859453[m fix: enlarge logo 10% and move down to prevent cutoff
+[33m68d8aa6[m fix(build): resolve server/client component error by converting pages to 'use client'
+[33m4ef4745[m chore: stabilize all runtime and development dependencies
+[33m9772f06[m feat: update gather-report.js with latest changes
+[33m29488a8[m feat: implement definitive architecture with themes, validation, and full scaffold
+[33m1e3c913[m fix: Apply definitive architectural fixes for background and layout
