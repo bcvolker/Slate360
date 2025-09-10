@@ -27,7 +27,7 @@
 .backButton {
   position: absolute;
   top: 1.5rem;
-  left: 1.5rem;
+  right: 1.5rem;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
@@ -36,6 +36,9 @@
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .backButton:hover {
@@ -249,9 +252,9 @@
   .backButton {
     position: relative;
     top: auto;
-    left: auto;
+    right: auto;
     margin-bottom: 1rem;
-    align-self: flex-start;
+    align-self: flex-end;
   }
 }
 
