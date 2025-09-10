@@ -21,19 +21,19 @@ export function UnifiedViewer({ title, type, src, className }: UnifiedViewerProp
       label: isPlaying ? 'Pause' : 'Play',
       action: () => setIsPlaying(!isPlaying),
       helpText: isPlaying ? 'Pause content' : 'Play content',
-      icon: isPlaying ? <Pause size={16} /> : <Play size={16} />
+      icon: isPlaying ? Pause : Play
     },
     {
       label: 'Reset',
       action: () => setIsPlaying(false),
       helpText: 'Reset to beginning',
-      icon: <RotateCcw size={16} />
+      icon: RotateCcw
     },
     {
       label: 'Fullscreen',
       action: () => setIsFullscreen(!isFullscreen),
       helpText: 'Toggle fullscreen',
-      icon: <Maximize size={16} />
+      icon: Maximize
     }
   ];
 

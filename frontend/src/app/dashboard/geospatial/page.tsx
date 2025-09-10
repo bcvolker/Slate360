@@ -1,9 +1,10 @@
+'use client';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 import { ContextualToolbar } from '@/components/ui/ContextualToolbar';
 import { 
   MapPin, 
-  Drone, 
+  Send, 
   Navigation, 
   Satellite,
   Upload,
@@ -20,7 +21,7 @@ export default function GeospatialPage() {
   ];
 
   const tools = [
-    { label: 'Schedule Survey', action: () => {}, helpText: 'Plan drone mapping mission', icon: Drone },
+    { label: 'Schedule Survey', action: () => {}, helpText: 'Plan drone mapping mission', icon: Send },
     { label: 'Upload Data', action: () => {}, helpText: 'Import GPS and LiDAR data', icon: Upload },
     { label: 'Export Maps', action: () => {}, helpText: 'Download mapping data', icon: Download },
     { label: 'Share Location', action: () => {}, helpText: 'Share coordinates with team', icon: Share },
@@ -111,7 +112,7 @@ export default function GeospatialPage() {
             <h3 className="text-lg font-semibold text-foreground mb-4">Drone Operations</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <Drone className="w-4 h-4 text-primary" />
+                <Send className="w-4 h-4 text-primary" />
                 <div>
                   <p className="text-sm text-foreground">Flight Time</p>
                   <p className="text-xs text-muted-foreground">2.5 hours today</p>
@@ -131,7 +132,7 @@ export default function GeospatialPage() {
             <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
             <div className="space-y-2">
               <button className="w-full p-3 text-left bg-accent/50 rounded-lg hover:bg-accent transition-colors">
-                <Drone className="w-4 h-4 inline mr-2" />
+                <Send className="w-4 h-4 inline mr-2" />
                 Schedule Drone Survey
               </button>
               <button className="w-full p-3 text-left bg-accent/50 rounded-lg hover:bg-accent transition-colors">

@@ -1,8 +1,9 @@
+'use client';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 import { ContextualToolbar } from '@/components/ui/ContextualToolbar';
 import { 
-  VrBox, 
+  View, 
   Eye, 
   Share, 
   Download,
@@ -20,7 +21,7 @@ export default function VRARPage() {
   ];
 
   const tools = [
-    { label: 'Create VR Experience', action: () => {}, helpText: 'Build immersive VR walkthroughs', icon: VrBox },
+    { label: 'Create VR Experience', action: () => {}, helpText: 'Build immersive VR walkthroughs', icon: View },
     { label: 'Preview Experience', action: () => {}, helpText: 'Test VR/AR content', icon: Eye },
     { label: 'Share Experience', action: () => {}, helpText: 'Share with team and clients', icon: Share },
     { label: 'Export Assets', action: () => {}, helpText: 'Download VR/AR files', icon: Download },
@@ -48,7 +49,7 @@ export default function VRARPage() {
           <h3 className="text-lg font-semibold text-foreground mb-4">VR Experience Preview</h3>
           <div className="h-96 bg-muted rounded-lg flex items-center justify-center">
             <div className="text-center">
-              <VrBox className="w-16 h-16 text-primary mx-auto mb-4" />
+              <View className="w-16 h-16 text-primary mx-auto mb-4" />
               <p className="text-muted-foreground">Immersive VR environment</p>
               <p className="text-sm text-muted-foreground">360° project walkthrough</p>
             </div>
@@ -63,7 +64,7 @@ export default function VRARPage() {
               <div key={experience.id} className="flex items-center justify-between p-4 bg-accent/50 rounded-lg">
                 <div className="flex items-center gap-3">
                   {experience.type === 'VR' ? (
-                    <VrBox className="w-8 h-8 text-primary" />
+                    <View className="w-8 h-8 text-primary" />
                   ) : (
                     <Smartphone className="w-8 h-8 text-primary" />
                   )}
@@ -100,7 +101,7 @@ export default function VRARPage() {
             <h3 className="text-lg font-semibold text-foreground mb-4">VR Devices</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <VrBox className="w-5 h-5 text-primary" />
+                <View className="w-5 h-5 text-primary" />
                 <div>
                   <p className="text-sm text-foreground">Oculus Quest</p>
                   <p className="text-xs text-muted-foreground">Wireless VR headset</p>
@@ -154,7 +155,7 @@ export default function VRARPage() {
             <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
             <div className="space-y-2">
               <button className="w-full p-3 text-left bg-accent/50 rounded-lg hover:bg-accent transition-colors">
-                <VrBox className="w-4 h-4 inline mr-2" />
+                <View className="w-4 h-4 inline mr-2" />
                 Create VR Experience
               </button>
               <button className="w-full p-3 text-left bg-accent/50 rounded-lg hover:bg-accent transition-colors">

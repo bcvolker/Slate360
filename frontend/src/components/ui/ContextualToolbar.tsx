@@ -1,10 +1,12 @@
+'use client';
 import { cn } from '@/lib/utils';
+import { type ElementType } from 'react';
 
 interface Tool {
   label: string;
   action: () => void;
   helpText?: string;
-  icon?: React.ReactNode;
+  icon?: ElementType;
 }
 
 interface ContextualToolbarProps {
@@ -22,7 +24,7 @@ export function ContextualToolbar({ tools, className }: ContextualToolbarProps) 
           className="flex items-center gap-2 px-3 py-2 text-sm bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors"
           title={tool.helpText}
         >
-          {tool.icon}
+          {tool.icon && <tool.icon className="w-4 h-4" />}
           {tool.label}
         </button>
       ))}

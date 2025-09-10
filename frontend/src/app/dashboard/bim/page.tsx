@@ -1,3 +1,4 @@
+'use client';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 import { ContextualToolbar } from '@/components/ui/ContextualToolbar';

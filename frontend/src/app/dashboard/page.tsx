@@ -1,3 +1,4 @@
+'use client';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 import { ContextualToolbar } from '@/components/ui/ContextualToolbar';
@@ -7,7 +8,7 @@ import {
   Video, 
   MapPin, 
   BarChart3, 
-  VrBox,
+  View,
   TrendingUp,
   Users,
   Clock,
@@ -110,9 +111,9 @@ export default function DashboardPage() {
               <p className="text-sm text-muted-foreground">Immersive walkthroughs</p>
             </div>
             <div className="text-center p-4 bg-accent/50 rounded-lg">
-              <BarChart3 className="w-8 h-8 text-primary mx-auto mb-2" />
-              <h4 className="font-semibold text-foreground">Analytics</h4>
-              <p className="text-sm text-muted-foreground">Data-driven insights</p>
+              <View className="w-8 h-8 text-primary mx-auto mb-2" />
+              <h4 className="font-semibold text-foreground">VR/AR</h4>
+              <p className="text-sm text-muted-foreground">Immersive experiences</p>
             </div>
           </div>
         </SurfaceCard>

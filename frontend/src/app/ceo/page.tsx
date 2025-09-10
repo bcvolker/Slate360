@@ -3,6 +3,7 @@ import { SurfaceCard } from '@/components/ui/SurfaceCard';
 import { ContextualToolbar } from '@/components/ui/ContextualToolbar';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Upload } from 'lucide-react';
 
 const useOwnerAuth = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -34,7 +35,7 @@ export default function CeoPage() {
       <SurfaceCard>
         <h1 className="text-2xl font-bold">CEO Dashboard (Private)</h1>
         <p className="mt-2 text-foreground/70">Manage homepage content, subscriptions, and default site theme.</p>
-        <ContextualToolbar tools={[{ label: 'Upload Content', action: () => {}, helpText: 'Upload homepage visuals', icon: null }]} />
+        <ContextualToolbar tools={[{ label: 'Upload Content', action: () => {}, helpText: 'Upload homepage visuals', icon: Upload }]} />
       </SurfaceCard>
     </div>
   );

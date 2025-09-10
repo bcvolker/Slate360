@@ -38,25 +38,25 @@ export function TourViewer({ title, steps, className }: TourViewerProps) {
       label: 'Previous',
       action: prevStep,
       helpText: 'Go to previous step',
-      icon: <ChevronLeft size={16} />
+      icon: ChevronLeft
     },
     {
       label: 'Next',
       action: nextStep,
       helpText: 'Go to next step',
-      icon: <ChevronRight size={16} />
+      icon: ChevronRight
     },
     {
       label: 'Reset',
       action: resetTour,
       helpText: 'Start tour from beginning',
-      icon: <RotateCcw size={16} />
+      icon: RotateCcw
     },
     {
       label: 'Overview',
       action: () => {},
       helpText: 'Show tour overview',
-      icon: <Map size={16} />
+      icon: Map
     }
   ];
 

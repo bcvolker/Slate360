@@ -11,7 +11,7 @@ import {
   Video, 
   MapPin, 
   BarChart3, 
-  VrBox, 
+  View, 
   Settings,
   Menu,
   X
@@ -24,7 +24,7 @@ const navigation = [
   { name: 'Content Studio', href: '/dashboard/content', icon: Video },
   { name: 'Geospatial', href: '/dashboard/geospatial', icon: MapPin },
   { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
-  { name: 'VR/AR', href: '/dashboard/vr-ar', icon: VrBox },
+  { name: 'VR/AR', href: '/dashboard/vr-ar', icon: View },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ];
 

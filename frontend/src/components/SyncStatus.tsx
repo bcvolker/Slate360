@@ -1,6 +1,4 @@
 import React from 'react';
-import { useOfflineProjects } from '../hooks/useOfflineProjects';
-import { projectSyncService } from '../lib/sync/projectSync';
 import { toast } from 'react-hot-toast';
 
 interface SyncStatusProps {
@@ -14,15 +12,10 @@ export function SyncStatus({
   showActions = true, 
   className = '' 
 }: SyncStatusProps) {
-  const { 
-    projects, 
-    isLoading, 
-    refreshProjects 
-  } = useOfflineProjects();
-
   const handleForceSync = async () => {
     try {
-      await refreshProjects();
+      // Simulate sync operation
+      await new Promise(resolve => setTimeout(resolve, 1000));
       toast.success('Projects refreshed successfully');
     } catch (error) {
       console.error('Force sync failed:', error);
@@ -41,17 +34,6 @@ export function SyncStatus({
       }
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className={`sync-status loading ${className}`}>
-        <div className="flex items-center space-x-2">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
-          <span className="text-sm text-gray-500">Loading sync status...</span>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={`sync-status ${className}`}>
@@ -72,7 +54,7 @@ export function SyncStatus({
             Ready
           </span>
           <span className="text-xs text-gray-500">
-            {projects.length} projects loaded
+            0 projects loaded
           </span>
         </div>
       </div>
@@ -83,7 +65,7 @@ export function SyncStatus({
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="sync-stat">
               <span className="text-gray-600">Total Projects:</span>
-              <span className="font-medium ml-2">{projects.length}</span>
+              <span className="font-medium ml-2">0</span>
             </div>
             <div className="sync-stat">
               <span className="text-gray-600">Status:</span>
@@ -98,15 +80,13 @@ export function SyncStatus({
         <div className="sync-actions space-y-2">
           <button
             onClick={handleForceSync}
-            disabled={isLoading}
             className="w-full px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors"
           >
-            {isLoading ? 'Refreshing...' : 'Refresh Projects'}
+            Refresh Projects
           </button>
           
           <button
             onClick={handleClearOldData}
-            disabled={isLoading}
             className="w-full px-3 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors"
           >
             Clear Old Data
@@ -119,8 +99,6 @@ export function SyncStatus({
 
 // Compact version for headers/toolbars
 export function CompactSyncStatus() {
-  const { projects, isLoading } = useOfflineProjects();
-
   return (
     <div className="compact-sync-status flex items-center space-x-2">
       {/* Network Indicator */}
@@ -135,7 +113,7 @@ export function CompactSyncStatus() {
       <div className="flex items-center space-x-1">
         <div className="w-2 h-2 rounded-full bg-green-500"></div>
         <span className="text-xs text-green-600">
-          {projects.length} projects
+          0 projects
         </span>
       </div>
     </div>

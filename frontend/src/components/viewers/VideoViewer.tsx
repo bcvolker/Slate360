@@ -51,19 +51,19 @@ export function VideoViewer({ title, src, className }: VideoViewerProps) {
       label: isPlaying ? 'Pause' : 'Play',
       action: togglePlay,
       helpText: isPlaying ? 'Pause video' : 'Play video',
-      icon: isPlaying ? <Pause size={16} /> : <Play size={16} />
+      icon: isPlaying ? Pause : Play
     },
     {
       label: isMuted ? 'Unmute' : 'Mute',
       action: toggleMute,
       helpText: isMuted ? 'Unmute video' : 'Mute video',
-      icon: isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />
+      icon: isMuted ? VolumeX : Volume2
     },
     {
       label: 'Fullscreen',
       action: toggleFullscreen,
       helpText: 'Toggle fullscreen',
-      icon: <Maximize size={16} />
+      icon: Maximize
     }
   ];
 
