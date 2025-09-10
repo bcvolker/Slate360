@@ -41,7 +41,7 @@ try {
         const gitStatus = execSync(`git -C "${projectRoot}" status`, { encoding: 'utf8' });
         summaryContent += gitStatus;
         summaryContent += '\n### Recent Commits\n';
-        const gitLog = execSync(`git -C "${projectRoot}" log -n 5 --pretty=format:'%h - %an, %ar : %s'`, { encoding: 'utf8' });
+        const gitLog = execSync(`git -C "${projectRoot}" log -n 5 --pretty=format:'%h - %an %ar : %s'`, { encoding: 'utf8' });
         summaryContent += gitLog;
     } catch (e) { summaryContent += `Error getting Git info: ${e.message}\n`; }
     summaryContent += '```\n\n';
