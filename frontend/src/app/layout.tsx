@@ -1,24 +1,21 @@
 // src/app/layout.tsx
 import './globals.css';
-import CleanHeader from '@/components/CleanHeader';
-import Footer from '@/components/Footer';
-import DotNav from '@/components/DotNav';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata = {
+  title: 'Slate360',
+  description: 'The future of construction technology.',
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="!scroll-smooth" suppressHydrationWarning>
-      <body suppressHydrationWarning>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <CleanHeader />
-          <main>{children}</main>
-          <DotNav />
-          <Footer />
+    <html lang="en">
+      <body className={inter.className}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          {children}
         </ThemeProvider>
       </body>
     </html>
