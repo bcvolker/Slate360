@@ -3,33 +3,26 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 248 250 252;
-    --foreground: 24 24 27;
-    --card: 255 255 255;
+  :root { /* Light Theme */
+    --background: 248 250 252; /* zinc-50 */
+    --foreground: 24 24 27; /* zinc-900 */
+    --card: 255 255 255; /* white */
     --card-foreground: 24 24 27;
-    --primary: 210 65% 41%;
+    --primary: 210 65% 41%; /* brand-blue */
     --primary-foreground: 255 255 255;
-    --accent: 30 59% 47%;
-    --accent-foreground: 255 255 255;
-    --border: 229 231 235;
+    --border: 229 231 235; /* zinc-200 */
   }
-  
-  .dark {
-    --background: 39 39 42;
+  .dark { /* Dark Theme */
+    --background: 39 39 42; /* zinc-800 */
     --foreground: 248 250 252;
     --card: 40 40 43;
     --card-foreground: 248 250 252;
     --primary: 30 59% 47%;
     --primary-foreground: 24 24 27;
-    --accent: 210 65% 41%;
-    --accent-foreground: 24 24 27;
-    --border: 63 63 70;
+    --border: 63 63 70; /* zinc-700 */
   }
 }
 
 @layer base {
-  body {
-    @apply bg-background text-foreground;
-  }
+  body { @apply bg-background text-foreground; }
 }
