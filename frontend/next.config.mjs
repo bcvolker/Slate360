@@ -1,17 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  // Allow build to pass while we finalize the refactor
-  typescript: { ignoreBuildErrors: true },
-  eslint: { ignoreDuringBuilds: true },
+  // We are fixing errors, not ignoring them.
+  // eslint: { ignoreDuringBuilds: false },
+  // typescript: { ignoreBuildErrors: false },
   images: {
-    // Add any external image domains your site uses here.
-    domains: ['localhost', 'images.unsplash.com'],
-  },
-  async rewrites() {
-    return [
-      { source: '/api/health', destination: '/api/health/check' },
-    ];
+    domains: ['localhost', 'images.unsplash.com', 'www.w3schools.com'],
   },
 };
 

@@ -1,7 +1,10 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { SurfaceCard } from '@/components/ui/SurfaceCard';
+import { UnifiedViewer } from '@/components/viewers/UnifiedViewer';
+import { VideoViewer } from '@/components/viewers/VideoViewer';
+import { TourViewer } from '@/components/viewers/TourViewer';
 
 const TILES = [
     { 
@@ -101,101 +104,27 @@ const TILES = [
     }
 ];
 
-// Unified Viewer Component
-const UnifiedViewer = ({ tile }: { tile: any }) => {
-    const getFileExtension = (url: string) => {
-        return url.split('.').pop()?.toLowerCase() || '';
-    };
-
-    const getViewerContent = () => {
-        const extension = getFileExtension(tile.viewerUrl || '');
-        
-        // Handle different file types
-        if (tile.viewerType === 'hero') {
-            return (
-                <div className="text-center">
-                    <div className="text-4xl mb-2">🚀</div>
-                    <h3 className="text-xl font-bold mb-1">SLATE360</h3>
-                    <p className="text-sm text-gray-300">The Future of Construction</p>
-                </div>
-            );
-        }
-        
-        if (tile.viewerType === 'image' || ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(extension)) {
-            return (
-                <img 
-                    src={tile.viewerUrl} 
-                    alt="Content" 
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                        // Fallback to placeholder if image fails to load
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                    }}
-                />
-            );
-        }
-        
-        if (tile.viewerType === 'video' || ['mp4', 'webm', 'ogg', 'mov', 'avi'].includes(extension)) {
-            return (
-                <video 
-                    src={tile.viewerUrl} 
-                    controls 
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                        // Fallback to placeholder if video fails to load
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                    }}
-                />
-            );
-        }
-        
-        if (tile.viewerType === 'model' || ['glb', 'gltf', 'obj', 'fbx', 'dae', 'ifc'].includes(extension)) {
-            return (
-                <div className="text-center">
-                    <div className="text-4xl mb-2">🏗️</div>
-                    <p className="text-sm text-gray-400">3D Model Viewer</p>
-                    <p className="text-xs text-gray-500 mt-1">{extension.toUpperCase()}</p>
-                </div>
-            );
-        }
-        
-        if (tile.viewerType === 'tour' || ['html', 'htm'].includes(extension)) {
-            return (
-                <div className="text-center">
-                    <div className="text-4xl mb-2">🌐</div>
-                    <p className="text-sm text-gray-400">360° Tour</p>
-                    <p className="text-xs text-gray-500 mt-1">Interactive</p>
-                </div>
-            );
-        }
-        
-        // Default fallback for unknown types
-        return (
-            <div className="text-center">
-                <div className="text-4xl mb-2">📄</div>
-                <p className="text-sm text-gray-400">File Viewer</p>
-                <p className="text-xs text-gray-500 mt-1">{extension.toUpperCase() || 'Unknown'}</p>
-            </div>
-        );
-    };
-
-    return (
-        <div className="w-full h-full relative flex items-center justify-center">
-            {getViewerContent()}
-            
-            {/* Fallback placeholder - hidden by default */}
-            <div className="hidden absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="text-4xl mb-2">📁</div>
-                    <p className="text-sm text-gray-400">Content Preview</p>
-                    <p className="text-xs text-gray-500 mt-1">Loading...</p>
-                </div>
-            </div>
-        </div>
-    );
-};
+// Mock data for tour steps
+const mockTourSteps = [
+    {
+        id: 'step1',
+        title: 'Project Overview',
+        description: 'Get a comprehensive view of the construction project',
+        imageUrl: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5'
+    },
+    {
+        id: 'step2',
+        title: 'Site Analysis',
+        description: 'Detailed analysis of the construction site',
+        imageUrl: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12'
+    },
+    {
+        id: 'step3',
+        title: 'Progress Tracking',
+        description: 'Monitor construction progress in real-time',
+        imageUrl: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd'
+    }
+];
 
 const Homepage = () => {
     const [activeTileIndex, setActiveTileIndex] = useState(0);
@@ -405,22 +334,28 @@ const Homepage = () => {
                             <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 items-center gap-12">
                                 <div className="absolute inset-0 -z-10 bg-noise" />
                                 <div className="p-4">
-                                    <div className="surface overflow-hidden shadow-2xl">
+                                    <SurfaceCard className="overflow-hidden shadow-2xl">
                                         <div className="w-full h-96">
-                                            <UnifiedViewer tile={tile} />
+                                            <Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+                                                <UnifiedViewer 
+                                                    title={tile.title}
+                                                    type="model"
+                                                    src={tile.viewerUrl || '/mock/hero-model.glb'}
+                                                />
+                                            </Suspense>
                                         </div>
-                                    </div>
+                                    </SurfaceCard>
                                 </div>
                                 <div className="p-4 text-center lg:text-left">
-                                    <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-zinc-50">
+                                    <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-foreground">
                                         Build Smarter with Slate360
                                     </h1>
-                                    <p className="mt-4 text-lg text-zinc-400 max-w-prose mx-auto lg:mx-0">
+                                    <p className="mt-4 text-lg text-muted-foreground max-w-prose mx-auto lg:mx-0">
                                         Photogrammetry, LiDAR, GNSS, and BIM in one modern workspace. Upload data, process in the cloud, and deliver interactive models.
                                     </p>
                                     <div className="mt-8 flex gap-4 justify-center lg:justify-start">
-                                        <a href="/dashboard" className="inline-flex items-center justify-center rounded-lg px-5 py-3 font-medium text-white transition-colors" style={{ backgroundColor: 'var(--brand-accent)' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--brand-accent-hover)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--brand-accent)'}>Open Dashboard</a>
-                                        <a href="/bim" className="inline-flex items-center justify-center rounded-lg px-5 py-3 font-medium ring-1 ring-zinc-700 text-zinc-200 hover:bg-zinc-800 transition-colors">Try BIM Studio</a>
+                                        <a href="/dashboard" className="inline-flex items-center justify-center rounded-lg px-5 py-3 font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">Open Dashboard</a>
+                                        <a href="/bim" className="inline-flex items-center justify-center rounded-lg px-5 py-3 font-medium ring-1 ring-border text-foreground hover:bg-accent transition-colors">Try BIM Studio</a>
                                     </div>
                                 </div>
                             </div>
@@ -430,13 +365,13 @@ const Homepage = () => {
                             <div className={`w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center`}>
                                 {/* Copy Column */}
                                 <div className={`p-2 ${tile.layout === 'right' ? 'lg:order-2' : 'lg:order-1'}`}>
-                                    <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-zinc-50">{tile.title}</h2>
-                                    <h3 className="mt-2 text-xl text-zinc-300">{tile.subtitle}</h3>
-                                    <p className="mt-4 text-base text-zinc-400">{tile.description}</p>
+                                    <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground">{tile.title}</h2>
+                                    <h3 className="mt-2 text-xl text-muted-foreground">{tile.subtitle}</h3>
+                                    <p className="mt-4 text-base text-muted-foreground">{tile.description}</p>
                                     <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         {tile.features?.map((f, i) => (
-                                            <li key={i} className="flex items-center gap-3 text-sm text-zinc-200">
-                                                <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--brand-accent)' }} />
+                                            <li key={i} className="flex items-center gap-3 text-sm text-foreground">
+                                                <span className="inline-block w-2 h-2 rounded-full bg-primary" />
                                                 <span>{f}</span>
                                             </li>
                                         ))}
@@ -445,60 +380,78 @@ const Homepage = () => {
                                 
                                 {/* Media Column */}
                                 <div className={`p-2 ${tile.layout === 'right' ? 'lg:order-1' : 'lg:order-2'}`}>
-                                    <div className="surface overflow-hidden shadow-xl">
+                                    <SurfaceCard className="overflow-hidden shadow-xl">
                                         <div className="w-full h-96">
-                                            <UnifiedViewer tile={tile} />
+                                            <Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+                                                {tile.viewerType === 'video' ? (
+                                                    <VideoViewer 
+                                                        title={tile.title}
+                                                        src={tile.viewerUrl || '/mock/demo.mp4'}
+                                                    />
+                                                ) : tile.viewerType === 'tour' ? (
+                                                    <TourViewer 
+                                                        title={tile.title}
+                                                        steps={mockTourSteps}
+                                                    />
+                                                ) : (
+                                                    <UnifiedViewer 
+                                                        title={tile.title}
+                                                        type={tile.viewerType as 'image' | 'model' | 'document'}
+                                                        src={tile.viewerUrl || '/mock/placeholder.jpg'}
+                                                    />
+                                                )}
+                                            </Suspense>
                                         </div>
-                                    </div>
+                                    </SurfaceCard>
                                 </div>
                             </div>
                         )}
                         
                         {/* Footer - Only on last tile */}
                         {index === TILES.length - 1 && (
-                            <footer className="absolute bottom-0 left-0 right-0 z-10 bg-zinc-950/95 backdrop-blur-sm border-t border-zinc-800">
+                            <footer className="absolute bottom-0 left-0 right-0 z-10 bg-background/95 backdrop-blur-sm border-t border-border">
                                 <div className="max-w-6xl mx-auto px-8 py-6">
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-4">
                                         <div>
-                                            <h3 className="font-semibold mb-2 text-sm text-zinc-50">Product</h3>
-                                            <ul className="space-y-1 text-xs text-zinc-400">
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Features</a></li>
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Pricing</a></li>
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Demo</a></li>
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">API</a></li>
+                                            <h3 className="font-semibold mb-2 text-sm text-foreground">Product</h3>
+                                            <ul className="space-y-1 text-xs text-muted-foreground">
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Features</a></li>
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Pricing</a></li>
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Demo</a></li>
+                                                <li><a href="#" className="hover:text-foreground transition-colors">API</a></li>
                                             </ul>
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold mb-2 text-sm text-zinc-50">Company</h3>
-                                            <ul className="space-y-1 text-xs text-zinc-400">
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">About</a></li>
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Careers</a></li>
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Press</a></li>
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Blog</a></li>
+                                            <h3 className="font-semibold mb-2 text-sm text-foreground">Company</h3>
+                                            <ul className="space-y-1 text-xs text-muted-foreground">
+                                                <li><a href="#" className="hover:text-foreground transition-colors">About</a></li>
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Careers</a></li>
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Press</a></li>
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Blog</a></li>
                                             </ul>
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold mb-2 text-sm text-zinc-50">Support</h3>
-                                            <ul className="space-y-1 text-xs text-zinc-400">
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Help Center</a></li>
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Contact</a></li>
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Status</a></li>
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Community</a></li>
+                                            <h3 className="font-semibold mb-2 text-sm text-foreground">Support</h3>
+                                            <ul className="space-y-1 text-xs text-muted-foreground">
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Help Center</a></li>
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Contact</a></li>
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Status</a></li>
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Community</a></li>
                                             </ul>
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold mb-2 text-sm text-zinc-50">Legal</h3>
-                                            <ul className="space-y-1 text-xs text-zinc-400">
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Privacy Policy</a></li>
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Terms of Service</a></li>
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Cookie Policy</a></li>
-                                                <li><a href="#" className="hover:text-zinc-100 transition-colors">Security</a></li>
+                                            <h3 className="font-semibold mb-2 text-sm text-foreground">Legal</h3>
+                                            <ul className="space-y-1 text-xs text-muted-foreground">
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Terms of Service</a></li>
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Cookie Policy</a></li>
+                                                <li><a href="#" className="hover:text-foreground transition-colors">Security</a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     
-                                    <div className="border-t border-zinc-800 pt-3 text-center">
-                                        <p className="text-xs text-zinc-500">
+                                    <div className="border-t border-border pt-3 text-center">
+                                        <p className="text-xs text-muted-foreground">
                                             © 2025 SLATE360. All rights reserved. | Built with innovation for the construction industry.
                                         </p>
                                     </div>

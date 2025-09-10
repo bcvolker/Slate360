@@ -3,15 +3,23 @@ import './globals.css';
 import CleanHeader from '@/components/CleanHeader';
 import Footer from '@/components/Footer';
 import DotNav from '@/components/DotNav';
+import { ThemeProvider } from '@/components/theme/ThemeProvider';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="!scroll-smooth">
-      <body className="bg-gradient-to-b from-zinc-900 to-zinc-950 text-zinc-300">
-        <CleanHeader />
-        <main>{children}</main>
-        <DotNav />
-        <Footer />
+    <html lang="en" className="!scroll-smooth" suppressHydrationWarning>
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <CleanHeader />
+          <main>{children}</main>
+          <DotNav />
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
