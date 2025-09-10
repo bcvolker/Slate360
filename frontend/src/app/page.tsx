@@ -1,3 +1,4 @@
+cat > page.tsx << 'EOF'
 'use client';
 import React, { Suspense } from 'react';
 import { CheckCircle2 } from 'lucide-react';
@@ -67,3 +68,4 @@ export default function HomePage() {
     </>
   );
 }
+EOF
