@@ -1,4 +1,3 @@
-// src/app/layout.tsx
 import './globals.css';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { Inter } from 'next/font/google';
@@ -10,7 +9,11 @@ export const metadata = {
   description: 'The future of construction technology.',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className={inter.className}>

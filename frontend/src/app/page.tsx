@@ -1,21 +1,42 @@
-// src/app/page.tsx
 'use client';
-import React, { Suspense } from 'react';
+import React from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import CleanHeader from '@/components/CleanHeader';
-import { SurfaceCard } from '@/components/ui/SurfaceCard';
-
-// Placeholder Viewers
-const UnifiedViewer = ({ title }: any) => <div className="w-full h-full flex items-center justify-center bg-foreground/5 text-foreground/30 rounded-lg">3D Viewer for {title}</div>;
-const VideoViewer = () => <div className="w-full h-full flex items-center justify-center bg-black text-white rounded-lg">Mock Video</div>;
-const TourViewer = () => <div className="w-full h-full flex items-center justify-center bg-foreground/5 text-foreground/30 rounded-lg">Mock 360 Tour</div>;
 
 const TILES = [
-  { id: 'hero', title: 'Slate360', layout: 'hero' },
-  { id: 'project-hub', title: 'Project Hub', subtitle: 'Plan, track, and coordinate.', features: ['RFI & Submittal Tracking', 'Document Version Control'], layout: 'left', viewer: <UnifiedViewer title="Project Hub" /> },
-  { id: 'bim-studio', title: 'BIM Studio', subtitle: '3D modeling & analysis.', features: ['Real-time Clash Detection', 'Live Annotations & Markups'], layout: 'right', viewer: <UnifiedViewer title="BIM Studio" /> },
-  { id: 'content', title: 'Content Creation', subtitle: 'AI-powered media editing.', features: ['Magnetic Video Timeline', 'AI Photo Enhancement'], layout: 'left', viewer: <VideoViewer /> },
-  { id: 'tours', title: '360 Tours', subtitle: 'Immersive site walkthroughs.', features: ['Interactive Hotspots', 'One-Click VR Export'], layout: 'right', viewer: <TourViewer /> },
+  { 
+    id: 'hero', 
+    title: 'Slate360', 
+    layout: 'hero' 
+  },
+  { 
+    id: 'project-hub', 
+    title: 'Project Hub', 
+    subtitle: 'Plan, track, and coordinate.', 
+    features: ['RFI & Submittal Tracking', 'Document Version Control'], 
+    layout: 'left' 
+  },
+  { 
+    id: 'bim-studio', 
+    title: 'BIM Studio', 
+    subtitle: '3D modeling & analysis.', 
+    features: ['Real-time Clash Detection', 'Live Annotations & Markups'], 
+    layout: 'right' 
+  },
+  { 
+    id: 'content', 
+    title: 'Content Creation', 
+    subtitle: 'AI-powered media editing.', 
+    features: ['Magnetic Video Timeline', 'AI Photo Enhancement'], 
+    layout: 'left' 
+  },
+  { 
+    id: 'tours', 
+    title: '360 Tours', 
+    subtitle: 'Immersive site walkthroughs.', 
+    features: ['Interactive Hotspots', 'One-Click VR Export'], 
+    layout: 'right' 
+  },
 ];
 
 export default function HomePage() {
@@ -54,11 +75,15 @@ export default function HomePage() {
                   </ul>
                 </div>
                 <div className={`p-2 ${tile.layout === 'right' ? 'lg:order-1' : 'lg:order-2'}`}>
-                  <SurfaceCard className="overflow-hidden shadow-2xl h-96">
-                    <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-foreground/50">Loading Viewer...</div>}>
-                      {tile.viewer}
-                    </Suspense>
-                  </SurfaceCard>
+                  <div className="w-full h-96 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg border border-border shadow-2xl flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <div className="w-8 h-8 bg-primary rounded"></div>
+                      </div>
+                      <p className="text-foreground/60 font-medium">Interactive Demo</p>
+                      <p className="text-sm text-foreground/40 mt-1">{tile.title}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </section>
