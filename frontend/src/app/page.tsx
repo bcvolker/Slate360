@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { CheckCircle2 } from 'lucide-react';
-import CleanHeader from '@/components/CleanHeader';
+import { CleanHeader } from '@/components/CleanHeader';
 
 const TILES = [
   { 
