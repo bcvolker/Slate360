@@ -362,7 +362,7 @@ const Homepage = () => {
                         )}
 
                         {tile.layout !== 'hero' && (
-                            <div className={`w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center`}>
+                            <div className={`w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${index === TILES.length - 1 ? 'pb-24' : ''}`}>
                                 {/* Copy Column */}
                                 <div className={`p-2 ${tile.layout === 'right' ? 'lg:order-2' : 'lg:order-1'}`}>
                                     <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground">{tile.title}</h2>
