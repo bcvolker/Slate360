@@ -72,7 +72,7 @@ const TILES = [
         subtitle: 'Advanced automation and mapping.',
         description: 'Leverage drone technology, GPS mapping, and robotic automation for precise construction operations. Our geospatial tools provide accurate site mapping, progress monitoring, and automated data collection.',
         features: ['Drone Mapping', 'GPS Integration', 'Robotic Automation', 'Site Analysis'],
-        icon: '🤖',
+        icon: '  ',
         color: 'pink',
         layout: 'left',
         viewerType: 'model',
@@ -466,5 +466,4 @@ const Homepage = () => {
     );
 };
 
-export default Homepage;/ /   F o r c e   V e r c e l   d e p l o y m e n t   -   0 9 / 1 0 / 2 0 2 5   0 0 : 2 6 : 2 0  
- 
+export default Homepage;
