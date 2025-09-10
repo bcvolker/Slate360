@@ -30,7 +30,7 @@ try {
     summaryContent += `Node.js Version: ${process.version}\n`;
     summaryContent += `Platform: ${process.platform}\n`;
     try {
-        const psInfo = execSync('powershell -Command "Get-ComputerInfo | Select-Object OsName, OsVersion | Format-List | Out-String"', { encoding: 'utf8' });
+        const psInfo = execSync('powershell -Command "Get-ComputerInfo | Select-Object OsName, OsVersion | Format-List | Out-String"', { encoding: 'utf8', stdio: 'pipe' });
         summaryContent += psInfo;
     } catch (e) { summaryContent += 'Could not get PowerShell info.\n'; }
     summaryContent += '```\n\n';
@@ -49,7 +49,7 @@ try {
     // File Structure
     summaryContent += '## Project File Structure\n```text\n';
     try {
-        const tree = execSync(`tree "${frontendDir}" /A /F`, { encoding: 'utf8' });
+        const tree = execSync(`powershell -Command "Get-ChildItem -Path '${frontendDir}' -Recurse | ForEach-Object { $_.FullName.Replace('${frontendDir}\\', '') }"`, { encoding: 'utf8' });
         summaryContent += tree;
     } catch (e) { summaryContent += `Could not generate file tree. Error: ${e.message}\n`; }
     summaryContent += '```\n\n';
@@ -69,7 +69,7 @@ try {
     // Dependency Tree
     summaryContent += '## NPM Dependency Tree (Top 5 Levels)\n```text\n';
     try {
-        const npmLs = execSync('npm ls --depth=5', { cwd: frontendDir, encoding: 'utf8' });
+        const npmLs = execSync('npm ls --depth=5', { cwd: frontendDir, encoding: 'utf8', stdio: 'pipe' });
         summaryContent += npmLs;
     } catch (err) {
         // npm ls returns a non-zero exit code if there are issues, but still outputs the tree. We'll capture stdout.
