@@ -4,85 +4,53 @@
 
 @layer base {
   :root {
-    /* DARK THEME (DEFAULT) */
-    --background: #0F172A; /* Deep slate blue */
-    --foreground: #E2E8F0;
-    --card: #1E293B;
-    --card-foreground: #E2E8F0;
-    --primary: #4B9CD3; /* North Carolina Blue */
-    --primary-foreground: #0F172A;
-    --secondary: #B87333; /* Copper Accent */
-    --secondary-foreground: #FFFFFF;
-    --muted: #334155;
-    --muted-foreground: #94A3B8;
-    --border: #334155;
-    --radius: 0.75rem;
-  }
-
-  [data-theme="light"] {
+    /* LIGHT THEME (MOBILE-FIRST DEFAULT) */
     --background: #FFFFFF;
     --foreground: #0F172A;
     --card: #F8FAFC;
-    --card-foreground: #0F172A;
     --primary: #4B9CD3;
-    --primary-foreground: #FFFFFF;
     --secondary: #B87333;
-    --secondary-foreground: #FFFFFF;
-    --muted: #F1F5F9;
     --muted-foreground: #64748B;
     --border: #E2E8F0;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
+  [data-theme="dark"] {
+    --background: #0F172A;
+    --foreground: #E2E8F0;
+    --card: #1E293B;
+    --muted-foreground: #94A3B8;
+    --border: #334155;
   }
   
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Orbitron', sans-serif;
-    @apply font-bold tracking-tight;
+  /* On desktop, we default to dark mode unless specified otherwise */
+  @media (min-width: 768px) {
+    :root {
+      --background: #0F172A;
+      --foreground: #E2E8F0;
+      --card: #1E293B;
+      --muted-foreground: #94A3B8;
+      --border: #334155;
+    }
+    [data-theme="light"] {
+      --background: #FFFFFF;
+      --foreground: #0F172A;
+      --card: #F8FAFC;
+      --muted-foreground: #64748B;
+      --border: #E2E8F0;
+    }
   }
 
-  .scroll-container {
-    height: 100vh;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-  }
+  html { scroll-behavior: smooth; }
+  body { @apply bg-background text-foreground; }
+  h1, h2, h3 { font-family: 'Orbitron', sans-serif; @apply tracking-tight; }
 
-  .scroll-section {
-    @apply h-screen w-full flex items-center justify-center p-4 md:p-8;
-    scroll-snap-align: start;
-    position: relative;
-  }
-}
+  /* SCROLL CONTAINER */
+  .scroll-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; }
+  .scroll-section { @apply h-screen w-full flex items-center justify-center p-6 md:p-12; scroll-snap-align: start; position: relative; }
 
-/* Logo size override */
-#site-logo svg {
-  height: 3rem !important; /* 48px, which is 4-5x the original size */
-  width: auto !important;
-}
-
-/* Side navigation styles */
-.side-nav-item {
-  @apply relative flex justify-end items-center;
-}
-
-.nav-line {
-  @apply w-8 h-0.5 bg-muted-foreground rounded-full transition-all duration-300;
-}
-
-.nav-line.active {
-  @apply w-16 bg-primary scale-110;
-}
-
-.nav-tooltip {
-  @apply absolute right-12 whitespace-nowrap bg-card text-card-foreground px-3 py-1 rounded-md text-sm opacity-0 scale-95 transition-all duration-200 pointer-events-none;
-}
-
-.side-nav-item:hover .nav-tooltip {
-  @apply opacity-100 scale-100;
+  /* NEW SIDE NAV STYLES */
+  .side-nav-item { @apply relative flex justify-end items-center; }
+  .nav-line { @apply w-6 h-1 bg-muted-foreground/50 rounded-full transition-all duration-300; }
+  .nav-line.active { @apply w-12 bg-primary; }
+  .nav-tooltip { @apply absolute right-full mr-3 whitespace-nowrap bg-card text-foreground px-3 py-1 rounded-md text-xs font-semibold opacity-0 scale-90 transition-all duration-200 pointer-events-none group-hover:opacity-100 group-hover:scale-100; }
 }
