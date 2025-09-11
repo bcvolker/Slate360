@@ -16,7 +16,7 @@ export default function HomePage() {
       detailedDescription: 'SLATE360 creates safe, efficient, and intelligent construction workflows with advanced 3D modeling, real-time collaboration, and immersive technologies.',
       highlightText: 'The mission: solve construction complexity, enable rapid project delivery, and transform how we build.',
       Icon: Code, 
-      gradient: 'from-blue-500/10 to-blue-900/10',
+      gradient: 'from-blue-600/20 to-blue-900/30',
       accentColor: 'blue',
       buttonText: 'GET STARTED',
       secondaryButtonText: 'VIEW DEMO'
@@ -29,8 +29,8 @@ export default function HomePage() {
       detailedDescription: 'Track progress, manage teams, and collaborate in real-time with advanced project management tools designed for modern construction workflows.',
       highlightText: 'Real-time collaboration and advanced tracking for maximum efficiency.',
       Icon: HardHat, 
-      gradient: 'from-green-500/10 to-green-900/10',
-      accentColor: 'green',
+      gradient: 'from-emerald-600/20 to-emerald-900/30',
+      accentColor: 'emerald',
       buttonText: 'EXPLORE PROJECTS',
       secondaryButtonText: 'VIEW ANALYTICS'
     },
@@ -42,7 +42,7 @@ export default function HomePage() {
       detailedDescription: 'Our advanced 3D modeling tools bring your construction projects to life with real-time updates, cloud rendering, and seamless collaboration.',
       highlightText: 'Precision modeling with real-time collaboration and cloud rendering.',
       Icon: Orbit, 
-      gradient: 'from-purple-500/10 to-purple-900/10',
+      gradient: 'from-purple-600/20 to-purple-900/30',
       accentColor: 'purple',
       buttonText: 'START MODELING',
       secondaryButtonText: 'VIEW GALLERY'
@@ -55,7 +55,7 @@ export default function HomePage() {
       detailedDescription: 'Professional media production tools to showcase your work and engage your audience with stunning visual content and interactive presentations.',
       highlightText: '4K video editing and photo enhancement for maximum impact.',
       Icon: Video, 
-      gradient: 'from-orange-500/10 to-orange-900/10',
+      gradient: 'from-orange-600/20 to-orange-900/30',
       accentColor: 'orange',
       buttonText: 'START CREATING',
       secondaryButtonText: 'VIEW PORTFOLIO'
@@ -68,7 +68,7 @@ export default function HomePage() {
       detailedDescription: 'Advanced geospatial tools and robotics to optimize your construction workflow with precise site monitoring and automated operations.',
       highlightText: 'Drone surveying and robotic automation for maximum precision.',
       Icon: Bot, 
-      gradient: 'from-pink-500/10 to-pink-900/10',
+      gradient: 'from-pink-600/20 to-pink-900/30',
       accentColor: 'pink',
       buttonText: 'EXPLORE AUTOMATION',
       secondaryButtonText: 'VIEW DEMOS'
@@ -81,8 +81,8 @@ export default function HomePage() {
       detailedDescription: 'Transform your construction data into actionable insights with real-time metrics, custom reports, and predictive analytics for optimal project performance.',
       highlightText: 'Real-time metrics and predictive analytics for maximum efficiency.',
       Icon: BarChart, 
-      gradient: 'from-teal-500/10 to-teal-900/10',
-      accentColor: 'teal',
+      gradient: 'from-cyan-600/20 to-cyan-900/30',
+      accentColor: 'cyan',
       buttonText: 'VIEW REPORTS',
       secondaryButtonText: 'EXPLORE ANALYTICS'
     },
@@ -94,7 +94,7 @@ export default function HomePage() {
       detailedDescription: 'Create immersive virtual reality experiences that allow stakeholders to walk through projects before construction begins.',
       highlightText: 'Immersive VR walkthroughs and simulations for maximum engagement.',
       Icon: Orbit, 
-      gradient: 'from-indigo-500/10 to-indigo-900/10',
+      gradient: 'from-indigo-600/20 to-indigo-900/30',
       accentColor: 'indigo',
       buttonText: 'ENTER VR',
       secondaryButtonText: 'VIEW EXPERIENCES'
