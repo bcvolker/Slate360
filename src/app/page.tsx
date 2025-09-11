@@ -126,7 +126,7 @@ export default function HomePage() {
 
       <div className="scroll-container">
         {tiles.map((tile, index) => (
-          <section key={tile.id} id={tile.id} className={`scroll-section relative overflow-hidden pt-20`}>
+          <section key={tile.id} id={tile.id} className={`scroll-section relative overflow-hidden pt-24`}>
             <div className={`absolute inset-0 bg-gradient-to-br ${tile.gradient} opacity-50`}></div>
             <div className="container relative z-10 px-4 md:px-6 h-full flex items-center">
               <div className="grid md:grid-cols-2 gap-12 items-center w-full min-h-[600px]">
