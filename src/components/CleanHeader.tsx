@@ -24,8 +24,17 @@ export function CleanHeader() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
           <nav className="flex items-center space-x-2">
-            <Link href="/dashboard">
-              <Button variant="ghost">Dashboard</Button>
+            <Link href="/contact">
+              <Button variant="ghost">Contact</Button>
+            </Link>
+            <Link href="/about">
+              <Button variant="ghost">About</Button>
+            </Link>
+            <Link href="/subscribe">
+              <Button variant="ghost">Subscribe</Button>
+            </Link>
+            <Link href="/login">
+              <Button variant="ghost">Login</Button>
             </Link>
             <Button
               variant="ghost"

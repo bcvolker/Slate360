@@ -1,94 +1,180 @@
+'use client';
+
 import { CleanHeader } from '@/components/CleanHeader';
 import { Button } from '@/components/ui/button';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 import Link from 'next/link';
-import { CheckCircle } from 'lucide-react';
+import { ArrowRight, Code, Video, Bot, BarChart, HardHat, Orbit, ChevronUp, ChevronDown } from 'lucide-react';
 
 export default function HomePage() {
-  const featureTiles = [
-    {
-      title: 'Project Hub',
-      description: 'Centralize communication, documentation, and task management.',
-      features: ['RFI Tracking', 'Submittal Management', 'Daily Logs', 'Task Assignment'],
+  const tiles = [
+    { 
+      id: 'home', 
+      title: 'SLATE360', 
+      subtitle: 'The Future of Construction Technology', 
+      description: 'Our platform combines cutting-edge 3D visualization, advanced project management, and immersive technologies to revolutionize how you build.',
+      detailedDescription: 'SLATE360 creates safe, efficient, and intelligent construction workflows with advanced 3D modeling, real-time collaboration, and immersive technologies.',
+      highlightText: 'The mission: solve construction complexity, enable rapid project delivery, and transform how we build.',
+      Icon: Code, 
+      gradient: 'from-blue-500/10 to-blue-900/10',
+      accentColor: 'blue',
+      buttonText: 'GET STARTED',
+      secondaryButtonText: 'VIEW DEMO'
     },
-    {
-      title: 'BIM Studio',
-      description: 'View, analyze, and collaborate on 3D models in real-time.',
-      features: ['Clash Detection', 'Model Viewer', 'Annotations', 'Version Control'],
+    { 
+      id: 'project-hub', 
+      title: 'PROJECT HUB', 
+      subtitle: 'Centralized Project Management', 
+      description: 'Manage all your construction projects from one powerful dashboard with real-time collaboration and advanced tracking.',
+      detailedDescription: 'Track progress, manage teams, and collaborate in real-time with advanced project management tools designed for modern construction workflows.',
+      highlightText: 'Real-time collaboration and advanced tracking for maximum efficiency.',
+      Icon: HardHat, 
+      gradient: 'from-green-500/10 to-green-900/10',
+      accentColor: 'green',
+      buttonText: 'EXPLORE PROJECTS',
+      secondaryButtonText: 'VIEW ANALYTICS'
     },
-    {
-      title: '360° Tour Builder',
-      description: 'Create immersive virtual site tours for stakeholders.',
-      features: ['Hotspot Linking', 'VR Mode', 'Measurement Tools', 'Progress Photos'],
+    { 
+      id: 'bim-studio', 
+      title: 'BIM STUDIO', 
+      subtitle: 'Advanced 3D Modeling', 
+      description: 'Create, edit, and collaborate on Building Information Models with precision and real-time updates.',
+      detailedDescription: 'Our advanced 3D modeling tools bring your construction projects to life with real-time updates, cloud rendering, and seamless collaboration.',
+      highlightText: 'Precision modeling with real-time collaboration and cloud rendering.',
+      Icon: Orbit, 
+      gradient: 'from-purple-500/10 to-purple-900/10',
+      accentColor: 'purple',
+      buttonText: 'START MODELING',
+      secondaryButtonText: 'VIEW GALLERY'
     },
+    { 
+      id: 'content-creation', 
+      title: 'CONTENT CREATION', 
+      subtitle: 'Professional Media Production', 
+      description: 'Create high-quality images, videos, and interactive content for your construction projects.',
+      detailedDescription: 'Professional media production tools to showcase your work and engage your audience with stunning visual content and interactive presentations.',
+      highlightText: '4K video editing and photo enhancement for maximum impact.',
+      Icon: Video, 
+      gradient: 'from-orange-500/10 to-orange-900/10',
+      accentColor: 'orange',
+      buttonText: 'START CREATING',
+      secondaryButtonText: 'VIEW PORTFOLIO'
+    },
+    { 
+      id: 'geospatial', 
+      title: 'GEOSPATIAL & ROBOTICS', 
+      subtitle: 'Advanced Automation & Mapping', 
+      description: 'Leverage drone technology, GPS mapping, and robotic automation for precise construction operations.',
+      detailedDescription: 'Advanced geospatial tools and robotics to optimize your construction workflow with precise site monitoring and automated operations.',
+      highlightText: 'Drone surveying and robotic automation for maximum precision.',
+      Icon: Bot, 
+      gradient: 'from-pink-500/10 to-pink-900/10',
+      accentColor: 'pink',
+      buttonText: 'EXPLORE AUTOMATION',
+      secondaryButtonText: 'VIEW DEMOS'
+    },
+    { 
+      id: 'reports', 
+      title: 'REPORTS & ANALYTICS', 
+      subtitle: 'Data-Driven Insights', 
+      description: 'Advanced analytics and reporting tools for informed decision-making and project optimization.',
+      detailedDescription: 'Transform your construction data into actionable insights with real-time metrics, custom reports, and predictive analytics for optimal project performance.',
+      highlightText: 'Real-time metrics and predictive analytics for maximum efficiency.',
+      Icon: BarChart, 
+      gradient: 'from-teal-500/10 to-teal-900/10',
+      accentColor: 'teal',
+      buttonText: 'VIEW REPORTS',
+      secondaryButtonText: 'EXPLORE ANALYTICS'
+    },
+    { 
+      id: 'vr-studio', 
+      title: 'VIRTUAL REALITY STUDIO', 
+      subtitle: 'Immersive Experiences', 
+      description: 'Step into your projects before they are built with immersive VR walkthroughs and simulations.',
+      detailedDescription: 'Create immersive virtual reality experiences that allow stakeholders to walk through projects before construction begins.',
+      highlightText: 'Immersive VR walkthroughs and simulations for maximum engagement.',
+      Icon: Orbit, 
+      gradient: 'from-indigo-500/10 to-indigo-900/10',
+      accentColor: 'indigo',
+      buttonText: 'ENTER VR',
+      secondaryButtonText: 'VIEW EXPERIENCES'
+    }
   ];
-  return (
-    <div className="flex min-h-screen flex-col">
-      <CleanHeader />
-      <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    Build Smarter with Slate360
-                  </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    The complete construction technology platform that transforms how you manage projects, collaborate with teams, and deliver exceptional results.
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link href="/dashboard">
-                    <Button size="lg">Start Free Trial</Button>
-                  </Link>
-                  <Link href="#">
-                    <Button size="lg" variant="outline">
-                      Watch Demo
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-              <div className="flex items-center justify-center">
-                {/* You can place an image or a simple graphic here */}
-                <div className="h-64 w-full rounded-lg bg-secondary flex items-center justify-center">
-                  <p className="text-muted-foreground">[Platform Visual Here]</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        {/* NEW FEATURES SECTION - ADD THIS */}
-        <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">An Integrated Toolset</h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  From project planning to execution, Slate360 provides a seamless workflow to keep your projects on time and on budget.
-                </p>
+  return (
+    <>
+      <CleanHeader />
+      
+      {/* Scroll up indicator */}
+      <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
+        <button className="bg-white/10 backdrop-blur-lg rounded-full p-2 hover:bg-white/20 transition-colors">
+          <ChevronUp className="h-4 w-4 text-white" />
+        </button>
+      </div>
+
+      {/* Navigation dots */}
+      <nav className="nav-dots">
+        {tiles.map(tile => <a key={tile.id} href={`#${tile.id}`}></a>)}
+      </nav>
+
+      {/* Scroll down indicator */}
+      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+        <button className="bg-white/10 backdrop-blur-lg rounded-full p-2 hover:bg-white/20 transition-colors">
+          <ChevronDown className="h-4 w-4 text-white" />
+        </button>
+      </div>
+
+      <div className="scroll-container">
+        {tiles.map(tile => (
+          <section key={tile.id} id={tile.id} className={`scroll-section relative overflow-hidden`}>
+            <div className={`absolute inset-0 bg-gradient-to-br ${tile.gradient} opacity-50`}></div>
+            <div className="container relative z-10 px-4 md:px-6 h-full flex items-center">
+              <div className="grid md:grid-cols-2 gap-12 items-center w-full">
+                {/* Left content */}
+                <div className="space-y-6">
+                  <div className="text-center md:text-left">
+                    <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-white uppercase">{tile.title}</h1>
+                    <h2 className="text-xl font-medium text-gray-300 mt-2">{tile.subtitle}</h2>
+                    <p className="text-gray-400 mt-4 max-w-[600px]">{tile.description}</p>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h3 className="text-2xl font-bold text-white">{tile.detailedDescription}</h3>
+                    <p className="text-gray-300 max-w-[600px]">{tile.description}</p>
+                    
+                    <div className={`bg-${tile.accentColor}-500/20 border border-${tile.accentColor}-500/30 rounded-lg p-4 max-w-[500px]`}>
+                      <p className="text-white font-medium">{tile.highlightText}</p>
+                    </div>
+                    
+                    <div className="flex gap-4 flex-wrap">
+                      <Button size="lg" className="bg-white text-black hover:bg-gray-200">
+                        {tile.buttonText} <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                      <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                        {tile.secondaryButtonText}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right content - Feature card */}
+                <div className="flex justify-center md:justify-end">
+                  <SurfaceCard className="p-8 bg-black/20 backdrop-blur-lg border-white/10 w-full max-w-sm">
+                    <div className="flex flex-col items-center text-center space-y-4">
+                      <tile.Icon className={`h-16 w-16 text-${tile.accentColor}-500`} />
+                      <div>
+                        <h3 className="text-xl font-bold text-white uppercase">{tile.title}</h3>
+                        <p className="text-sm text-gray-400 mt-1">{tile.subtitle}</p>
+                      </div>
+                      <div className={`w-12 h-1 bg-${tile.accentColor}-500 rounded-full`}></div>
+                    </div>
+                  </SurfaceCard>
+                </div>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:grid-cols-3 lg:gap-12 mt-12">
-              {featureTiles.map((tile) => (
-                <SurfaceCard key={tile.title} className="p-6 flex flex-col">
-                  <h3 className="text-xl font-bold">{tile.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-2 flex-grow">{tile.description}</p>
-                  <ul className="mt-4 space-y-2 text-sm">
-                    {tile.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-primary" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </SurfaceCard>
-              ))}
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
+          </section>
+        ))}
+      </div>
+    </>
   );
 }
