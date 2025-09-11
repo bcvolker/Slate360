@@ -1,15 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import React, { useState } from 'react';
 import { CleanHeader } from '@/components/CleanHeader';
-import { Button } from '@/components/ui/button';
-import { SurfaceCard } from '@/components/ui/SurfaceCard';
-import { ArrowRight, Code, Video, Bot, BarChart, HardHat, Orbit, Construction, UploadCloud, Check } from 'lucide-react';
+import { SideNav } from '@/components/SideNav';
+import { HomePageSection } from '@/components/HomePageSection';
+import { Code, Video, Bot, BarChart, HardHat, Orbit, Construction } from 'lucide-react';
 
-// --- Data for our modular sections ---
 const sections = [
   { id: 'home', title: 'Slate360', subtitle: 'The Future of Construction Technology', longDescription: 'Our platform combines cutting-edge 3D visualization, advanced project management, and immersive technologies to revolutionize how you build, from planning to completion with unparalleled efficiency and collaboration.', Icon: Code, bgClass: 'bg-background', features: ['Unified Platform', 'Real-Time Collaboration', 'Data-Driven Insights', 'Modular & Scalable'] },
   { id: 'project-hub', title: 'Project Hub', subtitle: 'Centralized Project Management', longDescription: 'Track progress, manage teams, and collaborate in real-time with advanced project management tools. Share permissions and manage documents with an intuitive, Dropbox-like folder system for all stakeholders.', Icon: HardHat, bgClass: 'bg-slate-900/10', features: ['RFI & Submittal Tracking', 'Document Control', 'Task Management', 'Daily Logs'] },
@@ -21,97 +17,17 @@ const sections = [
   { id: 'vr-studio', title: 'Virtual Reality Studio', subtitle: 'Immersive Design & Simulation', longDescription: 'Step into your projects before they are built with immersive VR walkthroughs for design validation, stakeholder approvals, and collaborative safety simulations.', Icon: Orbit, bgClass: 'bg-slate-900/10', features: ['1:1 Scale Walkthroughs', 'Design Review Tools', 'Safety Simulation', 'Multi-User Sessions'] }
 ];
 
-// --- Reusable Footer Component ---
-const Footer = () => (
-    <footer className="w-full absolute bottom-0 left-0 p-8">
-        <div className="container mx-auto max-w-screen-xl text-center border-t border-border/20 pt-6">
-            <div className="space-x-6 text-xs text-muted-foreground">
-                <Link href="/terms" className="hover:text-foreground">Terms of Service</Link>
-                <Link href="/privacy" className="hover:text-foreground">Privacy Policy</Link>
-                <Link href="/contact" className="hover:text-foreground">Contact</Link>
-            </div>
-            <p className="mt-4 text-xs text-muted-foreground/50">© 2025 Slate360. All rights reserved.</p>
-        </div>
-    </footer>
-);
-
-// --- Reusable Section Component for Modularity ---
-const Section = ({ section, setActiveSection, isLast, index }: { 
-  section: typeof sections[0], 
-  setActiveSection: (id: string) => void, 
-  isLast: boolean,
-  index: number
-}) => {
-    const { ref, inView } = useInView({ threshold: 0.5 });
-    
-    useEffect(() => {
-        if (inView) {
-            setActiveSection(section.id);
-        }
-    }, [inView, setActiveSection, section.id]);
-
-    const isOdd = index % 2 !== 0;
-
-    return (
-        <section ref={ref} id={section.id} className={`scroll-section ${section.bgClass}`}>
-            <div className="container mx-auto max-w-screen-xl">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <motion.div 
-                        className={`space-y-6 ${isOdd ? 'lg:order-last' : ''}`}
-                        initial={{ opacity: 0, x: isOdd ? 50 : -50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, amount: 0.2 }}
-                        transition={{ duration: 0.7 }}
-                    >
-                        <h1 className="text-5xl xl:text-6xl">{section.title}</h1>
-                        <h2 className="text-2xl xl:text-3xl text-primary font-semibold">{section.subtitle}</h2>
-                        <p className="text-lg text-muted-foreground leading-relaxed">{section.longDescription}</p>
-                        <ul className="space-y-3 pt-4">
-                            {section.features.map(feature => (
-                                <li key={feature} className="flex items-center gap-3">
-                                    <Check className="h-5 w-5 text-secondary" />
-                                    <span className="text-foreground">{feature}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </motion.div>
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true, amount: 0.2 }}
-                        transition={{ duration: 0.7, delay: 0.2 }}
-                    >
-                        <SurfaceCard className="p-12 bg-card/30 backdrop-blur-lg border-2 border-dashed border-border/30 shadow-2xl min-h-[500px] flex flex-col items-center justify-center text-center">
-                            <UploadCloud className="h-20 w-20 text-muted-foreground/50 mb-6" />
-                            <h3 className="text-2xl font-semibold text-foreground">Drag & Drop Your Files</h3>
-                            <p className="text-muted-foreground mt-2">Interactive Content Coming Soon</p>
-                        </SurfaceCard>
-                    </motion.div>
-                </div>
-                {isLast && <Footer />}
-            </div>
-        </section>
-    );
-};
-
-// --- Main Homepage Component ---
 export default function HomePage() {
     const [activeSection, setActiveSection] = useState('home');
 
     return (
         <div className="bg-background fixed inset-0">
             <CleanHeader />
-            <nav className="fixed right-8 top-1/3 -translate-y-1/2 z-50 hidden md:flex flex-col items-end space-y-3">
-                {sections.map(section => (
-                    <a key={section.id} href={`#${section.id}`} className="side-nav-item group">
-                        <span className="nav-tooltip">{section.title}</span>
-                        <div className={`nav-line ${activeSection === section.id ? 'active' : ''}`}></div>
-                    </a>
-                ))}
-            </nav>
+            <SideNav sections={sections} activeSection={activeSection} />
+
             <div className="scroll-container">
                 {sections.map((section, index) => (
-                    <Section 
+                    <HomePageSection 
                         key={section.id} 
                         section={section} 
                         setActiveSection={setActiveSection}

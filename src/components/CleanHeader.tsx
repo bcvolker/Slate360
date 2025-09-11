@@ -1,55 +1,62 @@
 'use client';
 
+import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { Menu, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export function CleanHeader() {
-  const { theme, setTheme } = useTheme();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleThemeToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
+  const navLinks = [
+    { href: '/contact', label: 'Contact' },
+    { href: '/about', label: 'About' },
+    { href: '/subscribe', label: 'Subscribe' },
+    { href: '/login', label: 'Login' },
+  ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border/50">
-      <div className="flex h-24 items-center justify-between px-6">
-        {/* Logo - Left side */}
-        <Link href="/" id="site-logo" className="flex items-center space-x-2">
-          <img
-            src="/slate360 logo.PNG"
-            alt="Slate360 Logo"
-            className="h-12 w-auto"
-          />
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 h-24 flex items-center">
+      <div className="container flex items-center justify-between">
+        <Link href="/" className="flex items-center" id="site-logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" className="h-12 w-auto">
+            <rect width="256" height="256" fill="none"></rect>
+            <path d="M48,216a23.9,23.9,0,0,1,24-24H208V88a23.9,23.9,0,0,0-24-24H72a23.9,23.9,0,0,0-24,24Z" opacity="0.2"></path>
+            <path d="M48,216a23.9,23.9,0,0,1,24-24H208V88a23.9,23.9,0,0,0-24-24H72a23.9,23.9,0,0,0-24,24Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="16"></path>
+            <polyline points="48 88 48 40 208 40 208 64" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="16"></polyline>
+          </svg>
+          <span className="ml-4 text-2xl font-bold font-orbitron">Slate360</span>
         </Link>
-
-        {/* Navigation - Right side */}
-        <nav className="flex items-center space-x-6">
-          <Link href="/contact" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-            Contact
-          </Link>
-          <Link href="/about" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-            About
-          </Link>
-          <Link href="/subscribe" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-            Subscribe
-          </Link>
-          <Link href="/login" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-            Login
-          </Link>
-          <button
-            onClick={handleThemeToggle}
-            className="w-10 h-10 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
-            aria-label="Toggle Theme"
-          >
-            <Sun className="h-4 w-4 text-foreground" />
-            <Moon className="h-4 w-4 text-foreground absolute opacity-0" />
-          </button>
+        
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-4">
+          {navLinks.map(link => (
+            <Link key={link.href} href={link.href}>
+              <Button variant="ghost">{link.label}</Button>
+            </Link>
+          ))}
         </nav>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden">
+          <Button onClick={() => setIsMenuOpen(!isMenuOpen)} variant="ghost" size="icon">
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
+        </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMenuOpen && (
+        <div className="md:hidden absolute top-24 left-0 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <nav className="flex flex-col items-center gap-4 py-8">
+            {navLinks.map(link => (
+              <Link key={link.href} href={link.href} onClick={() => setIsMenuOpen(false)}>
+                <span className="text-lg font-medium">{link.label}</span>
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
