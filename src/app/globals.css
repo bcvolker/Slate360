@@ -59,3 +59,30 @@
     position: relative;
   }
 }
+
+/* Logo size override */
+#site-logo svg {
+  height: 3rem !important; /* 48px, which is 4-5x the original size */
+  width: auto !important;
+}
+
+/* Side navigation styles */
+.side-nav-item {
+  @apply relative flex justify-end items-center;
+}
+
+.nav-line {
+  @apply w-8 h-0.5 bg-muted-foreground rounded-full transition-all duration-300;
+}
+
+.nav-line.active {
+  @apply w-16 bg-primary scale-110;
+}
+
+.nav-tooltip {
+  @apply absolute right-12 whitespace-nowrap bg-card text-card-foreground px-3 py-1 rounded-md text-sm opacity-0 scale-95 transition-all duration-200 pointer-events-none;
+}
+
+.side-nav-item:hover .nav-tooltip {
+  @apply opacity-100 scale-100;
+}

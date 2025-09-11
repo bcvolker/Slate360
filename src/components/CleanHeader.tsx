@@ -16,9 +16,9 @@ export function CleanHeader() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border/50">
-      <div className="flex h-20 items-center justify-between px-6">
+      <div className="flex h-24 items-center justify-between px-6">
         {/* Logo - Left side */}
-        <Link href="/" className="flex items-center space-x-2">
+        <Link href="/" id="site-logo" className="flex items-center space-x-2">
           <img
             src="/slate360 logo.PNG"
             alt="Slate360 Logo"
