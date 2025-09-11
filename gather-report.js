@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 
 // --- Configuration ---
 const projectRoot = 'C:\\Slate360';
-const frontendDir = path.join(projectRoot, 'frontend');
+const frontendDir = projectRoot; // Source code is in the root directory
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const outputDir = path.join(projectRoot, 'DIAGNOSTIC_REPORTS');
 const finalZipName = `PROJECT_DIAGNOSTIC_${timestamp}.zip`;

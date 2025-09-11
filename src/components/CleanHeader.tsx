@@ -1,9 +1,11 @@
 'use client';
 import React from 'react';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import { Menu, X, ArrowRight, Sun, Moon } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 export const CleanHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const { theme, setTheme } = useTheme();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-200/50">
@@ -28,19 +30,35 @@ export const CleanHeader = () => {
             <a href="#contact" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
               Contact
             </a>
-            <button className="btn-primary">
+            <a href="/login" className="btn-primary">
               Get Started
               <ArrowRight className="w-4 h-4 ml-2" />
-            </button>
+            </a>
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Theme Toggle & Mobile Menu */}
+          <div className="flex items-center space-x-2">
+            {/* Theme Toggle Button */}
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+              ) : (
+                <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+              )}
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -56,10 +74,10 @@ export const CleanHeader = () => {
               <a href="#contact" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
                 Contact
               </a>
-              <button className="btn-primary w-full mt-4">
+              <a href="/login" className="btn-primary w-full mt-4">
                 Get Started
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </button>
+              </a>
             </nav>
           </div>
         )}

@@ -1,37 +1,21 @@
 'use client';
+import React from 'react';
 
-import React, { Component, ReactNode } from 'react';
-
-interface Props {
-  children: ReactNode;
-  fallback: ReactNode;
-}
-
-interface State {
-  hasError: boolean;
-}
-
-class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+export default class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: any) {
     super(props);
     this.state = { hasError: false };
   }
-
-  static getDerivedStateFromError(_: Error): State {
+  static getDerivedStateFromError() {
     return { hasError: true };
   }
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
-  }
-
   render() {
     if (this.state.hasError) {
-      return this.props.fallback;
+      return <div>Something went wrong. Please reload the page.</div>;
     }
-
     return this.props.children;
   }
 }
-
-export default ErrorBoundary;
