@@ -16,7 +16,7 @@ export function CleanHeader() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full">
-      <div className="flex h-16 items-center justify-between px-6">
+      <div className="flex h-14 items-center justify-between px-6">
         {/* Logo - Left side */}
         <Link href="/" className="flex items-center space-x-3">
           <div className="logo-container">

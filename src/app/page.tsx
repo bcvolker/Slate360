@@ -125,51 +125,99 @@ export default function HomePage() {
       </div>
 
       <div className="scroll-container">
-        {tiles.map(tile => (
-          <section key={tile.id} id={tile.id} className={`scroll-section relative overflow-hidden`}>
+        {tiles.map((tile, index) => (
+          <section key={tile.id} id={tile.id} className={`scroll-section relative overflow-hidden pt-20`}>
             <div className={`absolute inset-0 bg-gradient-to-br ${tile.gradient} opacity-50`}></div>
             <div className="container relative z-10 px-4 md:px-6 h-full flex items-center">
-              <div className="grid md:grid-cols-2 gap-12 items-center w-full">
-                {/* Left content */}
-                <div className="space-y-6">
-                  <div className="text-center md:text-left">
-                    <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-white uppercase">{tile.title}</h1>
-                    <h2 className="text-xl font-medium text-gray-300 mt-2">{tile.subtitle}</h2>
-                    <p className="text-gray-400 mt-4 max-w-[600px]">{tile.description}</p>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <h3 className="text-2xl font-bold text-white">{tile.detailedDescription}</h3>
-                    <p className="text-gray-300 max-w-[600px]">{tile.description}</p>
-                    
-                    <div className={`bg-${tile.accentColor}-500/20 border border-${tile.accentColor}-500/30 rounded-lg p-4 max-w-[500px]`}>
-                      <p className="text-white font-medium">{tile.highlightText}</p>
-                    </div>
-                    
-                    <div className="flex gap-4 flex-wrap">
-                      <Button size="lg" className="bg-white text-black hover:bg-gray-200">
-                        {tile.buttonText} <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                      <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                        {tile.secondaryButtonText}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right content - Feature card */}
-                <div className="flex justify-center md:justify-end">
-                  <SurfaceCard className="p-8 bg-black/20 backdrop-blur-lg border-white/10 w-full max-w-sm">
-                    <div className="flex flex-col items-center text-center space-y-4">
-                      <tile.Icon className={`h-16 w-16 text-${tile.accentColor}-500`} />
-                      <div>
-                        <h3 className="text-xl font-bold text-white uppercase">{tile.title}</h3>
-                        <p className="text-sm text-gray-400 mt-1">{tile.subtitle}</p>
+              <div className="grid md:grid-cols-2 gap-8 items-center w-full">
+                {/* Content and Card - alternating sides */}
+                {index % 2 === 0 ? (
+                  <>
+                    {/* Left content */}
+                    <div className="space-y-4">
+                      <div className="text-center md:text-left">
+                        <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white uppercase">{tile.title}</h1>
+                        <h2 className="text-lg font-medium text-gray-300 mt-2">{tile.subtitle}</h2>
+                        <p className="text-gray-400 mt-3 max-w-[500px] text-sm md:text-base">{tile.description}</p>
                       </div>
-                      <div className={`w-12 h-1 bg-${tile.accentColor}-500 rounded-full`}></div>
+                      
+                      <div className="space-y-3">
+                        <h3 className="text-lg font-bold text-white">{tile.detailedDescription}</h3>
+                        <p className="text-gray-300 max-w-[500px] text-sm">{tile.description}</p>
+                        
+                        <div className={`bg-${tile.accentColor}-500/20 border border-${tile.accentColor}-500/30 rounded-lg p-3 max-w-[400px]`}>
+                          <p className="text-white font-medium text-sm">{tile.highlightText}</p>
+                        </div>
+                        
+                        <div className="flex gap-3 flex-wrap">
+                          <Button size="sm" className="bg-white text-black hover:bg-gray-200 text-sm">
+                            {tile.buttonText} <ArrowRight className="ml-2 h-3 w-3" />
+                          </Button>
+                          <Button size="sm" variant="outline" className="border-white text-white hover:bg-white/10 text-sm">
+                            {tile.secondaryButtonText}
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                  </SurfaceCard>
-                </div>
+
+                    {/* Right content - Feature card */}
+                    <div className="flex justify-center md:justify-end">
+                      <SurfaceCard className="p-6 bg-black/20 backdrop-blur-lg border-white/10 w-full max-w-xs">
+                        <div className="flex flex-col items-center text-center space-y-3">
+                          <tile.Icon className={`h-12 w-12 text-${tile.accentColor}-500`} />
+                          <div>
+                            <h3 className="text-lg font-bold text-white uppercase">{tile.title}</h3>
+                            <p className="text-xs text-gray-400 mt-1">{tile.subtitle}</p>
+                          </div>
+                          <div className={`w-8 h-1 bg-${tile.accentColor}-500 rounded-full`}></div>
+                        </div>
+                      </SurfaceCard>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Left content - Feature card */}
+                    <div className="flex justify-center md:justify-start">
+                      <SurfaceCard className="p-6 bg-black/20 backdrop-blur-lg border-white/10 w-full max-w-xs">
+                        <div className="flex flex-col items-center text-center space-y-3">
+                          <tile.Icon className={`h-12 w-12 text-${tile.accentColor}-500`} />
+                          <div>
+                            <h3 className="text-lg font-bold text-white uppercase">{tile.title}</h3>
+                            <p className="text-xs text-gray-400 mt-1">{tile.subtitle}</p>
+                          </div>
+                          <div className={`w-8 h-1 bg-${tile.accentColor}-500 rounded-full`}></div>
+                        </div>
+                      </SurfaceCard>
+                    </div>
+
+                    {/* Right content */}
+                    <div className="space-y-4">
+                      <div className="text-center md:text-right">
+                        <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white uppercase">{tile.title}</h1>
+                        <h2 className="text-lg font-medium text-gray-300 mt-2">{tile.subtitle}</h2>
+                        <p className="text-gray-400 mt-3 max-w-[500px] text-sm md:text-base">{tile.description}</p>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <h3 className="text-lg font-bold text-white">{tile.detailedDescription}</h3>
+                        <p className="text-gray-300 max-w-[500px] text-sm">{tile.description}</p>
+                        
+                        <div className={`bg-${tile.accentColor}-500/20 border border-${tile.accentColor}-500/30 rounded-lg p-3 max-w-[400px]`}>
+                          <p className="text-white font-medium text-sm">{tile.highlightText}</p>
+                        </div>
+                        
+                        <div className="flex gap-3 flex-wrap">
+                          <Button size="sm" className="bg-white text-black hover:bg-gray-200 text-sm">
+                            {tile.buttonText} <ArrowRight className="ml-2 h-3 w-3" />
+                          </Button>
+                          <Button size="sm" variant="outline" className="border-white text-white hover:bg-white/10 text-sm">
+                            {tile.secondaryButtonText}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </section>
