@@ -22,7 +22,7 @@ export function CleanHeader() {
           <img
             src="/slate360 logo.PNG"
             alt="Slate360 Logo"
-            className="h-16 w-auto object-contain"
+            className="h-12 w-auto"
           />
         </Link>
 

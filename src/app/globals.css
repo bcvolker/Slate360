@@ -10,13 +10,13 @@
     --card: #1E293B;
     --card-foreground: #E2E8F0;
     --primary: #4B9CD3; /* North Carolina Blue */
-    --primary-foreground: #0F172A; /* Dark text for light buttons */
+    --primary-foreground: #0F172A;
     --secondary: #B87333; /* Copper Accent */
     --secondary-foreground: #FFFFFF;
     --muted: #334155;
     --muted-foreground: #94A3B8;
     --border: #334155;
-    --radius: 0.75rem; /* Slightly larger radius for a modern feel */
+    --radius: 0.75rem;
   }
 
   [data-theme="light"] {
@@ -39,16 +39,14 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif; /* Use Inter for body text */
+    font-family: 'Inter', sans-serif;
   }
   
-  /* Headings use Orbitron for a branded, tech feel */
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Orbitron', sans-serif;
     @apply font-bold tracking-tight;
   }
 
-  /* Main container for the snapping scroll effect */
   .scroll-container {
     height: 100vh;
     overflow-y: scroll;
