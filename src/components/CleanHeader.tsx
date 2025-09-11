@@ -19,18 +19,15 @@ export function CleanHeader() {
     <header className="fixed top-0 left-0 right-0 z-50 w-full">
       <div className="flex h-14 items-center justify-between px-6">
         {/* Logo - Left side */}
-        <Link href="/" className="flex items-center space-x-3">
-          <div className="logo-container">
-            <Image
-              src="/slate360-logo.png"
-              alt="Slate360 Logo"
-              width={32}
-              height={32}
-              className="logo-image"
-              priority
-            />
-          </div>
-          <span className="logo-text font-bold text-white">SLATE360</span>
+        <Link href="/" className="logo-link">
+          <Image
+            src="/slate360-logo.png"
+            alt="Slate360 Logo"
+            width={160}
+            height={160}
+            className="logo-image"
+            priority
+          />
         </Link>
 
         {/* Navigation - Right side */}
