@@ -1,12 +1,12 @@
 'use client';
+
 import React, { useState } from 'react';
 import { CleanHeader } from '@/components/CleanHeader';
 import { SideNav } from '@/components/SideNav';
-import { HomePageSection } from '@/components/HomePageSection'; // Assuming HomePageSection exists from last step
+import { HomePageSection } from '@/components/HomePageSection';
 import { Code, Video, Bot, BarChart, HardHat, Orbit, Construction } from 'lucide-react';
 
 const sections = [
-  // Using the same detailed sections array from the previous prompt...
   { id: 'home', title: 'Slate360', subtitle: 'The Future of Construction Technology', longDescription: 'Our platform combines cutting-edge 3D visualization, advanced project management, and immersive technologies to revolutionize how you build, from planning to completion with unparalleled efficiency and collaboration.', Icon: Code, bgClass: 'bg-background', features: ['Unified Platform', 'Real-Time Collaboration', 'Data-Driven Insights', 'Modular & Scalable'] },
   { id: 'project-hub', title: 'Project Hub', subtitle: 'Centralized Project Management', longDescription: 'Track progress, manage teams, and collaborate in real-time with advanced project management tools. Share permissions and manage documents with an intuitive, Dropbox-like folder system for all stakeholders.', Icon: HardHat, bgClass: 'bg-card', features: ['RFI & Submittal Tracking', 'Document Control', 'Task Management', 'Daily Logs'] },
   { id: 'bim-studio', title: 'BIM Studio', subtitle: 'Advanced 3D Modeling', longDescription: 'Create, edit, and collaborate on Building Information Models with precision, parametric editing, and real-time updates. Animate fly-throughs, morph progression models, and prepare files for 3D printing.', Icon: Construction, bgClass: 'bg-background', features: ['Revit & SketchUp Integration', 'Clash Detection', 'Parametric Editing', '4D Sequencing'] },
@@ -21,7 +21,6 @@ export default function HomePage() {
     const [activeSection, setActiveSection] = useState('home');
 
     return (
-        // Note: The main layout is now simpler, letting CSS handle positioning
         <>
             <CleanHeader />
             <SideNav sections={sections} activeSection={activeSection} />

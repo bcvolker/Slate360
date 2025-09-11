@@ -4,53 +4,33 @@
 
 @layer base {
   :root {
-    /* LIGHT THEME (MOBILE-FIRST DEFAULT) */
+    /* DARK THEME (DEFAULT) */
+    --background: #0F172A; /* Deep slate blue */
+    --foreground: #E2E8F0;
+    --card: #1E293B;
+    --primary: #4B9CD3; /* North Carolina Blue */
+    --secondary: #B87333; /* Copper Accent */
+    --muted-foreground: #94A3B8;
+    --border: #334155;
+    --radius: 0.75rem;
+  }
+
+  [data-theme="light"] {
     --background: #FFFFFF;
     --foreground: #0F172A;
     --card: #F8FAFC;
-    --primary: #4B9CD3;
-    --secondary: #B87333;
     --muted-foreground: #64748B;
     --border: #E2E8F0;
   }
-
-  [data-theme="dark"] {
-    --background: #0F172A;
-    --foreground: #E2E8F0;
-    --card: #1E293B;
-    --muted-foreground: #94A3B8;
-    --border: #334155;
-  }
   
-  /* On desktop, we default to dark mode unless specified otherwise */
-  @media (min-width: 768px) {
-    :root {
-      --background: #0F172A;
-      --foreground: #E2E8F0;
-      --card: #1E293B;
-      --muted-foreground: #94A3B8;
-      --border: #334155;
-    }
-    [data-theme="light"] {
-      --background: #FFFFFF;
-      --foreground: #0F172A;
-      --card: #F8FAFC;
-      --muted-foreground: #64748B;
-      --border: #E2E8F0;
-    }
-  }
-
   html { scroll-behavior: smooth; }
-  body { @apply bg-background text-foreground; }
+  body { @apply bg-background text-foreground; font-family: 'Inter', sans-serif; }
   h1, h2, h3 { font-family: 'Orbitron', sans-serif; @apply tracking-tight; }
 
-  /* SCROLL CONTAINER */
   .scroll-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; }
   .scroll-section { @apply h-screen w-full flex items-center justify-center p-6 md:p-12; scroll-snap-align: start; position: relative; }
-
-  /* NEW SIDE NAV STYLES */
   .side-nav-item { @apply relative flex justify-end items-center; }
-  .nav-line { @apply w-6 h-1 bg-[hsl(var(--muted-foreground)/0.5)] rounded-full transition-all duration-300; }
+  .nav-line { @apply w-6 h-1 bg-muted-foreground/30 rounded-full transition-all duration-300; }
   .nav-line.active { @apply w-12 bg-primary; }
   .nav-tooltip { @apply absolute right-full mr-3 whitespace-nowrap bg-card text-foreground px-3 py-1 rounded-md text-xs font-semibold opacity-0 scale-90 transition-all duration-200 pointer-events-none group-hover:opacity-100 group-hover:scale-100; }
 }
