@@ -50,7 +50,7 @@
 
   /* NEW SIDE NAV STYLES */
   .side-nav-item { @apply relative flex justify-end items-center; }
-  .nav-line { @apply w-6 h-1 bg-muted-foreground/50 rounded-full transition-all duration-300; }
+  .nav-line { @apply w-6 h-1 bg-[hsl(var(--muted-foreground)/0.5)] rounded-full transition-all duration-300; }
   .nav-line.active { @apply w-12 bg-primary; }
   .nav-tooltip { @apply absolute right-full mr-3 whitespace-nowrap bg-card text-foreground px-3 py-1 rounded-md text-xs font-semibold opacity-0 scale-90 transition-all duration-200 pointer-events-none group-hover:opacity-100 group-hover:scale-100; }
 }
