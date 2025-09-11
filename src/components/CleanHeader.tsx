@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { Button } from '@/components/ui/button';
 
 export function CleanHeader() {
   const { theme, setTheme } = useTheme();
@@ -16,38 +15,38 @@ export function CleanHeader() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full">
-      <div className="flex h-20 items-center justify-between px-6 py-2">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border/50">
+      <div className="flex h-20 items-center justify-between px-6">
         {/* Logo - Left side */}
-        <Link href="/" className="logo-link">
+        <Link href="/" className="flex items-center space-x-2">
           <img
-            src="/slate360-logo.png"
+            src="/slate360 logo.PNG"
             alt="Slate360 Logo"
-            className="logo-image"
+            className="h-12 w-auto object-contain"
           />
         </Link>
 
         {/* Navigation - Right side */}
         <nav className="flex items-center space-x-6">
-          <Link href="/contact" className="nav-link">
-            <span className="text-white hover:text-gray-300 transition-colors">CONTACT</span>
+          <Link href="/contact" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+            Contact
           </Link>
-          <Link href="/about" className="nav-link">
-            <span className="text-white hover:text-gray-300 transition-colors">ABOUT</span>
+          <Link href="/about" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+            About
           </Link>
-          <Link href="/subscribe" className="nav-link">
-            <span className="text-white hover:text-gray-300 transition-colors">SUBSCRIBE</span>
+          <Link href="/subscribe" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+            Subscribe
           </Link>
-          <Link href="/login" className="nav-link">
-            <span className="text-white hover:text-gray-300 transition-colors">LOGIN</span>
+          <Link href="/login" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+            Login
           </Link>
           <button
             onClick={handleThemeToggle}
-            className="theme-toggle-btn"
+            className="w-10 h-10 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
             aria-label="Toggle Theme"
           >
-            <Sun className="theme-icon sun-icon" />
-            <Moon className="theme-icon moon-icon" />
+            <Sun className="h-4 w-4 text-foreground" />
+            <Moon className="h-4 w-4 text-foreground absolute opacity-0" />
           </button>
         </nav>
       </div>
