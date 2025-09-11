@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
@@ -20,12 +21,14 @@ export function CleanHeader() {
         {/* Logo - Left side */}
         <Link href="/" className="flex items-center space-x-3">
           <div className="logo-container">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" className="logo-icon">
-              <rect width="256" height="256" fill="none"></rect>
-              <path d="M48,216a23.9,23.9,0,0,1,24-24H208V88a23.9,23.9,0,0,0-24-24H72a23.9,23.9,0,0,0-24,24Z" opacity="0.2"></path>
-              <path d="M48,216a23.9,23.9,0,0,1,24-24H208V88a23.9,23.9,0,0,0-24-24H72a23.9,23.9,0,0,0-24,24Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="16"></path>
-              <polyline points="48 88 48 40 208 40 208 64" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="16"></polyline>
-            </svg>
+            <Image
+              src="/slate360-logo.png"
+              alt="Slate360 Logo"
+              width={32}
+              height={32}
+              className="logo-image"
+              priority
+            />
           </div>
           <span className="logo-text font-bold text-white">SLATE360</span>
         </Link>
