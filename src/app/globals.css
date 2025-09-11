@@ -110,10 +110,11 @@ body {
 }
 
 .logo-image {
-  width: 120px;
-  height: auto;
+  width: 200px !important;
+  height: auto !important;
   object-fit: contain;
-  max-height: 50px;
+  max-width: none !important;
+  max-height: none !important;
 }
 
 .nav-link {
