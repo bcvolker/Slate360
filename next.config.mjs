@@ -1,15 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // WARNING: These are temporary settings to force a build.
-  // They should be removed after the project is stable.
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // The project is NOT a static export. The 'output' line should be absent.
+  // output: 'export', <--- THIS LINE SHOULD NOT BE PRESENT
+
   images: {
-    domains: ['localhost', 'images.unsplash.com', 'www.w3schools.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
   },
 };
 

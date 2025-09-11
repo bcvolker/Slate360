@@ -30,7 +30,7 @@
   .scroll-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; }
   .scroll-section { @apply h-screen w-full flex items-center justify-center p-6 md:p-12; scroll-snap-align: start; position: relative; }
   .side-nav-item { @apply relative flex justify-end items-center; }
-  .nav-line { @apply w-6 h-1 bg-muted-foreground/30 rounded-full transition-all duration-300; }
+  .nav-line { @apply w-6 h-1 bg-[hsl(var(--muted-foreground)/0.3)] rounded-full transition-all duration-300; }
   .nav-line.active { @apply w-12 bg-primary; }
   .nav-tooltip { @apply absolute right-full mr-3 whitespace-nowrap bg-card text-foreground px-3 py-1 rounded-md text-xs font-semibold opacity-0 scale-90 transition-all duration-200 pointer-events-none group-hover:opacity-100 group-hover:scale-100; }
 }
