@@ -2,8 +2,26 @@ import { CleanHeader } from '@/components/CleanHeader';
 import { Button } from '@/components/ui/button';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 import Link from 'next/link';
+import { CheckCircle } from 'lucide-react';
 
 export default function HomePage() {
+  const featureTiles = [
+    {
+      title: 'Project Hub',
+      description: 'Centralize communication, documentation, and task management.',
+      features: ['RFI Tracking', 'Submittal Management', 'Daily Logs', 'Task Assignment'],
+    },
+    {
+      title: 'BIM Studio',
+      description: 'View, analyze, and collaborate on 3D models in real-time.',
+      features: ['Clash Detection', 'Model Viewer', 'Annotations', 'Version Control'],
+    },
+    {
+      title: '360° Tour Builder',
+      description: 'Create immersive virtual site tours for stakeholders.',
+      features: ['Hotspot Linking', 'VR Mode', 'Measurement Tools', 'Progress Photos'],
+    },
+  ];
   return (
     <div className="flex min-h-screen flex-col">
       <CleanHeader />
@@ -53,18 +71,20 @@ export default function HomePage() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:grid-cols-3 lg:gap-12 mt-12">
-              <SurfaceCard className="p-6">
-                <h3 className="text-xl font-bold">Project Hub</h3>
-                <p className="text-sm text-muted-foreground mt-2">Centralize communication, documentation, and task management.</p>
-              </SurfaceCard>
-              <SurfaceCard className="p-6">
-                <h3 className="text-xl font-bold">BIM Studio</h3>
-                <p className="text-sm text-muted-foreground mt-2">View, analyze, and collaborate on 3D models in real-time.</p>
-              </SurfaceCard>
-              <SurfaceCard className="p-6">
-                <h3 className="text-xl font-bold">360° Tour Builder</h3>
-                <p className="text-sm text-muted-foreground mt-2">Create immersive virtual site tours for stakeholders.</p>
-              </SurfaceCard>
+              {featureTiles.map((tile) => (
+                <SurfaceCard key={tile.title} className="p-6 flex flex-col">
+                  <h3 className="text-xl font-bold">{tile.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-2 flex-grow">{tile.description}</p>
+                  <ul className="mt-4 space-y-2 text-sm">
+                    {tile.features.map((feature) => (
+                      <li key={feature} className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-primary" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </SurfaceCard>
+              ))}
             </div>
           </div>
         </section>
