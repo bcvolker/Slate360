@@ -1,10 +1,19 @@
-// frontend/src/components/ui/SurfaceCard.tsx
-import React from 'react';
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-export const SurfaceCard = ({ children, className }: { children: React.ReactNode; className?: string }) => {
-  return (
-    <div className={`bg-white border rounded-2xl shadow-sm ${className}`}>
-      {children}
-    </div>
-  );
-};
+const SurfaceCard = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      className
+    )}
+    {...props}
+  />
+));
+SurfaceCard.displayName = "SurfaceCard";
+
+export { SurfaceCard };
