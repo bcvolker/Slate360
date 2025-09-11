@@ -1,87 +1,44 @@
 'use client';
-import React from 'react';
-import { Menu, X, ArrowRight, Sun, Moon } from 'lucide-react';
-import { useTheme } from 'next-themes';
 
-export const CleanHeader = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+import Link from 'next/link';
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { Button } from '@/components/ui/button';
+
+export function CleanHeader() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-200/50">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">S</span>
-            </div>
-            <span className="font-bold text-xl gradient-text">Slate360</span>
-          </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-              Features
-            </a>
-            <a href="#pricing" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-              Pricing
-            </a>
-            <a href="#contact" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-              Contact
-            </a>
-            <a href="/login" className="btn-primary">
-              Get Started
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </a>
-          </nav>
-
-          {/* Theme Toggle & Mobile Menu */}
-          <div className="flex items-center space-x-2">
-            {/* Theme Toggle Button */}
-            <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-              ) : (
-                <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-              )}
-            </button>
-
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 items-center">
+        <div className="mr-4 flex items-center">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" className="h-6 w-6">
+              <rect width="256" height="256" fill="none"></rect>
+              <path d="M48,216a23.9,23.9,0,0,1,24-24H208V88a23.9,23.9,0,0,0-24-24H72a23.9,23.9,0,0,0-24,24Z" opacity="0.2"></path>
+              <path d="M48,216a23.9,23.9,0,0,1,24-24H208V88a23.9,23.9,0,0,0-24-24H72a23.9,23.9,0,0,0-24,24Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="16"></path>
+              <polyline points="48 88 48 40 208 40 208 64" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="16"></polyline>
+            </svg>
+            <span className="font-bold">Slate360</span>
+          </Link>
         </div>
-
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200/50">
-            <nav className="flex flex-col space-y-4">
-              <a href="#features" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                Features
-              </a>
-              <a href="#pricing" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                Pricing
-              </a>
-              <a href="#contact" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                Contact
-              </a>
-              <a href="/login" className="btn-primary w-full mt-4">
-                Get Started
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </a>
-            </nav>
-          </div>
-        )}
+        <div className="flex flex-1 items-center justify-end space-x-2">
+          <nav className="flex items-center space-x-2">
+            <Link href="/dashboard">
+              <Button variant="ghost">Dashboard</Button>
+            </Link>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+              aria-label="Toggle Theme"
+            >
+              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            </Button>
+          </nav>
+        </div>
       </div>
     </header>
   );
-};
+}
