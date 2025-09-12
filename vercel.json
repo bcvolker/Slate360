@@ -1,3 +1,8 @@
 {
-  "rootDirectory": "slate360"
+  "builds": [
+    {
+      "src": "slate360/package.json",
+      "use": "@vercel/next"
+    }
+  ]
 }
