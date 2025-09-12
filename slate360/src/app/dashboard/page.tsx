@@ -1,0 +1,1 @@
+import CleanHeader from '@/components/CleanHeader'; export default function DashboardPage() { return (<div><CleanHeader /><main className='pt-24 container mx-auto'><h1 className='text-4xl font-bold'>Dashboard</h1></main></div>); }
