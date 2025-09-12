@@ -1,102 +1,105 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import CleanHeader from '@/components/CleanHeader';
-import { Button } from '@/components/ui/button';
-import { SurfaceCard } from '@/components/ui/SurfaceCard';
-import { ArrowRight, Code, Video, Bot, BarChart, HardHat, Orbit, Construction, UploadCloud, Check } from 'lucide-react';
+"use client";
+import { useState } from "react";
+import { clsx } from "clsx";
 
-// Data for modular sections
 const sections = [
-  { id: 'home', title: 'Slate360', subtitle: 'The Future of Construction Technology', longDescription: 'Our platform combines cutting-edge 3D visualization, advanced project management, and immersive technologies to revolutionize how you build, from planning to completion with unparalleled efficiency and collaboration.', Icon: Code, bgClass: 'bg-background', features: ['Unified Platform', 'Real-Time Collaboration', 'Data-Driven Insights', 'Modular & Scalable'] },
-  { id: 'project-hub', title: 'Project Hub', subtitle: 'Centralized Project Management', longDescription: 'Track progress, manage teams, and collaborate in real-time with advanced project management tools. Share permissions and manage documents with an intuitive, Dropbox-like folder system for all stakeholders.', Icon: HardHat, bgClass: 'bg-slate-900/10', features: ['RFI & Submittal Tracking', 'Document Control', 'Task Management', 'Daily Logs'] },
-  { id: 'bim-studio', title: 'BIM Studio', subtitle: 'Advanced 3D Modeling', longDescription: 'Create, edit, and collaborate on Building Information Models with precision, parametric editing, and real-time updates. Animate fly-throughs, morph progression models, and prepare files for 3D printing.', Icon: Construction, bgClass: 'bg-background', features: ['Revit & SketchUp Integration', 'Clash Detection', 'Parametric Editing', '4D Sequencing'] },
-  { id: 'tours', title: '360 Tour Builder', subtitle: 'Immersive Site Walkthroughs', longDescription: 'Create and share interactive 360° tours of your job sites, complete with annotations, hotspots, and notes for clear, visual communication with stakeholders from anywhere in the world.', Icon: Orbit, bgClass: 'bg-slate-900/10', features: ['Hotspot Annotations', 'VR Headset Compatible', 'Measurement Tools', 'Timeline Comparison'] },
-  { id: 'content-creation', title: 'Content Creation', subtitle: 'Professional Media Production', longDescription: 'Leverage a magnetic timeline to edit videos, apply AI enhancements, and produce stunning marketing and progress materials with your custom branding applied effortlessly.', Icon: Video, bgClass: 'bg-background', features: ['AI Video Enhancement', 'Magnetic Timeline', 'LUTs & Effects', 'Branding Overlays'] },
-  { id: 'geospatial', title: 'Geospatial & Robotics', subtitle: 'Advanced Automation & Mapping', longDescription: 'Plan drone missions, process survey data, and integrate with Google Street Maps for unparalleled site awareness and progress tracking. From mission to model, the workflow is seamless.', Icon: Bot, bgClass: 'bg-slate-900/10', features: ['Automated Mission Planning', 'Volumetric Analysis', 'Google Maps Overlay', 'Robotics Integration'] },
-  { id: 'reports', title: 'Reports & Analytics', subtitle: 'Data-Driven Insights', longDescription: 'Transform your construction data, including radiometric thermal imagery and site issues, into actionable insights with real-time metrics and customizable, brandable reports.', Icon: BarChart, bgClass: 'bg-background', features: ['Custom Report Builder', 'Thermal Data Analysis', 'Predictive Analytics', 'KPI Dashboards'] },
-  { id: 'vr-studio', title: 'Virtual Reality Studio', subtitle: 'Immersive Design & Simulation', longDescription: 'Step into your projects before they are built with immersive VR walkthroughs for design validation, stakeholder approvals, and collaborative safety simulations.', Icon: Orbit, bgClass: 'bg-slate-900/10', features: ['1:1 Scale Walkthroughs', 'Design Review Tools', 'Safety Simulation', 'Multi-User Sessions'] }
+  {
+    id: "overview",
+    title: "360° Overview",
+    content:
+      "Slate360 is your all-in-one platform for visualizing, organizing, and sharing knowledge. Experience a new dimension of productivity.",
+    bgClass: "bg-white dark:bg-slate-800",
+  },
+  {
+    id: "features",
+    title: "Features",
+    content:
+      "- Interactive dashboards\n- Real-time collaboration\n- Customizable layouts\n- Secure cloud storage",
+    bgClass: "bg-slate-100 dark:bg-slate-700",
+  },
+  {
+    id: "why",
+    title: "Why Slate360?",
+    content:
+      "Built for teams and individuals who want clarity, speed, and control over their digital workspace.",
+    bgClass: "bg-white dark:bg-slate-800",
+  },
 ];
 
-// Reusable Footer Component
-const Footer = () => (
-    <footer className="w-full absolute bottom-0 left-0 p-8">
-        <div className="container mx-auto max-w-screen-xl text-center border-t border-border/20 pt-6">
-            <div className="space-x-6 text-xs text-muted-foreground">
-                <Link href="/terms" className="hover:text-foreground">Terms</Link>
-                <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
-                <Link href="/contact" className="hover:text-foreground">Contact</Link>
-            </div>
-            <p className="mt-2 text-xs text-muted-foreground/50">© 2025 Slate360</p>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function Section({ section, isLast, index }: { section: any; isLast: any; index: any }) {
+  const isOdd = index % 2 !== 0;
+  return (
+    <section
+      id={section.id}
+      className={clsx(
+        "scroll-section py-16 px-4 md:px-0 transition-colors duration-300",
+        section.bgClass,
+        isOdd ? "md:flex-row-reverse" : "md:flex-row"
+      )}
+    >
+      <div className={clsx("max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8", isOdd ? "md:flex-row-reverse" : "")}
+      >
+        <div className="flex-1">
+          <h2 className="font-orbitron text-3xl md:text-4xl font-bold text-slate360-blue mb-4 drop-shadow-lg">{section.title}</h2>
+          <p className="font-inter text-lg text-slate-700 dark:text-slate-200 whitespace-pre-line">{section.content}</p>
         </div>
-    </footer>
-);
-
-// Reusable Section Component
-const Section = ({ section, isLast, index }) => {
-    const isOdd = index % 2 !== 0;
-    return (
-        <section id={section.id} className={`scroll-section ${section.bgClass}`}>
-            <div className="container mx-auto max-w-7xl">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                    <motion.div className={`space-y-6 ${isOdd ? 'lg:order-last' : 'lg:order-first'}`} initial={{ opacity: 0, x: isOdd ? 50 : -50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}>
-                        <h1 className="text-5xl font-bold font-orbitron">{section.title}</h1>
-                        <h2 className="text-3xl text-slate360-copper">{section.subtitle}</h2>
-                        <p className="text-lg">{section.longDescription}</p>
-                        <ul className="list-inside space-y-2">
-                            {section.features.map((f, i) => <li key={i} className="flex items-center gap-2"><Check className="h-5 w-5 text-primary"/><span>{f}</span></li>)}
-                        </ul>
-                    </motion.div>
-                    <motion.div className="hidden lg:block" initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.2 }}>
-                        <SurfaceCard className="p-12 bg-gradient-to-br from-card to-border/10 border-2 border-dashed border-slate360-blue/20 min-h-[600px] flex items-center justify-center">
-                            <div className="text-center">
-                                <UploadCloud className="h-24 w-24 text-slate360-blue/50 mb-4" />
-                                <h3 className="text-2xl font-bold">Interactive Viewer</h3>
-                                <p>Content Coming Soon</p>
-                            </div>
-                        </SurfaceCard>
-                    </motion.div>
-                </div>
-                {isLast && <Footer />}
-            </div>
-        </section>
-    );
-};
-
-// Reusable SideNav Component
-const SideNav = ({ sections, activeSection }) => {
-    return (
-        <nav className="fixed right-4 top-1/4 -translate-y-1/2 z-50 hidden md:flex flex-col items-end space-y-1 text-xs">
-            {sections.map(section => (
-                <a key={section.id} href={`#${section.id}`} className={`transition-all ${activeSection === section.id ? 'text-slate360-copper font-medium' : 'text-foreground/70 hover:text-slate360-blue'}`}>
-                    {section.title}
-                </a>
-            ))}
-        </nav>
-    );
-};
+        <div className="flex-1 flex justify-center">
+          <div className="w-48 h-48 bg-slate360-blue/10 rounded-2xl flex items-center justify-center shadow-lg">
+            {/* Placeholder for illustration */}
+            <span className="text-6xl">🌐</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function HomePage() {
-    const [activeSection, setActiveSection] = useState('home');
-    const { ref, inView } = useInView({ threshold: 0.5 });
-    useEffect(() => {
-        const currentSection = sections.find(s => inView && ref.current?.id === s.id);
-        if (currentSection) {
-            setActiveSection(currentSection.id);
-        }
-    }, [inView]);
-
-    return (
-        <div className="bg-background fixed inset-0">
-            <CleanHeader />
-            <SideNav sections={sections} activeSection={activeSection} />
-            <div ref={ref} className="scroll-container">
-                {sections.map((section, index) => (
-                    <Section key={section.id} section={section} isLast={index === sections.length - 1} index={index} />
-                ))}
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-slate-50 to-slate360-blue/10 dark:from-slate-900 dark:to-slate-800">
+      <div className="pt-8 pb-4">
+        <h1 className="font-orbitron text-5xl md:text-6xl text-center font-bold text-slate360-blue drop-shadow-lg mb-4">Welcome to Slate360</h1>
+        <p className="font-inter text-xl text-center text-slate-700 dark:text-slate-200 max-w-2xl mx-auto mb-8">
+          The next generation knowledge platform for teams and creators.
+        </p>
+      </div>
+      {/* Desktop sections */}
+      <div className="hidden md:block">
+        {sections.map((section, i) => (
+          <Section key={section.id} section={section} isLast={i === sections.length - 1} index={i} />
+        ))}
+      </div>
+      {/* Mobile accordion */}
+      <div className="md:hidden px-2">
+        {sections.map((section, i) => (
+          <div key={section.id} className="mb-4">
+            <button
+              className={clsx(
+                "w-full flex justify-between items-center px-4 py-3 rounded-lg shadow font-orbitron text-xl font-bold text-slate360-blue bg-white dark:bg-slate-800",
+                openIndex === i ? "ring-2 ring-slate360-blue" : ""
+              )}
+              onClick={() => setOpenIndex(openIndex === i ? null : i)}
+              aria-expanded={openIndex === i}
+              aria-controls={`section-content-${i}`}
+            >
+              {section.title}
+              <span>{openIndex === i ? "−" : "+"}</span>
+            </button>
+            <div
+              id={`section-content-${i}`}
+              className={clsx(
+                "transition-all duration-300 overflow-hidden",
+                openIndex === i ? "max-h-96 py-4 px-2" : "max-h-0"
+              )}
+              style={{ pointerEvents: openIndex === i ? "auto" : "none" }}
+            >
+              <p className="font-inter text-base text-slate-700 dark:text-slate-200 whitespace-pre-line">{section.content}</p>
             </div>
-        </div>
-    );
+          </div>
+        ))}
+      </div>
+    </main>
+  );
 }
