@@ -4,46 +4,19 @@
 
 @layer base {
   :root {
-    /* LIGHT THEME (MOBILE-FIRST DEFAULT) */
-    --background: #FFFFFF;
-    --foreground: #0F172A;
-    --card: #F8FAFC;
-    --primary: #4B9CD3;
-    --secondary: #B87333;
-    --muted-foreground: #64748B;
-    --border: #E2E8F0;
+    /* Set your theme variables here */
+    --background: 255 100% 100%;
+    --foreground: 222 84% 5%;
+    /* Add all other light and dark theme variables */
   }
 
-  [data-theme="dark"] {
-    --background: #0F172A;
-    --foreground: #E2E8F0;
-    --card: #1E293B;
-    --muted-foreground: #94A3B8;
-    --border: #334155;
-  }
-  
-  /* On desktop, we default to dark mode unless specified otherwise */
-  @media (min-width: 768px) {
-    :root {
-      --background: #0F172A;
-      --foreground: #E2E8F0;
-      --card: #1E293B;
-      --muted-foreground: #94A3B8;
-      --border: #334155;
-    }
-    [data-theme="light"] {
-      --background: #FFFFFF;
-      --foreground: #0F172A;
-      --card: #F8FAFC;
-      --muted-foreground: #64748B;
-      --border: #E2E8F0;
-    }
+  .dark {
+    --background: 222 84% 5%;
+    --foreground: 210 40% 98%;
+    /* Add all other dark theme variables */
   }
 
   html { scroll-behavior: smooth; }
   body { @apply bg-background text-foreground; }
-  h1, h2, h3 { font-family: 'Orbitron', sans-serif; @apply tracking-tight; }
-
-  .scroll-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; }
-  .scroll-section { @apply h-screen w-full flex items-center justify-center p-6 md:p-12; scroll-snap-align: start; position: relative; }
+  h1, h2, h3 { font-family: 'Orbitron', sans-serif; }
 }
