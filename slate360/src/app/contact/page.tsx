@@ -1,1 +1,0 @@
-import CleanHeader from '@/components/CleanHeader'; export default function ContactPage() { return (<div><CleanHeader /><main className='pt-24 container mx-auto'><h1 className='text-4xl font-bold'>Contact</h1></main></div>); }
