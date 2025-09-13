@@ -1,15 +1,8 @@
-import CleanHeader from '@/components/CleanHeader';
-
 export default function HomePage() {
   return (
-    <>
-      <CleanHeader />
-      <main className="container mx-auto py-32 text-center">
-        <h1 className="text-5xl font-bold font-orbitron">Welcome to Slate360</h1>
-        <p className="mt-4 text-lg">
-          This is your new, clean, and stable foundation. We will add the complex components back now that the base is working.
-        </p>
-      </main>
-    </>
+    <main className="min-h-screen bg-slate-900/20 text-white">
+      <h1 className="text-4xl font-bold text-slate360-blue">Welcome to Slate360</h1>
+      <p className="text-muted-foreground">Your all-in-one construction platform.</p>
+    </main>
   );
 }
