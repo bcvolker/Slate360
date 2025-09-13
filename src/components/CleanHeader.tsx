@@ -1,69 +1,36 @@
-'use client';
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
-import { clsx } from "clsx";
-
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-  { href: "/subscribe", label: "Subscribe" },
-];
+"use client";
+import Link from 'next/link';
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 
 export default function CleanHeader() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const navLinks = [
+    { href: '/contact', label: 'Contact' },
+    { href: '/about', label: 'About' },
+    { href: '/subscribe', label: 'Subscribe' },
+    { href: '/dashboard', label: 'Dashboard' }
+  ];
 
   return (
-    <header className="bg-slate360-slate dark:bg-slate-900 text-white shadow-lg sticky top-0 z-50">
-      <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
-        <Link href="/" className="flex items-center gap-3">
-          <Image src="/globe.svg" alt="Slate360 Logo" width={48} height={48} priority />
-          <span className="font-orbitron text-3xl tracking-widest font-bold text-slate360-blue drop-shadow-lg">Slate360</span>
-        </Link>
-        <div className="hidden md:flex gap-6 items-center">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="font-inter text-lg px-3 py-2 rounded hover:bg-slate360-blue/20 transition-colors duration-200"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-        <button
-          className="md:hidden flex items-center p-2 rounded hover:bg-slate360-blue/20 focus:outline-none"
-          aria-label="Open menu"
-          onClick={() => setMobileOpen((v) => !v)}
-        >
-          <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+    <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-lg border-b border-slate-700 h-24 flex items-center px-6">
+      <Link href="/" className="text-4xl font-bold text-slate360-blue drop-shadow-md font-orbitron">Slate360</Link>
+      <nav className="ml-auto hidden md:flex gap-6 text-sm text-slate-300">
+        {navLinks.map(link => (
+          <Link key={link.label} href={link.href} className="hover:text-white transition-colors">{link.label}</Link>
+        ))}
       </nav>
-      {/* Mobile menu */}
-      <div
-        className={clsx(
-          "md:hidden bg-slate360-slate dark:bg-slate-900 px-4 pb-4 transition-all duration-300 overflow-hidden",
-          mobileOpen ? "max-h-96" : "max-h-0"
-        )}
-        style={{ boxShadow: mobileOpen ? "0 4px 12px rgba(0,0,0,0.08)" : undefined }}
-      >
-        <div className="flex flex-col gap-2">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="font-inter text-lg px-3 py-2 rounded hover:bg-slate360-blue/20 transition-colors duration-200"
-              onClick={() => setMobileOpen(false)}
-            >
-              {link.label}
-            </Link>
+      <button className="md:hidden ml-auto p-2" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
+        {isOpen ? <X className="h-6 w-6 text-white"/> : <Menu className="h-6 w-6 text-white" />}
+      </button>
+      {isOpen && (
+        <nav className="absolute top-24 left-0 right-0 bg-slate-900/95 flex flex-col gap-6 p-8 md:hidden shadow-xl">
+          {navLinks.map(link => (
+            <Link key={link.label} href={link.href} onClick={() => setIsOpen(false)} className="text-lg text-slate-200">{link.label}</Link>
           ))}
-        </div>
-      </div>
+        </nav>
+      )}
     </header>
   );
 }
+// ...existing code ends above...

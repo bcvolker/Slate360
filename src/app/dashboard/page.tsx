@@ -1,8 +1,8 @@
 export default function DashboardPage() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-50 to-slate360-blue/10 dark:from-slate-900 dark:to-slate-800">
-      <h1 className="font-orbitron text-4xl md:text-5xl font-bold text-slate360-blue mb-4 drop-shadow-lg">Dashboard</h1>
-      <p className="font-inter text-lg text-slate-700 dark:text-slate-200 mb-8">Your personalized workspace will appear here soon.</p>
+    <main className="min-h-screen flex flex-col items-center justify-center bg-slate-950 text-slate-100">
+      <h1 className="text-4xl font-bold mb-4 font-orbitron text-slate360-blue">Dashboard</h1>
+      <p className="text-lg text-slate-300">Welcome to your dashboard. More features coming soon!</p>
     </main>
   );
 }
