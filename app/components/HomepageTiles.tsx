@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+// Animation removed: use Tailwind transitions instead
 import Link from "next/link";
 
 const tiles = [
@@ -40,24 +40,16 @@ const tiles = [
   },
 ];
 
-const flyInVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
+
 
 export default function HomepageTiles() {
   return (
     <section className="snap-y snap-mandatory overflow-y-scroll h-screen">
       {tiles.map((tile, index) => (
         <div key={tile.title} className="snap-center h-screen flex items-center justify-center bg-gray-50">
-          <motion.div
-            className={`grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto p-8 ${
-              index % 2 === 0 ? "" : "md:grid-flow-col-dense"
-            }`}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={flyInVariants}
+          <div
+            className={`grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto p-8 transition-all duration-500 opacity-0 translate-y-10 animate-fadein ${index % 2 === 0 ? "" : "md:grid-flow-col-dense"}`}
+            style={{ animationDelay: `${index * 0.1}s` }}
           >
             <div className={index % 2 === 0 ? "md:order-1" : "md:order-2"}>
               <img src={tile.image} alt={tile.title} className="w-full h-auto rounded-lg shadow-lg" />
@@ -71,7 +63,7 @@ export default function HomepageTiles() {
               </ul>
               <Link href={tile.link} className="text-[#4B9CD3] hover:underline text-lg">Learn More</Link>
             </div>
-          </motion.div>
+          </div>
         </div>
       ))}
     </section>

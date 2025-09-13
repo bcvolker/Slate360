@@ -1,7 +1,6 @@
 // UsersDashboard stub
 'use client';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 interface User { id: string; name: string; role: string; }
 export default function UsersDashboard() {
   const [users, setUsers] = useState<User[]>([
@@ -12,7 +11,7 @@ export default function UsersDashboard() {
     setUsers(users.map(u => (u.id === id ? { ...u, role } : u)));
   };
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="space-y-6">
+    <div className="space-y-6 transition-all duration-500 opacity-0 translate-y-5 animate-fadein">
       <h2 className="text-2xl font-bold text-[#2F4F4F]">Users</h2>
       <table className="w-full bg-white shadow-md rounded-lg">
         <thead className="bg-gray-200">
@@ -36,6 +35,6 @@ export default function UsersDashboard() {
           ))}
         </tbody>
       </table>
-    </motion.div>
+    </div>
   );
 }

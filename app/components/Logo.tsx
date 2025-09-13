@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import Link from "next/link";
-import { cn } from "@/lib/cn";
+import { cn } from "../lib/cn";
 
 export default function Logo({ className }: { className?: string }) {
   return (

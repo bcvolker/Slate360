@@ -1,7 +1,5 @@
 // TabsContent component for dashboard tab switching and profession widgets
-'use client';
 
-import { motion } from 'framer-motion';
 import OverviewDashboard from './OverviewDashboard';
 import ProjectsDashboard from './ProjectsDashboard';
 import SettingsDashboard from './SettingsDashboard';
@@ -21,13 +19,7 @@ interface TabsContentProps {
 
 export default function TabsContent({ tab, role, profession }: TabsContentProps) {
   return (
-    <motion.div
-      key={tab}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="space-y-6"
-    >
+    <div className="space-y-6 transition-all duration-500 opacity-0 translate-y-5 animate-fadein">
       {tab === 'Overview' && <OverviewDashboard />}
       {tab === 'Projects' && <ProjectsDashboard />}
       {tab === 'Settings' && <SettingsDashboard />}
@@ -38,6 +30,6 @@ export default function TabsContent({ tab, role, profession }: TabsContentProps)
       {profession === 'architect' && <ArchitectOptimizer />}
       {profession === 'engineer' && <EngineerLoadAnalysis />}
       {/* Extend with more widgets as needed */}
-    </motion.div>
+    </div>
   );
 }
