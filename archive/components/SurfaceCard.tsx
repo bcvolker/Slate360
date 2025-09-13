@@ -2,7 +2,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const SurfaceCard = React.forwardRef<
-  HTMLDivElement,
+  HTMLDivElement, 
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
   <div
@@ -16,4 +16,5 @@ const SurfaceCard = React.forwardRef<
 ));
 SurfaceCard.displayName = "SurfaceCard";
 
-export { SurfaceCard };
+// MOVED TO archive/components/SurfaceCard.tsx
+// export { SurfaceCard };
