@@ -4,6 +4,7 @@ import HomepageTiles from './components/HomepageTiles';
 export default function HomePage() {
   return (
     <main className="min-h-svh bg-white text-[#2F4F4F]">
+      <h1 className="text-3xl font-bold bg-red-200">Tailwind Test</h1>
       <NavBar />
       <HomepageTiles />
       <footer className="snap-start py-12 border-t border-black/5">
